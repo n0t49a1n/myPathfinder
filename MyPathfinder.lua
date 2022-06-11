@@ -47,7 +47,7 @@ function addon:OnInitialize()
 		MyPathfinder.Config = {}
 	end	
 	if MyPathfinder.Config.ShowCompleted == nil then
-		MyPathfinder.Config.ShowCompleted = true;
+		MyPathfinder.Config.ShowCompleted = false;
 	end
 	if MyPathfinder.Config.Draenor == nil then
 		MyPathfinder.Config.Draenor = false;
@@ -1345,7 +1345,7 @@ function addon:OnInitialize()
 						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cFFA330C9Shadowlands|r|n|n");
 						tooltip:AddLine("|cff00A2E8Patch 9.0.1 (The Shadowlands)");				
 						--start of requirements / guide / info section
-						if isKnown == true then
+						if MyPathfinder.GetAchievementInfo(15514) == false or MyPathfinder.Config.ShowCompleted == true then 
 						tooltip:AddLine("|cfff8b700Prerequisites");
 						if level > 43 then
 						tooltip:AddLine("|cff00A2E8Renown","|cff13ff29Complete|r");
@@ -1365,7 +1365,7 @@ function addon:OnInitialize()
 						tooltip:AddLine("|cfff8b700Chains of Domination Quest Line");						
 						-- Battle of Ardenweald
 						if check2 == true then -- preq check
-						if quest63639 == true then -- complete check
+						if quest63639 == true and MyPathfinder.Config.ShowCompleted == false then  -- complete check
 						tooltip:AddLine("|cff00A2E8Battle of Ardenweald","|cff00ff00Complete|r");
 						else
 						tooltip:AddLine("|cff00A2E8Battle of Ardenweald");
@@ -1383,7 +1383,7 @@ function addon:OnInitialize()
 						
 						-- Maw Walkers
 						if quest63639 == true and check2 then -- preq check
-						if quest64556 == true then -- complete check
+						if quest64556 == true and MyPathfinder.Config.ShowCompleted == false then  -- complete check
 						tooltip:AddLine("|cff00A2E8Maw Walkers","|cff00ff00Complete|r");
 						else
 						tooltip:AddLine("|cff00A2E8Maw Walkers");
@@ -1402,7 +1402,7 @@ function addon:OnInitialize()
 						end
 						-- Focusing the Eye
 						if quest64556 == true and quest63639 == true and check2 then -- preq check
-						if quest63902 == true then -- complete check
+						if quest63902 == true and MyPathfinder.Config.ShowCompleted == false then  -- complete check
 						tooltip:AddLine("|cff00A2E8Focusing the Eye","|cff00ff00Complete|r");
 						else
 						tooltip:AddLine("|cff00A2E8Focusing the Eye");
@@ -1467,7 +1467,7 @@ function addon:OnInitialize()
 						tooltip:AddLine("|cfff8b700Chains of Domination Quest Line (Continued)");
 						-- The Last Sigil
 						if quest63902 == true and check3 == true and check4 == true and quest64556 == true and quest63639 == true and check1 == true and check2 then -- preq check
-						if quest63727 == true then -- complete check
+						if quest63727 == true and MyPathfinder.Config.ShowCompleted == false then  -- complete check
 						tooltip:AddLine("|cff00A2E8The Last Sigil","|cff00ff00Complete|r");
 						else
 						tooltip:AddLine("|cff00A2E8The Last Sigil");
@@ -1499,7 +1499,7 @@ function addon:OnInitialize()
 						end
 						tooltip:AddLine(" ");
 						tooltip:AddLine("|cff00A2E8Patch 9.2 (Zereth Mortis)");
-						if isZereth == true then
+						if isZereth == true and MyPathfinder.Config.ShowCompleted == false then 
 						tooltip:AddLine("|cffffffffRequirements","|cff00ff00Complete|r");
 						else
 						tooltip:AddLine("|cfff8b700Prerequisites");
@@ -1514,14 +1514,14 @@ function addon:OnInitialize()
 					elseif MyPathfinder.Config.Battle then	
 						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cFFE77324Battle for Azeroth|r|n|n");
 						tooltip:AddLine("|cff00A2E8Patch 8.0.1");
-						if MyPathfinder.GetAchievementInfo(12989) == true then 
+						if MyPathfinder.GetAchievementInfo(12989) == true and MyPathfinder.Config.ShowCompleted == false then 
 						tooltip:AddLine("|cffffffffRequirements","|cff00ff00Complete|r");
 						else
 						MyPathfinder.Tooltip(item[12989]);
 						end
 						tooltip:AddLine(" ");
 						tooltip:AddLine("|cff00A2E8Patch 8.2");
-						if MyPathfinder.GetAchievementInfo(13250) == true then 
+						if MyPathfinder.GetAchievementInfo(13250) == true and MyPathfinder.Config.ShowCompleted == false then  
 						tooltip:AddLine("|cffffffffRequirements","|cff00ff00Complete|r");
 						else
 						MyPathfinder.Tooltip(item[13250]);
@@ -1530,14 +1530,14 @@ function addon:OnInitialize()
 					elseif MyPathfinder.Config.Legion then	
 						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cff13ff29Legion|r|n|n");
 						tooltip:AddLine("|cff00A2E8Patch 7.0.3");
-						if MyPathfinder.GetAchievementInfo(11190) == true then 
+						if MyPathfinder.GetAchievementInfo(11190) == true and MyPathfinder.Config.ShowCompleted == false then 
 						tooltip:AddLine("|cffffffffRequirements","|cff00ff00Complete|r");
 						else
 						MyPathfinder.Tooltip(item[11190]);
 						end
 						tooltip:AddLine(" ");
 						tooltip:AddLine("|cff00A2E8Patch 7.2");
-						if MyPathfinder.GetAchievementInfo(11446) == true then 
+						if MyPathfinder.GetAchievementInfo(11446) == true and MyPathfinder.Config.ShowCompleted == false then  
 						tooltip:AddLine("|cffffffffRequirements","|cff00ff00Complete|r");
 						else
 						MyPathfinder.Tooltip(item[11446]);
@@ -1545,7 +1545,7 @@ function addon:OnInitialize()
 					elseif MyPathfinder.Config.Draenor then	
 						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cffe53101Warlords of Draenor|r|n|n");						
 						tooltip:AddLine("|cff00A2E8Patch 6.2");
-						if MyPathfinder.GetAchievementInfo(10018) == true then 
+						if MyPathfinder.GetAchievementInfo(10018) == true and MyPathfinder.Config.ShowCompleted == false then  
 						tooltip:AddLine("|cffffffffRequirements","|cff00ff00Complete|r");
 						else
 						MyPathfinder.Tooltip(item[10018]);
@@ -1706,7 +1706,17 @@ function MyPathfinder_OnClick(self, button, ...)
 				MyPathfinder.Config.Draenor = false;
 			end			
 			MyDO:BuildToolTip(self);
-		end				
+		end	
+		if button == "RightButton" then
+			tooltip:Release();
+    	tooltip = nil;			
+			if MyPathfinder.Config.ShowCompleted == true then
+				MyPathfinder.Config.ShowCompleted = false;
+			else
+				MyPathfinder.Config.ShowCompleted = true;
+			end			
+			MyDO:BuildToolTip(self);
+		end			
 end
 
 function GameTooltip_SetBackdropStyle(self, style)
@@ -1790,8 +1800,12 @@ function MyDO:BuildToolTip(self)
 	tooltip:SetAutoHideDelay(0.25, self)										
 	tooltip:AddHeader("|cffe5cc80MyPathfinder v" .. GetAddOnMetadata("MyPathfinder", "Version") .. "|r|n");		
 	MyPathfinder.ProcessTooltip(MyPathfinder.Status);
-	tooltip:AddLine("|n|cff00ff00Left Click|r to toggle between Shadowlands, BFA, WOD, and Legion ");
-	tooltip:AddLine("|n|cff00ff00Right Click|r to toggle Show / Hide Completed Requirements (soon)");
+	tooltip:AddLine("|n|cffffffffLeft Click|r to toggle between Shadowlands, BFA, WOD, and Legion ");
+	if MyPathfinder.Config.ShowCompleted == false then
+		tooltip:AddLine("|n|cffffffffRight Click|r to |cff00ff00Show|r Completed Requirements (BETA)");
+	else
+		tooltip:AddLine("|n|cffffffffRight Click|r to |cffff0000Hide|r Completed Requirements (BETA)");
+	end	
 	tooltip:UpdateScrolling();
 	tooltip:Show();			
 end
