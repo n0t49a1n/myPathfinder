@@ -1353,22 +1353,55 @@ function addon:OnInitialize()
 						MyPathfinder.Tooltip(item[14961])
 						-- Battle of Ardenweald
 						if quest63639 == false then
-						tooltip:AddLine("|cffffffffCH19 Battle of Ardenweald", "|cffff0000False|r|n|n");
+						tooltip:AddLine("|cffffffff--Battle of Ardenweald (CH1)", "|cffff0000False|r|n|n");
+						tooltip:AddLine("|cffffffff--The First Move", C_QuestLog.IsQuestFlaggedCompleted(63576));
+						tooltip:AddLine("|cffffffff--A Gathering of Covenants", C_QuestLog.IsQuestFlaggedCompleted(63856));
+						tooltip:AddLine("|cffffffff--Voices of the Eternal", C_QuestLog.IsQuestFlaggedCompleted(63857));
+						tooltip:AddLine("|cffffffff--The Battle of Ardenweald", C_QuestLog.IsQuestFlaggedCompleted(63578));
+						tooltip:AddLine("|cffffffff--Can't Turn Our Backs", C_QuestLog.IsQuestFlaggedCompleted(63638));
+						tooltip:AddLine("|cffffffff--The Heart of Ardenweald", C_QuestLog.IsQuestFlaggedCompleted(63904));
+						tooltip:AddLine("|cffffffff--Report to Oribos", C_QuestLog.IsQuestFlaggedCompleted(63639));
 						else
-						tooltip:AddLine("|cffffffffCH1/9 Battle of Ardenweald","|cff00ff00True|r|n|n");
+						tooltip:AddLine("|cffffffffBattle of Ardenweald (CH1)","|cff00ff00True|r|n|n");
 						end
 						-- Maw Walkers
 						if quest64556 == false then
-						tooltip:AddLine("|cffffffffCH2/9 Maw Walkers", "|cffff0000False|r|n|n");
+						tooltip:AddLine("|cffffffffMaw Walkers (CH2)", "|cffff0000False|r|n|n");
+						tooltip:AddLine("|cffffffff--Opening the Maw", C_QuestLog.IsQuestFlaggedCompleted(63660));
+						tooltip:AddLine("|cffffffff--Link to the Maw", C_QuestLog.IsQuestFlaggedCompleted(63661));
+						tooltip:AddLine("|cffffffff--Mysteries of the Maw", C_QuestLog.IsQuestFlaggedCompleted(63662));
+						tooltip:AddLine("|cffffffff--Korthia, the City of Secrets", C_QuestLog.IsQuestFlaggedCompleted(63663));
+						tooltip:AddLine("|cffffffff--Who is the Maw Walker?", C_QuestLog.IsQuestFlaggedCompleted(63664));
+						tooltip:AddLine("|cffffffff--Opening to Oribos", C_QuestLog.IsQuestFlaggedCompleted(63665));
+						tooltip:AddLine("|cffffffff--Charge of the Covenants", C_QuestLog.IsQuestFlaggedCompleted(64007));
+						tooltip:AddLine("|cffffffff--Surveying Secrets", C_QuestLog.IsQuestFlaggedCompleted(64555));
+						tooltip:AddLine("|cffffffff--In Need of Assistance", C_QuestLog.IsQuestFlaggedCompleted(64556));
 						else
-						tooltip:AddLine("|cffffffffCH2/9 Maw Walkers","|cff00ff00True|r|n|n");
+						tooltip:AddLine("|cffffffffMaw Walkers (CH2)","|cff00ff00True|r|n|n");
 						end
 						-- Focusing the Eye
 						if quest63902 == false then
-						tooltip:AddLine("|cffffffffCH3/9 Focusing the Eye", "|cffff0000False|r|n|n");
+						tooltip:AddLine("|cffffffffFocusing the Eye (CH3)", "|cffff0000False|r|n|n");
+						tooltip:AddLine("|cffffffff--A Show of Gratitude", C_QuestLog.IsQuestFlaggedCompleted(63848));
+						tooltip:AddLine("|cffffffff--Ease of Passage", C_QuestLog.IsQuestFlaggedCompleted(63855));
+						tooltip:AddLine("|cffffffff--Grab Bag", C_QuestLog.IsQuestFlaggedCompleted(63895));
+						tooltip:AddLine("|cffffffff--Hearing Aid", C_QuestLog.IsQuestFlaggedCompleted(63849));
+						tooltip:AddLine("|cffffffff--Birds of a Feather", C_QuestLog.IsQuestFlaggedCompleted(63810));
+						tooltip:AddLine("|cffffffff--The Caged Bird", C_QuestLog.IsQuestFlaggedCompleted(63754));
+						tooltip:AddLine("|cffffffff--Claim the Sky", C_QuestLog.IsQuestFlaggedCompleted(63764));
+						tooltip:AddLine("|cffffffff--A Hate-Hate Relationship", C_QuestLog.IsQuestFlaggedCompleted(63811));
+						tooltip:AddLine("|cffffffff--Fury Given Voice", C_QuestLog.IsQuestFlaggedCompleted(63831));
+						tooltip:AddLine("|cffffffff--The Chosen Few", C_QuestLog.IsQuestFlaggedCompleted(63844));
+						tooltip:AddLine("|cffffffff--Wrath of Odyn", C_QuestLog.IsQuestFlaggedCompleted(63845));
+						tooltip:AddLine("|cffffffff--Mawsplaining", C_QuestLog.IsQuestFlaggedCompleted(64014));
+						tooltip:AddLine("|cffffffff--Tears of the Damned", C_QuestLog.IsQuestFlaggedCompleted(63896));
+						tooltip:AddLine("|cffffffff--Anger Management", C_QuestLog.IsQuestFlaggedCompleted(63867));
+						tooltip:AddLine("|cffffffff--Focusing the Eye", C_QuestLog.IsQuestFlaggedCompleted(63901));
+						tooltip:AddLine("|cffffffff--Good News, Everyone!", C_QuestLog.IsQuestFlaggedCompleted(63902));
 						else
-						tooltip:AddLine("|cffffffffCH3/9 Focusing the Eye","|cff00ff00True|r|n|n");
+						tooltip:AddLine("|cffffffffFocusing the Eye (CH3)","|cff00ff00True|r|n|n");
 						end			
+						tooltip:AddLine(" ");
 						level = C_CovenantSanctumUI.GetRenownLevel();
 						if level > 43 then
 						tooltip:AddLine("|cff13ff29Renown Level Complete|r");
@@ -1633,9 +1666,7 @@ function MyDO:BuildToolTip(self)
 	tooltip:SetAutoHideDelay(0.25, self)										
 	tooltip:AddHeader("|cffe5cc80MyPathfinder - Flying Progression Tracker|r|n");		
 	MyPathfinder.ProcessTooltip(MyPathfinder.Status);						
-	tooltip:AddLine("|n|cff00ff00Left Click|r to toggle between Shadowlands, BFA, WOD, and Legion ");
-	tooltip:AddLine("|n" .. RED_FONT_COLOR_CODE .. "Achievements once completed on any character count for account");
-	tooltip:AddLine(RED_FONT_COLOR_CODE .. "wide progress. Blizzards earned by is not always accurate!");					
+	tooltip:AddLine("|n|cff00ff00Left Click|r to toggle between Shadowlands, BFA, WOD, and Legion ");					
 	tooltip:UpdateScrolling();
 	tooltip:Show();			
 end
