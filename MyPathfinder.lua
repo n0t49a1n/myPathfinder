@@ -32,6 +32,9 @@ local MyDO = LibStub("LibDataBroker-1.1"):NewDataObject("MyPathfinder", {
 	type = "data source", 
 	text = "Nothing to track!", 
 	icon = MINIMAP_ICON,
+	OnClick = function(self, button, ...)
+		MyPathfinder_OnClick(self,button,...);
+	end,
 }); --added ;
 
 function addon:OnInitialize()
@@ -39,7 +42,33 @@ function addon:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("MyPathfinder", dbDefaults, true)
 	output="";
 	icon:Register("MyPathfinder", MyDO, self.db.profile.minimap)
-		
+	
+	if not MyPathfinder.Config then
+		MyPathfinder.Config.Shadow = true;
+		MyPathfinder.Config.Transparent = true;
+		MyPathfinder.Config.Draenor = false;
+		MyPathfinder.Config.Legion = false;
+		MyPathfinder.Config.Battle = false;
+	end	
+	if not MyPathfinder.Config.Transparent then
+		MyPathfinder.Config.Transparent = true;
+	end	
+	if MyPathfinder.Config.ShowCompleted == nil then
+		MyPathfinder.Config.ShowCompleted = true;
+	end
+	if MyPathfinder.Config.Draenor == nil then
+		MyPathfinder.Config.Draenor = false;
+	end
+	if MyPathfinder.Config.Legion == nil then
+		MyPathfinder.Config.Legion = false;
+	end
+	if MyPathfinder.Config.Battle == nil then
+		MyPathfinder.Config.Battle = true;
+	end
+	if MyPathfinder.Config.Shadow == nil then
+		MyPathfinder.Config.Shadow = true;
+	end
+	
 	MyPathfinder.tStatus = {
 	  [15514] = {
 		Sum = 0,
@@ -50,19 +79,45 @@ function addon:OnInitialize()
 		Sum = 0,
 		Count = 0,
 		Percent = 0
+	  },
+	  [13250] = {
+	  	Sum = 0,
+	  	Count = 0,
+	  	Percent = 0
+	  },	
+	  [12989] = {
+	  	Sum = 0,
+	  	Count = 0,
+	  	Percent = 0
+	  },	  
+	  [11446] = {
+	  	Sum = 0,
+	  	Count = 0,
+	  	Percent = 0
+	  },	  
+	  [11190] = {
+	  	Sum = 0,
+	  	Count = 0,
+	  	Percent = 0
+	  },	  
+	  [10018] = {
+	  	Sum = 0,
+	  	Count = 0,
+	  	Percent = 0
 	  } 	  	  
 	}
 	
-	MyPathfinder.Status = {	-- 9.2
+	MyPathfinder.Status = {	
 		[15514] = { -- Unlocking the Secrets
 			Completed = false,
 			Tab = 0,
-			Color = "|cff00A2E8",
+			Color = "|cffffffff",
 			sFormat = true,
-			Display = "Status",
+			Display = "None",
+			skipAdd = true,
 				[15224] = {-- 
 					Completed = false,
-					Tab = 2,
+					Tab = 3,
 					Color = "|cfff8b700",
 					sFormat = false,
 					Display = "Percent",
@@ -70,7 +125,7 @@ function addon:OnInitialize()
 				},
 				[15513] = {-- 
 					Completed = false,
-					Tab = 2,
+					Tab = 3,
 					Color = "|cfff8b700",
 					sFormat = false,
 					Display = "Percent",
@@ -78,7 +133,7 @@ function addon:OnInitialize()
 				},
 				[15515] = {-- 
 					Completed = false,
-					Tab = 2,
+					Tab = 3,
 					Color = "|cfff8b700",
 					sFormat = false,
 					Display = "Percent",
@@ -86,7 +141,7 @@ function addon:OnInitialize()
 				},	
 				[15509] = {-- 
 					Completed = false,
-					Tab = 2,
+					Tab = 3,
 					Color = "|cfff8b700",
 					sFormat = false,
 					Display = "Percent",
@@ -94,7 +149,7 @@ function addon:OnInitialize()
 				},
 				[15512] = {-- 
 					Completed = false,
-					Tab = 2,
+					Tab = 3,
 					Color = "|cfff8b700",
 					sFormat = false,
 					Display = "Percent",
@@ -102,7 +157,7 @@ function addon:OnInitialize()
 				},
 				[15518] = {-- 
 					Completed = false,
-					Tab = 2,
+					Tab = 3,
 					Color = "|cfff8b700",
 					sFormat = false,
 					Display = "Percent",
@@ -112,7 +167,7 @@ function addon:OnInitialize()
 		[14961] = { -- Chains of Domination
 			Completed = false,
 			Tab = 0,
-			Color = "|cff00A2E8",
+			Color = "|cffffffff",
 			sFormat = true,
 			Display = "Status",
 			skipAdd = true,					
@@ -120,13 +175,995 @@ function addon:OnInitialize()
 		[14790] = { -- Covenant Campaign
 			Completed = false,
 			Tab = 0,
-			Color = "|cff00A2E8",
+			Color = "|cffffffff",
 			sFormat = true,
 			Display = "Status",			
 		},
-	}										
-	
-	
+	[12989] = {-- Battle for Azeroth MyPathfinder, Part One
+			Completed = false,
+			Tab = 1,
+			Color = "|cff00A2E8",
+			sFormat = true,
+			Display = "None",
+			skipAdd = true,
+			
+			
+			[12988] = {-- Battle for Azeroth Explorer
+				Completed = false,
+				Tab = 2,
+				Color = "|cffffffff",
+				sFormat = true,
+				Display = "Status",
+				[12556] = {-- Explore Tiragarde Sound
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[12558] = {-- Explore Stormsong Valley
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[12561] = {-- Explore Nazmir
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[12557] = {-- Explore Drustvar
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[12559] = {-- Explore Zuldazar
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[12560] = {-- Explore Vol'dun
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				}, 
+			
+			},	
+			[13144] = {-- Wide World of Quests (NYI)
+				Completed = false,
+				Tab = 2,
+				Color = "|cffffffff",
+				sFormat = true,
+				Display = "Status",
+				[13144] = {
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+			},
+			
+		},
+		
+		[13250] = {-- Battle for Azeroth MyPathfinder, Part Two
+			Completed = false,
+			Tab = 1,
+			Color = "|cff00A2E8",
+			sFormat = true,
+			Display = "None",
+			Header = true,
+			skipAdd = true,
+			
+			[12989] = {-- Battle for Azeroth Part One
+				Completed = false,
+				Tab = 2,
+				Color = "|cffffffff",
+				sFormat = true,
+				Display = "Status",	
+				skipAdd = true,
+				[12989] = {
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},		
+			},	
+			
+			[13712] = {-- Explore Nazjatar
+				Completed = false,
+				Tab = 2,
+				Color = "|cffffffff",
+				sFormat = true,
+				Display = "Status",	
+				[13712] = {
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},			
+			},
+			
+			[13776] = {-- Explore Mechagon
+				Completed = false,
+				Tab = 2,
+				Color = "|cffffffff",
+				sFormat = true,
+				Display = "Status",	
+				[13776] = {
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},			
+			},
+			
+			[2391] = {-- Rustbolt Resistance
+				Faction = true,
+				Completed = false,
+				Tab = 2,
+				Color = "|cffffffff",
+				sFormat = true,
+				Display = "Status",	
+				[2391] = {
+					Faction = true,
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},			
+			},
+			
+		},
+						
+		[11190] = { --Broken Isles MyPathfinder, Part One
+			Completed = false,
+			Tab = 1,
+			Color = "|cff00A2E8",
+			sFormat = true,
+			Display = "None",
+			skipAdd = true,
+			
+			[11188] = { -- Broken Isles Explorer
+				Completed = false,
+				Tab = 2,
+				Color = "|cffffffff",
+				sFormat = true,
+				Display = "Status",
+				[10665] = { -- Explore Azsuna
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[10667] = { -- Explore Highmountain
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[10669] = { -- Explore Suramar
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[10668] = { -- Explore Stormheim
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[10666] = { -- Explore Val'sharah
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+			},
+			[11157] = { --Loremaster of Legion
+				Completed = false,
+				Tab = 2,
+				Color = "|cffffffff",
+				sFormat = true,
+				Display = "Status",
+				[10059] = { --Ain't No Mountain High Enough
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[10763] = { -- Azsuna Matata
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[11124] = { -- Good Suramaritan
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[10698] = { -- That's Val'sharah Folks!
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[10790] = { -- Vrykul Story, Bro
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+			},
+			[10994] = { --A Glorious Campaign
+				Completed = false,
+				Tab = 2,
+				Color = "|cffffffff",
+				sFormat = true,
+				Display = "Status",
+				[10994] = {
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "None",
+					skipAdd = true,
+				},
+			},
+			[11189] = { -- Variety is the Spice of Life
+				Completed = false,
+				Tab = 2,
+				Color = "|cffffffff",
+				sFormat = true,
+				Display = "Status",
+				[11189] = {
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+			},
+			[10672] = { -- Broken Isles Diplomat
+				Completed = false,
+				Tab = 2,
+				Color = "|cffffffff",
+				sFormat = true,
+				Display = "Status",
+				[1900] = {
+					Faction = true, 
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[1828] = {
+					Faction = true, 
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[1859] = {
+					Faction = true, 
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[1883] = {
+					Faction = true, 
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+					[1948] = {
+					Faction = true, 
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[1894] = {
+					Faction = true, 
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+			}, 
+		},
+		[11446] = { -- Broken Isles MyPathfinder, Part Two
+			Completed = false,
+			Tab = 1,
+			Color = "|cff00A2E8",
+			sFormat = true,
+			Display = "None",
+			Header = true;
+			skipAdd = true,
+			[11543] = { -- Explore Broken Shore
+				Completed = false,
+				Tab = 2,
+				Color = "|cffffffff",
+				sFormat = true,
+				Display = "Status",
+				[11543] = {
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+			},
+			[11545] = { -- Legionfall Commander
+				Completed = false,
+				Tab = 2,
+				Color = "|cffffffff",
+				sFormat = true,
+				Display = "Status",
+				[2045] = {
+					Faction = true, 
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+			},
+			[11190] = {
+				Completed = false,
+				Tab = 2,
+				Color = "|cffffffff",
+				sFormat = true,
+				Display = "Status",
+				skipAdd = true,
+				[11190] = {
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+			}, 
+			
+		},
+		[10018] = { -- Draenor MyPathfinder
+			Completed = false,
+			Tab = 1,
+			Color = "|cff00A2E8",
+			sFormat = true,
+			Display = "None",
+			skipAdd = true,
+			[8935] = { -- Draenor Explorer
+				Completed = false,
+				Tab = 2,
+				Color = "|cffffffff",
+				sFormat = true,
+				Display = "Status",
+				[8937] = { -- Explore Frostfire Ridge
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[8939] = { -- Explore Gorgrond
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[8942] = { -- Explore Nagrand
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[8938] = { -- Explore Shadowmoon Valley
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[8941] = { -- Explore Spires of Arak
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[8940] = { -- Explore Talador
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+			},
+			[10348] = { -- Master Treasure Hunter
+				Completed = false,
+				Tab = 2,
+				Color = "|cffffffff",
+				sFormat = true,
+				Display = "Status",
+				[10348] = { -- Master Treasure Hunter
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[9727] = { -- Expert Treasure Hunter
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[9726] = { -- Treasure Hunter
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+			},
+		},
+	}
+
+	if UnitFactionGroup("player") == "Alliance" then
+		
+		MyPathfinder.Status[12989][12593] = {-- Kul Tourist
+			Completed = false,
+			Tab = 2,
+			Color = "|cffffffff",
+			sFormat = true,
+			Display = "Status",
+			[12473] = {
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[12497] = {
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[12496] = {
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+		}
+		
+		MyPathfinder.Status[12989][12947] = { -- Azerothian Diplomat
+			Completed = false,
+			Tab = 2,
+			Color = "|cffffffff",
+			sFormat = true,
+			Display = "Status",
+			[2159] = { 
+				Faction = true, 
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[2164] = { 
+				Faction = true, 
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[2161] = { 
+				Faction = true, 
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[2160] = { 
+				Faction = true, 
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[2162] = { 
+				Faction = true, 
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[2163] = { 
+				Faction = true, 
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+				},
+		}
+		
+		MyPathfinder.Status[12989][12510] = {-- Ready for War
+			Completed = false,
+			Tab = 2,
+			Color = "|cffffffff",
+			sFormat = true,
+			Display = "Status",
+			[12510] = {
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+		}
+		
+		MyPathfinder.Status[13250][2400] = { -- Waveblade Ankoan
+			Faction = true,
+			Completed = false,
+			Tab = 2,
+			Color = "|cffffffff",
+			sFormat = true,
+			Display = "Status",
+			[2400] = { 
+				Faction = true,
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+		}
+		
+		MyPathfinder.Status[10018][9833] = { -- Alliance Loremaster
+			Completed = false,
+			Tab = 2,
+			Color = "|cffffffff",
+			sFormat = true,
+			Display = "Status",
+			[8845] = { -- As I Walk Throug the Valley of the Shadow of Moon
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[8920] = { -- Don't Let the Tala-door Hit You on the Way Out
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[8927] = { -- Nagrandeur
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[8923] = { -- Putting the Gore in Gorgrond
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[8925] = { -- Between Arak and a Hard Place
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			}
+		}
+		
+		MyPathfinder.Status[10018][9564] = { -- Securing Draenor
+			Completed = false,
+			Tab = 2,
+			Color = "|cffffffff",
+			sFormat = true,
+			Display = "Status",
+			[9564] = { 
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+		}
+						
+		MyPathfinder.Status[10018][10350] = { -- Tanaan Diplomat
+			Completed = false,
+			Tab = 2,
+			Color = "|cffffffff",
+			sFormat = true,
+			Display = "Status",
+			[1849] = { 
+				Faction = true,
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[1850] = { 
+				Faction = true,
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[1847] = { 
+				Faction = true,
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+		}
+										
+	elseif UnitFactionGroup("player") == "Horde" then
+		
+		MyPathfinder.Status[12989][12479] = {-- Zandalar Forever!
+			Completed = false,
+			Tab = 2,
+			Color = "|cffffffff",
+			sFormat = true,
+			Display = "Status",
+			[12480] = {
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[12478] = {
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[11868] = {
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[12481] = {
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Status",
+				skipAdd = true,
+			},
+			[11861] = {
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			
+		}
+		
+		MyPathfinder.Status[12989][12947] = { -- Azerothian Diplomat
+			Completed = false,
+			Tab = 2,
+			Color = "|cffffffff",
+			sFormat = true,
+			Display = "Status",
+			[2164] = { 
+				Faction = true, 
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[2156] = { 
+				Faction = true, 
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[2157] = { 
+				Faction = true, 
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[2163] = { 
+				Faction = true, 
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[2158] = { 
+				Faction = true, 
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[2103] = { 
+				Faction = true, 
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+		}
+		
+		MyPathfinder.Status[12989][12509] = {-- Ready for War
+			Completed = false,
+			Tab = 2,
+			Color = "|cffffffff",
+			sFormat = true,
+			Display = "Status",
+			[12509] = {
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+		}
+								
+		MyPathfinder.Status[13250][2373] = { -- The Unshackled
+			Faction = true,
+			Completed = false,
+			Tab = 2,
+			Color = "|cffffffff",
+			sFormat = true,
+			Display = "Status",
+			[2373] = { 
+				Faction = true,
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+		}
+		
+		MyPathfinder.Status[10018][9923] = { -- Horde Loremaster
+			Completed = false,
+			Tab = 2,
+			Color = "|cffffffff",
+			sFormat = true,
+			Display = "Status",
+			[8671] = { -- You'll Get Caught Up In The... Frostfire!
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[8919] = { -- Don't Let the Tala-door Hit You on the Way Out
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[8928] = { -- Nagrandeur
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[8924] = { -- Putting the Gore in Gorgrond
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[8926] = { -- Between Arak and a Hard Place
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			}
+		}
+		
+		MyPathfinder.Status[10018][9562] = { -- Securing Draenor
+			Completed = false,
+			Tab = 2,
+			Color = "|cffffffff",
+			sFormat = true,
+			Display = "Status",
+			[9562] = { 
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+		}
+		
+		MyPathfinder.Status[10018][10349] = { -- Tanaan Diplomat
+			Completed = false,
+			Tab = 2,
+			Color = "|cffffffff",
+			sFormat = true,
+			Display = "Status",
+			[1849] = { 
+				Faction = true,
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[1850] = { 
+				Faction = true,
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+			[1848] = { 
+				Faction = true,
+				Completed = false,
+				Tab = 3,
+				Color = "|cfff8b700",
+				sFormat = false,
+				Display = "Percent",
+				skipAdd = true,
+			},
+		}
+												
+	end	
+
 	MyPathfinder.GetColor = function (value)
 		value = value * 2;
 		local r = (2 - value);
@@ -220,7 +1257,7 @@ function addon:OnInitialize()
 	end
 	
 	MyPathfinder.Sort = function(table)
-		SortOrder = { [0] = 15514, [1] = 14790};
+		SortOrder = { [0] = 15514, [1] = 14790, [2] = 12989, [3] = 13250, [4] = 11190, [5] = 11446, [6] = 10018};
 
 		for k1,v1 in ipairs(SortOrder) do
 			for k2,v2 in pairs(table) do
@@ -251,7 +1288,7 @@ function addon:OnInitialize()
 	end
 	
 	MyPathfinder.Reset = function ()
-		SortOrder = { [0] = 15514, [1] = 14790};
+		SortOrder = { [0] = 15514, [1] = 14790, [2] = 12989, [3] = 13250, [4] = 11190, [5] = 11446, [6] = 10018};
 		for soK,soV in ipairs(SortOrder) do
 			MyPathfinder.tStatus[soV].Sum = 0;
 			MyPathfinder.tStatus[soV].Count = 0;
@@ -260,7 +1297,7 @@ function addon:OnInitialize()
 	
 	MyPathfinder.ProcessTitlePercent = function (item)						
 		MyPathfinder.Reset();
-		SortOrder = { [0] = 15514, [1] = 14790};
+		SortOrder = { [0] = 15514, [1] = 14790, [2] = 12989, [3] = 13250, [4] = 11190, [5] = 11446, [6] = 10018};
 		for soK,soV in ipairs(SortOrder) do
 			for iK,iV in pairs(item) do
 				if soV == iK then
@@ -302,7 +1339,11 @@ function addon:OnInitialize()
 	end
 	
 	MyPathfinder.ProcessTooltip = function (item)
-						if UnitLevel("player") == 60 then
+			SortOrder = { [0] = 15514, [1] = 14790, [2] = 12989, [3] = 13250, [4] = 11190, [5] = 11446, [6] = 10018};
+			for k1,v1 in ipairs(SortOrder) do
+			for k2,v2 in pairs(item) do
+				if v1 == k2 then
+					if MyPathfinder.Config.Shadow and (v1 == 15514 or v1 == 14790) then	
 						--logic
 						quest63639=C_QuestLog.IsQuestFlaggedCompleted(63639);
 						quest64556=C_QuestLog.IsQuestFlaggedCompleted(64556);
@@ -331,8 +1372,8 @@ function addon:OnInitialize()
 							end
 						end
 						-- check1 = MyPathfinder.GetAchievementInfo(14790);
-						
-						tooltip:AddLine("|cffffffffPatch 9.1 (The Shadowlands)");				
+						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cFFA330C9Shadowlands|r|n|n");
+						tooltip:AddLine("|cff00A2E8Patch 9.1 (The Shadowlands)");				
 						--start of requirements / guide / info section
 						if isKnown == true then
 						tooltip:AddLine("|cfff8b700Prerequisites");
@@ -484,26 +1525,36 @@ function addon:OnInitialize()
 						tooltip:AddLine("|cff888888The Last Sigil","|cff888888Locked|r");
 						end
 						else
-						tooltip:AddLine("|cff00A2E8Flying","|cff00ff00Complete|r");
+						tooltip:AddLine("|cffffffffFlying","|cff00ff00Complete|r");
 						end
 						tooltip:AddLine(" ");
-						tooltip:AddLine("|cffffffffPatch 9.2 (Zereth Mortis)");
+						tooltip:AddLine("|cff00A2E8Patch 9.2 (Zereth Mortis)");
 						if isZereth == true then
 						tooltip:AddLine("|cff00A2E8Flying","|cff00ff00Complete|r");
 						else
 						tooltip:AddLine("|cfff8b700Prerequisites");
 						if quest63727 == true then -- preq check
-						tooltip:AddLine("|cff00A2E8Patch 9.1","|cff00ff00Complete|r");
+						tooltip:AddLine("|cffffffffPatch 9.1","|cff00ff00Complete|r");
 						tooltip:AddLine("|cfff8b700Achievments");
 						MyPathfinder.Tooltip(item[15514]);
 						else
 						tooltip:AddLine("|cff888888Patch 9.1", "|cff888888Incomplete");
 						end	
 						end						
-						else
-						tooltip:AddLine("|cfff8b700Please Level up to 60");
-						end
-						
+						elseif MyPathfinder.Config.Battle and (v1 == 12989 or v1 == 13250) then	
+						if v1 == 12989 then tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cFFE77324Battle for Azeroth|r|n|n"); end
+						MyPathfinder.Tooltip(item[k2]);
+					elseif MyPathfinder.Config.Legion and (v1 == 11446 or v1 == 11190) then	
+						if v1 == 11190 then tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cff13ff29Legion|r|n|n"); end
+						MyPathfinder.Tooltip(item[k2]);
+					elseif MyPathfinder.Config.Draenor and v1 == 10018 then	
+						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cffe53101Warlords of Draenor|r|n|n");						
+						MyPathfinder.Tooltip(item[k2]);
+					end
+				end
+			end
+		end
+	
 	end
 	
 	MyPathfinder.Tooltip = function (item)	
@@ -530,8 +1581,22 @@ function addon:OnInitialize()
 					if item.Completed then
 						status = true;
 					end
-									
-					local Tab = 2;
+					
+					local ebo = false;
+					if item.earnedBy then
+						if item.earnedBy ~= "" then
+							ebo = true;
+						end
+					end
+					
+					local ebm = false;
+					if item.wasEarnedByMe then
+						if item.wasEarnedByMe ~= "" then
+							ebm = true;
+						end
+					end
+					
+					local tab = 3;
 					local spacing = "";
 					if item.Tab then
 						tab = item.Tab;
@@ -540,18 +1605,38 @@ function addon:OnInitialize()
 						spacing = spacing .. "   ";
 					end
 					
-
-					
 					if display == "None" then
 						tooltip:AddLine(spacing .. color .. item.Name);
 					elseif display == "Status" then
 						if status == true then
-							tooltip:AddLine(spacing .. color .. item.Name, GREEN_FONT_COLOR_CODE .. "Complete");
+							if item.HideEB then
+								tooltip:AddLine(spacing .. color .. item.Name, GREEN_FONT_COLOR_CODE .. "Complete");
+							else
+								if ebo == true then
+									tooltip:AddLine(spacing .. color .. item.Name, "|cff888888Earned By " .. item.earnedBy .. "|r " .. GREEN_FONT_COLOR_CODE .. "Complete");
+								elseif ebm == true then
+									myname, myrealm = UnitName("player");
+									tooltip:AddLine(spacing .. color .. item.Name, "|cff888888Earned By " .. myname .. "|r " .. GREEN_FONT_COLOR_CODE .. "Complete");
+								else
+									tooltip:AddLine(spacing .. color .. item.Name, GREEN_FONT_COLOR_CODE .. "Complete");
+								end
+							end
 						else
 							tooltip:AddLine(spacing .. color .. item.Name, RED_FONT_COLOR_CODE .. "Incomplete");
 						end		
 					else
-						tooltip:AddLine(spacing .. color .. item.Name, MyPathfinder.GetPercent(item));	
+						if item.HideEB then
+							tooltip:AddLine(spacing .. color .. item.Name, MyPathfinder.GetPercent(item));
+						else
+							if ebo == true then
+								tooltip:AddLine(spacing .. color .. item.Name, "|cff888888Earned By " .. item.earnedBy .. "|r " .. GREEN_FONT_COLOR_CODE .. MyPathfinder.GetPercent(item));
+							elseif ebm == true then
+								myname, myrealm = UnitName("player");
+								tooltip:AddLine(spacing .. color .. item.Name, "|cff888888Earned By " .. myname .. "|r " .. GREEN_FONT_COLOR_CODE .. MyPathfinder.GetPercent(item));
+							else
+								tooltip:AddLine(spacing .. color .. item.Name, MyPathfinder.GetPercent(item));
+							end
+						end		
 					end							
 			end
 				
@@ -567,10 +1652,24 @@ function addon:OnInitialize()
 		local output = "";		
 		MyPathfinder.Status = MyPathfinder.Traverse(MyPathfinder.Status);
 		MyPathfinder.ProcessTitlePercent(MyPathfinder.Status);			
-		local p = MyPathfinder.tStatus[15514].Sum / MyPathfinder.tStatus[15514].Count;
-		output = " |cFFE77324B|r: " .. string.format("%#3.2f%%", p);
+		if MyPathfinder.Config.Shadow then	
+			local p = (MyPathfinder.tStatus[15514].Sum + MyPathfinder.tStatus[14790].Sum) / (MyPathfinder.tStatus[15514].Count + MyPathfinder.tStatus[14790].Count); 
+			output = " |cFFE77324B|r: " .. string.format("%#3.2f%%", p);
+		end
+		if MyPathfinder.Config.Battle then	
+			local p = (MyPathfinder.tStatus[13250].Sum + MyPathfinder.tStatus[12989].Sum) / (MyPathfinder.tStatus[13250].Count + MyPathfinder.tStatus[12989].Count); 
+			output = " |cFFE77324B|r: " .. string.format("%#3.2f%%", p);
+		end
+		if MyPathfinder.Config.Legion then
+			local p = (MyPathfinder.tStatus[11446].Sum + MyPathfinder.tStatus[11190].Sum) / (MyPathfinder.tStatus[11446].Count + MyPathfinder.tStatus[11190].Count); 
+			output = " |cff13ff29L|r: " .. string.format("%#3.2f%%", p);
+		end
+		if MyPathfinder.Config.Draenor then
+			local p = MyPathfinder.tStatus[10018].Sum / MyPathfinder.tStatus[10018].Count; 
+			output = " |cffe53101D|r: " .. string.format("%#3.2f%%", p);
+		end
 		MyDO.text = output;
-	end	
+	end		
 	initialized = true;
 	return true;
 	
@@ -582,6 +1681,35 @@ function MyDO:Hide()
         tooltip:Release()
         tooltip = nil
       end
+end
+
+function MyPathfinder_OnClick(self, button, ...)			
+		if button == "LeftButton" then
+			tooltip:Release();
+    	tooltip = nil;			
+			if MyPathfinder.Config.Shadow == true then
+				MyPathfinder.Config.Shadow = false;
+				MyPathfinder.Config.Battle = true;
+				MyPathfinder.Config.Legion = false;
+				MyPathfinder.Config.Draenor = false;
+			elseif MyPathfinder.Config.Battle == true then
+				MyPathfinder.Config.Shadow = false;
+				MyPathfinder.Config.Battle = false;
+				MyPathfinder.Config.Legion = true;
+				MyPathfinder.Config.Draenor = false;
+			elseif  MyPathfinder.Config.Legion == true then
+				MyPathfinder.Config.Shadow = false;
+				MyPathfinder.Config.Battle = false;
+				MyPathfinder.Config.Legion = false;
+				MyPathfinder.Config.Draenor = true;
+			else
+				MyPathfinder.Config.Shadow = true;
+				MyPathfinder.Config.Battle = false;
+				MyPathfinder.Config.Legion = false;
+				MyPathfinder.Config.Draenor = false;
+			end			
+			MyDO:BuildToolTip(self);
+		end				
 end
 
 function GameTooltip_SetBackdropStyle(self, style)
@@ -665,6 +1793,7 @@ function MyDO:BuildToolTip(self)
 	tooltip:SetAutoHideDelay(0.25, self)										
 	tooltip:AddHeader("|cffe5cc80MyPathfinder v" .. GetAddOnMetadata("MyPathfinder", "Version") .. "|r|n");		
 	MyPathfinder.ProcessTooltip(MyPathfinder.Status);
+	tooltip:AddLine("|n|cff00ff00Left Click|r to toggle between Shadowlands, BFA, WOD, and Legion ");
 	tooltip:UpdateScrolling();
 	tooltip:Show();			
 end
