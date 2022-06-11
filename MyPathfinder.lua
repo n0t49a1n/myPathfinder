@@ -412,6 +412,7 @@ function addon:OnInitialize()
 						else
 						tooltip:AddLine("|cff888888Focusing the Eye","|cff888888Locked|r");
 						end						
+						if check1 == true then
 						tooltip:AddLine("|cfff8b700World Quests");
 						if quest63949 == true then
 						tooltip:AddLine("|cffffffffShaping Fate", "|cff00ff00Complete|r");
@@ -447,6 +448,7 @@ function addon:OnInitialize()
 							tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff888888Incomplete");
 							end
 							check4 = true;
+						end
 						end
 						tooltip:AddLine("|cfff8b700Chains of Domination Quest Line (Continued)");
 						-- The Last Sigil
@@ -648,8 +650,7 @@ function MyDO:BuildToolTip(self)
 	tooltip:SmartAnchorTo(self);
 	tooltip:SetAutoHideDelay(0.25, self)										
 	tooltip:AddHeader("|cffe5cc80MyPathfinder v" .. GetAddOnMetadata("MyPathfinder", "Version") .. "|r|n");		
-	MyPathfinder.ProcessTooltip(MyPathfinder.Status);	
-	tooltip:AddHeader("|cffe5cc80By n0t49a1n|r|n");	
+	MyPathfinder.ProcessTooltip(MyPathfinder.Status);
 	tooltip:UpdateScrolling();
 	tooltip:Show();			
 end
