@@ -10,5 +10,3 @@
 ##Libs\Libs.xml
 Libs.xml
 MyPathfinder.lua
-
-

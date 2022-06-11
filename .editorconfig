@@ -1,0 +1,12 @@
+#This file sets formatting defaults for any editor that supports .editorconfig
+#Visual Studio, Notepad++, Editpad Pro, etc
+
+root = true
+
+[*]
+end_of_line = crlf
+insert_final_newline = true
+
+[*.lua]
+indent_style = space
+indent_size = 4
