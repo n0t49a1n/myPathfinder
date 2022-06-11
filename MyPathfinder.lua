@@ -43,16 +43,8 @@ function addon:OnInitialize()
 	output="";
 	icon:Register("MyPathfinder", MyDO, self.db.profile.minimap)
 	
-	MyPathfinder.Config = {};
 	if not MyPathfinder.Config then
-		MyPathfinder.Config.Shadow = true;
-		MyPathfinder.Config.Transparent = true;
-		MyPathfinder.Config.Draenor = false;
-		MyPathfinder.Config.Legion = false;
-		MyPathfinder.Config.Battle = false;
-	end	
-	if not MyPathfinder.Config.Transparent then
-		MyPathfinder.Config.Transparent = true;
+		MyPathfinder.Config = {}
 	end	
 	if MyPathfinder.Config.ShowCompleted == nil then
 		MyPathfinder.Config.ShowCompleted = true;
@@ -64,7 +56,7 @@ function addon:OnInitialize()
 		MyPathfinder.Config.Legion = false;
 	end
 	if MyPathfinder.Config.Battle == nil then
-		MyPathfinder.Config.Battle = true;
+		MyPathfinder.Config.Battle = false;
 	end
 	if MyPathfinder.Config.Shadow == nil then
 		MyPathfinder.Config.Shadow = true;
