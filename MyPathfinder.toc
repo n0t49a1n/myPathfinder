@@ -2,7 +2,7 @@
 ## Title: MyPathfinder
 ## Notes: A simple LDB add-on for displaying the status of MyPathfinder (Flying) Unlocks, Updated to work with SL
 ## Author: n0t49a1n
-## Version: 3.3.2
+## Version: 3.4.8
 ## SavedVariables: MyPathfinder
 ## X-Category: LDB
 ## X-Website: 

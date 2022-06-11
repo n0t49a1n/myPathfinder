@@ -164,6 +164,10 @@ function addon:OnInitialize()
 		end
 		return name, completed, icon, quantity, required, nReqQuantity, nQuantity, wasEarnedByMe, earnedBy;
 	end
+	MyPathfinder.GetAchievementInfo = function(achievementID)
+		local criteriaString, criteriaType, completed, quantity, reqQuantity, charName, flags, assetID, quantityString, criteriaID, eligible = GetAchievementCriteriaInfo(achievementID, 1);
+		return completed;
+	end
 
 	MyPathfinder.IsFactionRevered = function(factionID)
 		local name, description, standingID, barMin, barMax, barValue, atWarWith, canToggleAtWar, isHeader, isCollapsed, hasRep, isWatched, isChild, factionID, hasBonusRepGain, canBeLFGBonus = GetFactionInfoByID(factionID);
@@ -298,44 +302,77 @@ function addon:OnInitialize()
 	end
 	
 	MyPathfinder.ProcessTooltip = function (item)
-						tooltip:AddLine("|cfff8b700World Of Warcraft: |cff6600CCShadowlands|r|n");	
-						tooltip:AddLine("|cff00A2E8Patch 9.2 (Zereth Mortis)");
-						MyPathfinder.Tooltip(item[15514]);
-						tooltip:AddLine(" ");
-						tooltip:AddLine("|cff00A2E8Patch 9.1 (The Shadowlands)");				
+						if UnitLevel("player") == 60 then
 						--logic
 						quest63639=C_QuestLog.IsQuestFlaggedCompleted(63639);
 						quest64556=C_QuestLog.IsQuestFlaggedCompleted(64556);
-						quest63902=C_QuestLog.IsQuestFlaggedCompleted(63902);					
+						quest63902=C_QuestLog.IsQuestFlaggedCompleted(63902);	
+						quest63949=C_QuestLog.IsQuestFlaggedCompleted(63949);
+						quest63727=C_QuestLog.IsQuestFlaggedCompleted(63727);
 						level = C_CovenantSanctumUI.GetRenownLevel();
-						if level > 43 then
-						tooltip:AddLine("|cff13ff29Renown (Reached Requiremnet)|r");
-						elseif level > 30 and level < 44 then
-						tooltip:AddLine("|cffffffffRenown Level|r","|cfff8b700" .. level .. "/44");
-						elseif level > 20 and level < 30 then
-						tooltip:AddLine("|cffffffffRenown Level|r","|cfff8b700" .. level .. "/44");
-						elseif level > 0 and level < 20 then
-						tooltip:AddLine("|cffffffffRenown Level|r","|cffff0000" .. level .. "/44");
+						covenantID = C_Covenants.GetActiveCovenantID();
+						if covenantID == 1 then --kyrian 
+							if C_QuestLog.IsQuestFlaggedCompleted(62557) == true then
+							check1 = true;
+							end
+						elseif covenantID == 2 then --venthyr
+							if C_QuestLog.IsQuestFlaggedCompleted(58407) == true then
+							check1 = true;
+							end
+						elseif covenantID == 3 then --nightfae
+							if C_QuestLog.IsQuestFlaggedCompleted(60108) == true then
+							check1 = true;
+							end
+						elseif covenantID == 4 then --necrolord
+							if C_QuestLog.IsQuestFlaggedCompleted(62406) == true then
+							check1 = true;
+							end
 						end
+						-- check1 = MyPathfinder.GetAchievementInfo(14790);
+						
+						tooltip:AddLine("|cffffffffPatch 9.1 (The Shadowlands)");				
+						--start of requirements / guide / info section
+						tooltip:AddLine("|cfff8b700Prerequisites");
+						if level > 43 then
+						tooltip:AddLine("|cff00A2E8Renown","|cff13ff29Complete|r");
+						check2= true;
+						elseif level > 30 and level < 44 then
+						tooltip:AddLine("|cff00A2E8Renown","|cfff8b700" .. level .. "/44");
+						elseif level > 20 and level < 30 then
+						tooltip:AddLine("|cff00A2E8Renown","|cfff8b700" .. level .. "/44");
+						elseif level > 0 and level < 20 then
+						tooltip:AddLine("|cff00A2E8Renown","|cffff0000" .. level .. "/44");
+						end
+						if check1 == true then
 						MyPathfinder.Tooltip(item[14790]);	
-						-- Battle of Ardenweald
-						if quest63639 == true then
-						tooltip:AddLine("|cff00A2E8Battle of Ardenweald (CH1)","|cff00ff00True|r|n|n");
 						else
-						tooltip:AddLine("|cff00A2E8Battle of Ardenweald (CH1)", "|cffff0000False|r|n|n");
+							tooltip:AddLine("|cff00A2E8Covenant Campaign", "|cff888888Incomplete");
+						end
+						tooltip:AddLine("|cfff8b700Chains of Domination Quest Line");						
+						-- Battle of Ardenweald
+						if check1 == true and check2 == true then -- preq check
+						if quest63639 == true then -- complete check
+						tooltip:AddLine("|cff00A2E8Battle of Ardenweald","|cff00ff00Complete|r");
+						else
+						tooltip:AddLine("|cff00A2E8Battle of Ardenweald");
 						tooltip:AddLine("|cffffffff--The First Move", C_QuestLog.IsQuestFlaggedCompleted(63576));
 						tooltip:AddLine("|cffffffff--A Gathering of Covenants", C_QuestLog.IsQuestFlaggedCompleted(63856));
 						tooltip:AddLine("|cffffffff--Voices of the Eternal", C_QuestLog.IsQuestFlaggedCompleted(63857));
 						tooltip:AddLine("|cffffffff--The Battle of Ardenweald", C_QuestLog.IsQuestFlaggedCompleted(63578));
 						tooltip:AddLine("|cffffffff--Can't Turn Our Backs", C_QuestLog.IsQuestFlaggedCompleted(63638));
 						tooltip:AddLine("|cffffffff--The Heart of Ardenweald", C_QuestLog.IsQuestFlaggedCompleted(63904));
-						tooltip:AddLine("|cffffffff--Report to Oribos", C_QuestLog.IsQuestFlaggedCompleted(63639));
+						tooltip:AddLine("|cffffffff--Report to Oribos", quest63639);
 						end
-						-- Maw Walkers
-						if quest64556 == true then
-						tooltip:AddLine("|cff00A2E8Maw Walkers (CH2)","|cff00ff00True|r|n|n");
 						else
-						tooltip:AddLine("|cff00A2E8Maw Walkers (CH2)", "|cffff0000False|r|n|n");
+						tooltip:AddLine("|cff888888Battle of Ardenweald","|cff888888Locked|r");
+						end
+						
+						-- Maw Walkers
+						if quest63639 == true and check1 == true and check2 then -- preq check
+						if quest64556 == true then -- complete check
+						tooltip:AddLine("|cff00A2E8Maw Walkers","|cff00ff00Complete|r");
+						else
+						tooltip:AddLine("|cff00A2E8Maw Walkers");
 						tooltip:AddLine("|cffffffff--Opening the Maw", C_QuestLog.IsQuestFlaggedCompleted(63660));
 						tooltip:AddLine("|cffffffff--Link to the Maw", C_QuestLog.IsQuestFlaggedCompleted(63661));
 						tooltip:AddLine("|cffffffff--Mysteries of the Maw", C_QuestLog.IsQuestFlaggedCompleted(63662));
@@ -344,13 +381,17 @@ function addon:OnInitialize()
 						tooltip:AddLine("|cffffffff--Opening to Oribos", C_QuestLog.IsQuestFlaggedCompleted(63665));
 						tooltip:AddLine("|cffffffff--Charge of the Covenants", C_QuestLog.IsQuestFlaggedCompleted(64007));
 						tooltip:AddLine("|cffffffff--Surveying Secrets", C_QuestLog.IsQuestFlaggedCompleted(64555));
-						tooltip:AddLine("|cffffffff--In Need of Assistance", C_QuestLog.IsQuestFlaggedCompleted(64556));
+						tooltip:AddLine("|cffffffff--In Need of Assistance", quest64556);
+						end
+						else
+						tooltip:AddLine("|cff888888Maw Walkers","|cff888888Locked|r");
 						end
 						-- Focusing the Eye
-						if quest63902 == true then
-						tooltip:AddLine("|cff00A2E8Focusing the Eye (CH3)","|cff00ff00True|r|n|n");
+						if quest64556 == true and quest63639 == true and check1 == true and check2 then -- preq check
+						if quest63902 == true then -- complete check
+						tooltip:AddLine("|cff00A2E8Focusing the Eye","|cff00ff00Complete|r");
 						else
-						tooltip:AddLine("|cff00A2E8Focusing the Eye (CH3)", "|cffff0000False|r|n|n");
+						tooltip:AddLine("|cff00A2E8Focusing the Eye");
 						tooltip:AddLine("|cffffffff--A Show of Gratitude", C_QuestLog.IsQuestFlaggedCompleted(63848));
 						tooltip:AddLine("|cffffffff--Ease of Passage", C_QuestLog.IsQuestFlaggedCompleted(63855));
 						tooltip:AddLine("|cffffffff--Grab Bag", C_QuestLog.IsQuestFlaggedCompleted(63895));
@@ -366,13 +407,54 @@ function addon:OnInitialize()
 						tooltip:AddLine("|cffffffff--Tears of the Damned", C_QuestLog.IsQuestFlaggedCompleted(63896));
 						tooltip:AddLine("|cffffffff--Anger Management", C_QuestLog.IsQuestFlaggedCompleted(63867));
 						tooltip:AddLine("|cffffffff--Focusing the Eye", C_QuestLog.IsQuestFlaggedCompleted(63901));
-						tooltip:AddLine("|cffffffff--Good News, Everyone!", C_QuestLog.IsQuestFlaggedCompleted(63902));
-						end	
-						-- The Last Sigil
-						if quest63727 == true then
-						tooltip:AddLine("|cff00A2E8The Last Sigil (CH4)","|cff00ff00True|r|n|n");
+						tooltip:AddLine("|cffffffff--Good News, Everyone!", quest63902);
+						end
 						else
-						tooltip:AddLine("|cff00A2E8The Last Sigil (CH4)", "|cffff0000False|r|n|n");
+						tooltip:AddLine("|cff888888Focusing the Eye","|cff888888Locked|r");
+						end						
+						tooltip:AddLine("|cfff8b700World Quests");
+						if quest63949 == true then
+						tooltip:AddLine("|cffffffffShaping Fate", "|cff00ff00Complete|r");
+						check3 = true;
+						else
+						tooltip:AddLine("|cffffffffShaping Fate", "|cff888888Incomplete");
+						end
+						if covenantID == 1 then --kyrian 
+							if C_QuestLog.IsQuestFlaggedCompleted(61982) == true then
+							tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff00ff00Complete|r");
+							else
+							tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff888888Incomplete");
+							end
+							check4 = true;
+						elseif covenantID == 2 then --venthyr
+							if C_QuestLog.IsQuestFlaggedCompleted(61981) == true then
+							tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff00ff00Complete|r");
+							else
+							tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff888888Incomplete");
+							end
+							check4 = true;
+						elseif covenantID == 3 then --nightfae
+							if C_QuestLog.IsQuestFlaggedCompleted(61984) == true then
+							tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff00ff00Complete|r");
+							else
+							tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff888888Incomplete");
+							end
+							check4 = true;
+						elseif covenantID == 4 then --necrolord
+							if C_QuestLog.IsQuestFlaggedCompleted(61983) == true then
+							tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff00ff00Complete|r");
+							else
+							tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff888888Incomplete");
+							end
+							check4 = true;
+						end
+						tooltip:AddLine("|cfff8b700Chains of Domination Quest Line (Continued)");
+						-- The Last Sigil
+						if quest63902 == true and check3 == true and check4 == true and quest64556 == true and quest63639 == true and check1 == true and check2 then -- preq check
+						if quest63727 == true then -- complete check
+						tooltip:AddLine("|cff00A2E8The Last Sigil","|cff00ff00Complete|r");
+						else
+						tooltip:AddLine("|cff00A2E8The Last Sigil");
 						tooltip:AddLine("|cffffffff--Vault of Secrets", C_QuestLog.IsQuestFlaggedCompleted(63703));
 						tooltip:AddLine("|cffffffff--Vengeance for Korthia", C_QuestLog.IsQuestFlaggedCompleted(63704));
 						tooltip:AddLine("|cffffffff--The Knowledge Keepers", C_QuestLog.IsQuestFlaggedCompleted(63705));
@@ -387,8 +469,24 @@ function addon:OnInitialize()
 						tooltip:AddLine("|cffffffff--Keepers of Korthia", C_QuestLog.IsQuestFlaggedCompleted(63722));
 						tooltip:AddLine("|cffffffff--Into the Vault", C_QuestLog.IsQuestFlaggedCompleted(63725));
 						tooltip:AddLine("|cffffffff--Untangling the Sigil", C_QuestLog.IsQuestFlaggedCompleted(63726));
-						tooltip:AddLine("|cffffffff--The Primus Returns (Get Flying Here)", C_QuestLog.IsQuestFlaggedCompleted(63727));
-						end					
+						tooltip:AddLine("|cffffffff--The Primus Returns (Get Flying Here)", quest63727);
+						end	
+						else
+						tooltip:AddLine("|cff888888The Last Sigil","|cff888888Locked|r");
+						end			
+						tooltip:AddLine(" ");
+						tooltip:AddLine("|cffffffffPatch 9.2 (Zereth Mortis)");
+						tooltip:AddLine("|cfff8b700Prerequisites");
+						if quest63727 == true then -- preq check
+						tooltip:AddLine("|cff00A2E8Patch 9.1","|cff00ff00Complete|r");
+						tooltip:AddLine("|cfff8b700Achievments");
+						MyPathfinder.Tooltip(item[15514]);
+						else
+						tooltip:AddLine("|cff888888Patch 9.1", "|cff888888Incomplete");
+						end												
+						else
+						tooltip:AddLine("|cfff8b700Please Level up to 60");
+						end
 						
 	end
 	
@@ -416,21 +514,7 @@ function addon:OnInitialize()
 					if item.Completed then
 						status = true;
 					end
-					
-					local ebo = false;
-					if item.earnedBy then
-						if item.earnedBy ~= "" then
-							ebo = true;
-						end
-					end
-					
-					local ebm = false;
-					if item.wasEarnedByMe then
-						if item.wasEarnedByMe ~= "" then
-							ebm = true;
-						end
-					end
-					
+									
 					local Tab = 2;
 					local spacing = "";
 					if item.Tab then
@@ -446,34 +530,12 @@ function addon:OnInitialize()
 						tooltip:AddLine(spacing .. color .. item.Name);
 					elseif display == "Status" then
 						if status == true then
-							if item.HideEB then
-								tooltip:AddLine(spacing .. color .. item.Name, GREEN_FONT_COLOR_CODE .. "Complete");
-							else
-								if ebo == true then
-									tooltip:AddLine(spacing .. color .. item.Name, "|cff888888Earned By " .. item.earnedBy .. "|r " .. GREEN_FONT_COLOR_CODE .. "Complete");
-								elseif ebm == true then
-									myname, myrealm = UnitName("player");
-									tooltip:AddLine(spacing .. color .. item.Name, "|cff888888Earned By " .. myname .. "|r " .. GREEN_FONT_COLOR_CODE .. "Complete");
-								else
-									tooltip:AddLine(spacing .. color .. item.Name, GREEN_FONT_COLOR_CODE .. "Complete");
-								end
-							end
+							tooltip:AddLine(spacing .. color .. item.Name, GREEN_FONT_COLOR_CODE .. "Complete");
 						else
 							tooltip:AddLine(spacing .. color .. item.Name, RED_FONT_COLOR_CODE .. "Incomplete");
 						end		
 					else
-						if item.HideEB then
-							tooltip:AddLine(spacing .. color .. item.Name, MyPathfinder.GetPercent(item));
-						else
-							if ebo == true then
-								tooltip:AddLine(spacing .. color .. item.Name, "|cff888888Earned By " .. item.earnedBy .. "|r " .. GREEN_FONT_COLOR_CODE .. MyPathfinder.GetPercent(item));
-							elseif ebm == true then
-								myname, myrealm = UnitName("player");
-								tooltip:AddLine(spacing .. color .. item.Name, "|cff888888Earned By " .. myname .. "|r " .. GREEN_FONT_COLOR_CODE .. MyPathfinder.GetPercent(item));
-							else
-								tooltip:AddLine(spacing .. color .. item.Name, MyPathfinder.GetPercent(item));
-							end
-						end		
+						tooltip:AddLine(spacing .. color .. item.Name, MyPathfinder.GetPercent(item));	
 					end							
 			end
 				
@@ -504,16 +566,6 @@ function MyDO:Hide()
         tooltip:Release()
         tooltip = nil
       end
-end
-
---Retrieve and return the players riding skill
-function GetRidingSkill()
-	for skillIndex = 1, GetNumSkillLines() do
-		skillName, _, _, skillRank, _, _, _, _, _, _, _, _, _ = GetSkillLineInfo(skillIndex)
-		if skillName == L["Riding"] then
-			return skillRank
-		end
-	end
 end
 
 function GameTooltip_SetBackdropStyle(self, style)
@@ -596,7 +648,8 @@ function MyDO:BuildToolTip(self)
 	tooltip:SmartAnchorTo(self);
 	tooltip:SetAutoHideDelay(0.25, self)										
 	tooltip:AddHeader("|cffe5cc80MyPathfinder v" .. GetAddOnMetadata("MyPathfinder", "Version") .. "|r|n");		
-	MyPathfinder.ProcessTooltip(MyPathfinder.Status);								
+	MyPathfinder.ProcessTooltip(MyPathfinder.Status);	
+	tooltip:AddHeader("|cffe5cc80By n0t49a1n|r|n");	
 	tooltip:UpdateScrolling();
 	tooltip:Show();			
 end
