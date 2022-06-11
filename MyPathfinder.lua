@@ -43,6 +43,7 @@ function addon:OnInitialize()
 	output="";
 	icon:Register("MyPathfinder", MyDO, self.db.profile.minimap)
 	
+	MyPathfinder.Config = {};
 	if not MyPathfinder.Config then
 		MyPathfinder.Config.Shadow = true;
 		MyPathfinder.Config.Transparent = true;
@@ -185,8 +186,7 @@ function addon:OnInitialize()
 			Color = "|cff00A2E8",
 			sFormat = true,
 			Display = "None",
-			skipAdd = true,
-			
+			skipAdd = true,		
 			
 			[12988] = {-- Battle for Azeroth Explorer
 				Completed = false,
@@ -242,7 +242,6 @@ function addon:OnInitialize()
 					Display = "Percent",
 					skipAdd = true,
 				}, 
-			
 			},	
 			[13144] = {-- Wide World of Quests (NYI)
 				Completed = false,
@@ -270,24 +269,7 @@ function addon:OnInitialize()
 			Display = "None",
 			Header = true,
 			skipAdd = true,
-			
-			[12989] = {-- Battle for Azeroth Part One
-				Completed = false,
-				Tab = 2,
-				Color = "|cffffffff",
-				sFormat = true,
-				Display = "Status",	
-				skipAdd = true,
-				[12989] = {
-					Completed = false,
-					Tab = 3,
-					Color = "|cfff8b700",
-					sFormat = false,
-					Display = "Percent",
-					skipAdd = true,
-				},		
-			},	
-			
+					
 			[13712] = {-- Explore Nazjatar
 				Completed = false,
 				Tab = 2,
@@ -1202,7 +1184,7 @@ function addon:OnInitialize()
 		return name, completed, icon, quantity, required, nReqQuantity, nQuantity, wasEarnedByMe, earnedBy;
 	end
 	MyPathfinder.GetAchievementInfo = function(achievementID)
-		local criteriaString, criteriaType, completed, quantity, reqQuantity, charName, flags, assetID, quantityString, criteriaID, eligible = GetAchievementCriteriaInfo(achievementID, 3);
+		local id, name, points, completed, month, day, year, description, flags, icon, rewardText, isGuild, wasEarnedByMe, earnedBy, isStatistic = GetAchievementInfo(achievementID)
 		return completed;
 	end
 
@@ -1257,7 +1239,7 @@ function addon:OnInitialize()
 	end
 	
 	MyPathfinder.Sort = function(table)
-		SortOrder = { [0] = 15514, [1] = 14790, [2] = 12989, [3] = 13250, [4] = 11190, [5] = 11446, [6] = 10018};
+		SortOrder = { [0] = 15514, [1] = 14790, [2] = 13250, [3] = 12989, [4] = 11446, [5] = 11190, [6] = 10018};
 
 		for k1,v1 in ipairs(SortOrder) do
 			for k2,v2 in pairs(table) do
@@ -1288,7 +1270,7 @@ function addon:OnInitialize()
 	end
 	
 	MyPathfinder.Reset = function ()
-		SortOrder = { [0] = 15514, [1] = 14790, [2] = 12989, [3] = 13250, [4] = 11190, [5] = 11446, [6] = 10018};
+		SortOrder = { [0] = 15514, [1] = 14790, [2] = 13250, [3] = 12989, [4] = 11446, [5] = 11190, [6] = 10018};
 		for soK,soV in ipairs(SortOrder) do
 			MyPathfinder.tStatus[soV].Sum = 0;
 			MyPathfinder.tStatus[soV].Count = 0;
@@ -1297,7 +1279,7 @@ function addon:OnInitialize()
 	
 	MyPathfinder.ProcessTitlePercent = function (item)						
 		MyPathfinder.Reset();
-		SortOrder = { [0] = 15514, [1] = 14790, [2] = 12989, [3] = 13250, [4] = 11190, [5] = 11446, [6] = 10018};
+		SortOrder = { [0] = 15514, [1] = 14790, [2] = 13250, [3] = 12989, [4] = 11446, [5] = 11190, [6] = 10018};
 		for soK,soV in ipairs(SortOrder) do
 			for iK,iV in pairs(item) do
 				if soV == iK then
@@ -1339,11 +1321,7 @@ function addon:OnInitialize()
 	end
 	
 	MyPathfinder.ProcessTooltip = function (item)
-			SortOrder = { [0] = 15514, [1] = 14790, [2] = 12989, [3] = 13250, [4] = 11190, [5] = 11446, [6] = 10018};
-			for k1,v1 in ipairs(SortOrder) do
-			for k2,v2 in pairs(item) do
-				if v1 == k2 then
-					if MyPathfinder.Config.Shadow and (v1 == 15514 or v1 == 14790) then	
+			if MyPathfinder.Config.Shadow then	
 						--logic
 						quest63639=C_QuestLog.IsQuestFlaggedCompleted(63639);
 						quest64556=C_QuestLog.IsQuestFlaggedCompleted(64556);
@@ -1352,7 +1330,7 @@ function addon:OnInitialize()
 						quest63727=C_QuestLog.IsQuestFlaggedCompleted(63727);
 						level = C_CovenantSanctumUI.GetRenownLevel();
 						isKnown = IsSpellKnown(352177)
-						isZereth =  MyPathfinder.GetAchievementInfo(15514) == MyPathfinder.GetAchievementInfo(15512) == MyPathfinder.GetAchievementInfo(15513);
+						isZereth =  MyPathfinder.GetAchievementInfo(15514);
 						covenantID = C_Covenants.GetActiveCovenantID();
 						if covenantID == 1 then --kyrian 
 							if C_QuestLog.IsQuestFlaggedCompleted(62557) == true then
@@ -1373,7 +1351,7 @@ function addon:OnInitialize()
 						end
 						-- check1 = MyPathfinder.GetAchievementInfo(14790);
 						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cFFA330C9Shadowlands|r|n|n");
-						tooltip:AddLine("|cff00A2E8Patch 9.1 (The Shadowlands)");				
+						tooltip:AddLine("|cff00A2E8Patch 9.0.1 (The Shadowlands)");				
 						--start of requirements / guide / info section
 						if isKnown == true then
 						tooltip:AddLine("|cfff8b700Prerequisites");
@@ -1525,38 +1503,65 @@ function addon:OnInitialize()
 						tooltip:AddLine("|cff888888The Last Sigil","|cff888888Locked|r");
 						end
 						else
-						tooltip:AddLine("|cffffffffFlying","|cff00ff00Complete|r");
+						tooltip:AddLine("|cffffffffRequirements","|cff00ff00Complete|r");
 						end
 						tooltip:AddLine(" ");
 						tooltip:AddLine("|cff00A2E8Patch 9.2 (Zereth Mortis)");
 						if isZereth == true then
-						tooltip:AddLine("|cff00A2E8Flying","|cff00ff00Complete|r");
+						tooltip:AddLine("|cffffffffRequirements","|cff00ff00Complete|r");
 						else
 						tooltip:AddLine("|cfff8b700Prerequisites");
 						if quest63727 == true then -- preq check
-						tooltip:AddLine("|cffffffffPatch 9.1","|cff00ff00Complete|r");
+						tooltip:AddLine("|cffffffffPatch 9.0.1","|cff00ff00Complete|r");
 						tooltip:AddLine("|cfff8b700Achievments");
 						MyPathfinder.Tooltip(item[15514]);
 						else
-						tooltip:AddLine("|cff888888Patch 9.1", "|cff888888Incomplete");
+						tooltip:AddLine("|cff888888Patch 9.0.1", "|cff888888Incomplete");
 						end	
 						end						
-						elseif MyPathfinder.Config.Battle and (v1 == 12989 or v1 == 13250) then	
-						if v1 == 12989 then tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cFFE77324Battle for Azeroth|r|n|n"); end
-						MyPathfinder.Tooltip(item[k2]);
-					elseif MyPathfinder.Config.Legion and (v1 == 11446 or v1 == 11190) then	
-						if v1 == 11190 then tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cff13ff29Legion|r|n|n"); end
-						MyPathfinder.Tooltip(item[k2]);
-					elseif MyPathfinder.Config.Draenor and v1 == 10018 then	
+					elseif MyPathfinder.Config.Battle then	
+						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cFFE77324Battle for Azeroth|r|n|n");
+						tooltip:AddLine("|cff00A2E8Patch 8.0.1");
+						if MyPathfinder.GetAchievementInfo(12989) == true then 
+						tooltip:AddLine("|cffffffffRequirements","|cff00ff00Complete|r");
+						else
+						MyPathfinder.Tooltip(item[12989]);
+						end
+						tooltip:AddLine(" ");
+						tooltip:AddLine("|cff00A2E8Patch 8.2");
+						if MyPathfinder.GetAchievementInfo(13250) == true then 
+						tooltip:AddLine("|cffffffffRequirements","|cff00ff00Complete|r");
+						else
+						MyPathfinder.Tooltip(item[13250]);
+						end
+						
+					elseif MyPathfinder.Config.Legion then	
+						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cff13ff29Legion|r|n|n");
+						tooltip:AddLine("|cff00A2E8Patch 7.0.3");
+						if MyPathfinder.GetAchievementInfo(11190) == true then 
+						tooltip:AddLine("|cffffffffRequirements","|cff00ff00Complete|r");
+						else
+						MyPathfinder.Tooltip(item[11190]);
+						end
+						tooltip:AddLine(" ");
+						tooltip:AddLine("|cff00A2E8Patch 7.2");
+						if MyPathfinder.GetAchievementInfo(11446) == true then 
+						tooltip:AddLine("|cffffffffRequirements","|cff00ff00Complete|r");
+						else
+						MyPathfinder.Tooltip(item[11446]);
+						end
+					elseif MyPathfinder.Config.Draenor then	
 						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cffe53101Warlords of Draenor|r|n|n");						
-						MyPathfinder.Tooltip(item[k2]);
+						tooltip:AddLine("|cff00A2E8Patch 6.2");
+						if MyPathfinder.GetAchievementInfo(10018) == true then 
+						tooltip:AddLine("|cffffffffRequirements","|cff00ff00Complete|r");
+						else
+						MyPathfinder.Tooltip(item[10018]);
+						end
 					end
-				end
-			end
-		end
 	
 	end
-	
+	--[4] = 11446, [5] = 11190, [6] = 10018};
 	MyPathfinder.Tooltip = function (item)	
 		if type(item) == "table" then
 			
@@ -1794,6 +1799,7 @@ function MyDO:BuildToolTip(self)
 	tooltip:AddHeader("|cffe5cc80MyPathfinder v" .. GetAddOnMetadata("MyPathfinder", "Version") .. "|r|n");		
 	MyPathfinder.ProcessTooltip(MyPathfinder.Status);
 	tooltip:AddLine("|n|cff00ff00Left Click|r to toggle between Shadowlands, BFA, WOD, and Legion ");
+	tooltip:AddLine("|n|cff00ff00Right Click|r to toggle Show / Hide Completed Requirements (soon)");
 	tooltip:UpdateScrolling();
 	tooltip:Show();			
 end
