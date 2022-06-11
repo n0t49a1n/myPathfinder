@@ -1202,7 +1202,7 @@ function addon:OnInitialize()
 		return name, completed, icon, quantity, required, nReqQuantity, nQuantity, wasEarnedByMe, earnedBy;
 	end
 	MyPathfinder.GetAchievementInfo = function(achievementID)
-		local criteriaString, criteriaType, completed, quantity, reqQuantity, charName, flags, assetID, quantityString, criteriaID, eligible = GetAchievementCriteriaInfo(achievementID, 1);
+		local criteriaString, criteriaType, completed, quantity, reqQuantity, charName, flags, assetID, quantityString, criteriaID, eligible = GetAchievementCriteriaInfo(achievementID, 3);
 		return completed;
 	end
 
