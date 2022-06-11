@@ -340,7 +340,7 @@ function addon:OnInitialize()
 						tooltip:AddLine("|cffffffff--Link to the Maw", C_QuestLog.IsQuestFlaggedCompleted(63661));
 						tooltip:AddLine("|cffffffff--Mysteries of the Maw", C_QuestLog.IsQuestFlaggedCompleted(63662));
 						tooltip:AddLine("|cffffffff--Korthia, the City of Secrets", C_QuestLog.IsQuestFlaggedCompleted(63663));
-						tooltip:AddLine("|cffffffff--Who is the Maw Walker?", C_QuestLog.IsQuestFlaggedCompleted(63664));
+						tooltip:AddLine("|cffffffff--Who is the Maw Walker?", C_QuestLog.IsQuestFlaggedCompleted(63994));
 						tooltip:AddLine("|cffffffff--Opening to Oribos", C_QuestLog.IsQuestFlaggedCompleted(63665));
 						tooltip:AddLine("|cffffffff--Charge of the Covenants", C_QuestLog.IsQuestFlaggedCompleted(64007));
 						tooltip:AddLine("|cffffffff--Surveying Secrets", C_QuestLog.IsQuestFlaggedCompleted(64555));
