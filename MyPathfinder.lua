@@ -310,6 +310,8 @@ function addon:OnInitialize()
 						quest63949=C_QuestLog.IsQuestFlaggedCompleted(63949);
 						quest63727=C_QuestLog.IsQuestFlaggedCompleted(63727);
 						level = C_CovenantSanctumUI.GetRenownLevel();
+						isKnown = IsSpellKnown(352177)
+						isZereth =  MyPathfinder.GetAchievementInfo(15514);
 						covenantID = C_Covenants.GetActiveCovenantID();
 						if covenantID == 1 then --kyrian 
 							if C_QuestLog.IsQuestFlaggedCompleted(62557) == true then
@@ -332,6 +334,7 @@ function addon:OnInitialize()
 						
 						tooltip:AddLine("|cffffffffPatch 9.1 (The Shadowlands)");				
 						--start of requirements / guide / info section
+						if isKnown == true then
 						tooltip:AddLine("|cfff8b700Prerequisites");
 						if level > 43 then
 						tooltip:AddLine("|cff00A2E8Renown","|cff13ff29Complete|r");
@@ -472,12 +475,22 @@ function addon:OnInitialize()
 						tooltip:AddLine("|cffffffff--Into the Vault", C_QuestLog.IsQuestFlaggedCompleted(63725));
 						tooltip:AddLine("|cffffffff--Untangling the Sigil", C_QuestLog.IsQuestFlaggedCompleted(63726));
 						tooltip:AddLine("|cffffffff--The Primus Returns (Get Flying Here)", quest63727);
+						if quest63727 == true then
+						tooltip:AddLine("|cfff8b700Item");
+						tooltip:AddLine("|cff00A2E8Memories of Sunless Skies","|cff888888Unused|r");
+						end
 						end	
 						else
 						tooltip:AddLine("|cff888888The Last Sigil","|cff888888Locked|r");
-						end			
+						end
+						else
+						tooltip:AddLine("|cff00A2E8Flying","|cff00ff00Complete|r");
+						end
 						tooltip:AddLine(" ");
 						tooltip:AddLine("|cffffffffPatch 9.2 (Zereth Mortis)");
+						if isZereth == true then
+						tooltip:AddLine("|cff00A2E8Flying","|cff00ff00Complete|r");
+						else
 						tooltip:AddLine("|cfff8b700Prerequisites");
 						if quest63727 == true then -- preq check
 						tooltip:AddLine("|cff00A2E8Patch 9.1","|cff00ff00Complete|r");
@@ -485,7 +498,8 @@ function addon:OnInitialize()
 						MyPathfinder.Tooltip(item[15514]);
 						else
 						tooltip:AddLine("|cff888888Patch 9.1", "|cff888888Incomplete");
-						end												
+						end	
+						end						
 						else
 						tooltip:AddLine("|cfff8b700Please Level up to 60");
 						end

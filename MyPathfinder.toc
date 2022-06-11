@@ -2,7 +2,7 @@
 ## Title: MyPathfinder
 ## Notes: A simple add-on for displaying the status of MyPathfinder (Flying) Unlocks, Updated to work with SL
 ## Author: n0t49a1n
-## Version: 3.5.2
+## Version: 3.5.3
 ## SavedVariables: MyPathfinder
 ## X-Category: 
 ## X-Website: 
