@@ -1466,7 +1466,7 @@ function addon:OnInitialize()
 						end
 						tooltip:AddLine("|cfff8b700Chains of Domination Quest Line (Continued)");
 						-- The Last Sigil
-						if quest63902 == true and check3 == true and check4 == true and quest64556 == true and quest63639 == true and check1 == true and check2 then -- preq check
+						if quest63902 == true and check3 == true and check4 == true and quest64556 == true and quest63639 == true and check1 == true and check2 or MyPathfinder.Config.ShowCompleted == true then -- preq check
 						if quest63727 == true and MyPathfinder.Config.ShowCompleted == false then  -- complete check
 						tooltip:AddLine("|cff00A2E8The Last Sigil","|cff00ff00Complete|r");
 						else
