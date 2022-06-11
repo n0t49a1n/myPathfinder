@@ -1338,35 +1338,46 @@ function addon:OnInitialize()
 	MyPathfinder.ProcessTooltip = function (item)
 		
 		SortOrder = { [1] = 14790, [2] = 12989, [3] = 13250, [4] = 11190, [5] = 11446, [6] = 10018};
-		for k1,v1 in ipairs(SortOrder) do
+			for k1,v1 in ipairs(SortOrder) do
 			for k2,v2 in pairs(item) do
 				if v1 == k2 then
 					if MyPathfinder.Config.Shadow and v1 == 14790 then	
 						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cff6600CCShadowlands|r 9.2 Zereth Mortis|n|n");	
-						tooltip:AddLine("Achievements");
 						MyPathfinder.Tooltip(item[15514]);
 						tooltip:AddLine(" ");
-						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cff6600CCShadowlands|r 9.1|n|n");	
-						tooltip:AddLine("Quests");
-						questprimus=QuestUtils_GetQuestName(63727);
-						if questprimus == "" then
-						tooltip:AddLine("|cffffffffThe Primus Returns|r|n|n","0%")				
+						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cff6600CCShadowlands|r 9.1|n|n");				
+						quest63639=C_QuestLog.IsQuestFlaggedCompleted(63639);
+						quest64556=C_QuestLog.IsQuestFlaggedCompleted(64556);
+						quest63902=C_QuestLog.IsQuestFlaggedCompleted(63902);					
+						MyPathfinder.Tooltip(item[14790]);	
+						MyPathfinder.Tooltip(item[14961])
+						-- Battle of Ardenweald
+						if quest63639 == false then
+						tooltip:AddLine("|cffffffffCH19 Battle of Ardenweald", "|cffff0000False|r|n|n");
 						else
-						tooltip:AddLine("|cffffffff" .. questprimus,GetQuestProgressBarPercent(63727) .. "%|r|n|n");
+						tooltip:AddLine("|cffffffffCH1/9 Battle of Ardenweald","|cff00ff00True|r|n|n");
 						end
-						tooltip:AddLine("Achievements");
-						MyPathfinder.Tooltip(item[14790]);
-						MyPathfinder.Tooltip(item[14961]);
-						tooltip:AddLine("Renown");
+						-- Maw Walkers
+						if quest64556 == false then
+						tooltip:AddLine("|cffffffffCH2/9 Maw Walkers", "|cffff0000False|r|n|n");
+						else
+						tooltip:AddLine("|cffffffffCH2/9 Maw Walkers","|cff00ff00True|r|n|n");
+						end
+						-- Focusing the Eye
+						if quest63902 == false then
+						tooltip:AddLine("|cffffffffCH3/9 Focusing the Eye", "|cffff0000False|r|n|n");
+						else
+						tooltip:AddLine("|cffffffffCH3/9 Focusing the Eye","|cff00ff00True|r|n|n");
+						end			
 						level = C_CovenantSanctumUI.GetRenownLevel();
 						if level > 43 then
-						tooltip:AddLine("|cff13ff29Complete|r");
+						tooltip:AddLine("|cff13ff29Renown Level Complete|r");
 						elseif level > 30 and level < 44 then
-						tooltip:AddLine("|cffffffffLevel|r","|cfff8b700" .. level .. "/44");
+						tooltip:AddLine("|cffffffffRenown Level|r","|cfff8b700" .. level .. "/44");
 						elseif level > 20 and level < 30 then
-						tooltip:AddLine("|cffffffffLevel|r","|cfff8b700" .. level .. "/44");
+						tooltip:AddLine("|cffffffffRenown Level|r","|cfff8b700" .. level .. "/44");
 						elseif level > 0 and level < 20 then
-						tooltip:AddLine("|cffffffffLevel|r","|cffff0000" .. level .. "/44");
+						tooltip:AddLine("|cffffffffRenown Level|r","|cffff0000" .. level .. "/44");
 						end
 					elseif MyPathfinder.Config.Battle and (v1 == 12989 or v1 == 13250) then	
 						if v1 == 12989 then tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cFFE77324Battle for Azeroth|r|n|n"); end
