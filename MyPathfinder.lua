@@ -1352,7 +1352,7 @@ function addon:OnInitialize()
 						quest63727=C_QuestLog.IsQuestFlaggedCompleted(63727);
 						level = C_CovenantSanctumUI.GetRenownLevel();
 						isKnown = IsSpellKnown(352177)
-						isZereth =  MyPathfinder.GetAchievementInfo(15514);
+						isZereth =  MyPathfinder.GetAchievementInfo(15514) == MyPathfinder.GetAchievementInfo(15512) == MyPathfinder.GetAchievementInfo(15513);
 						covenantID = C_Covenants.GetActiveCovenantID();
 						if covenantID == 1 then --kyrian 
 							if C_QuestLog.IsQuestFlaggedCompleted(62557) == true then
