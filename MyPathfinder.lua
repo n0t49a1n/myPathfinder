@@ -1342,10 +1342,11 @@ function addon:OnInitialize()
 			for k2,v2 in pairs(item) do
 				if v1 == k2 then
 					if MyPathfinder.Config.Shadow and v1 == 14790 then	
-						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cff6600CCShadowlands|r 9.2 Zereth Mortis|n|n");	
+						tooltip:AddLine("|cfff8b700World Of Warcraft: |cff6600CCShadowlands|r|n");	
+						tooltip:AddLine("|cff40C7EBPatch 9.2 (Zereth Mortis)");
 						MyPathfinder.Tooltip(item[15514]);
 						tooltip:AddLine(" ");
-						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cff6600CCShadowlands|r 9.1|n|n");				
+						tooltip:AddLine("|cff40C7EBPatch 9.1 (The Shadowlands)");				
 						quest63639=C_QuestLog.IsQuestFlaggedCompleted(63639);
 						quest64556=C_QuestLog.IsQuestFlaggedCompleted(64556);
 						quest63902=C_QuestLog.IsQuestFlaggedCompleted(63902);					
@@ -1353,7 +1354,7 @@ function addon:OnInitialize()
 						MyPathfinder.Tooltip(item[14961])
 						-- Battle of Ardenweald
 						if quest63639 == false then
-						tooltip:AddLine("|cffffffff--Battle of Ardenweald (CH1)", "|cffff0000False|r|n|n");
+						tooltip:AddLine("--Battle of Ardenweald (CH1)", "|cffff0000False|r|n|n");
 						tooltip:AddLine("|cffffffff--The First Move", C_QuestLog.IsQuestFlaggedCompleted(63576));
 						tooltip:AddLine("|cffffffff--A Gathering of Covenants", C_QuestLog.IsQuestFlaggedCompleted(63856));
 						tooltip:AddLine("|cffffffff--Voices of the Eternal", C_QuestLog.IsQuestFlaggedCompleted(63857));
@@ -1362,11 +1363,11 @@ function addon:OnInitialize()
 						tooltip:AddLine("|cffffffff--The Heart of Ardenweald", C_QuestLog.IsQuestFlaggedCompleted(63904));
 						tooltip:AddLine("|cffffffff--Report to Oribos", C_QuestLog.IsQuestFlaggedCompleted(63639));
 						else
-						tooltip:AddLine("|cffffffffBattle of Ardenweald (CH1)","|cff00ff00True|r|n|n");
+						tooltip:AddLine("Battle of Ardenweald (CH1)","|cff00ff00True|r|n|n");
 						end
 						-- Maw Walkers
 						if quest64556 == false then
-						tooltip:AddLine("|cffffffffMaw Walkers (CH2)", "|cffff0000False|r|n|n");
+						tooltip:AddLine("Maw Walkers (CH2)", "|cffff0000False|r|n|n");
 						tooltip:AddLine("|cffffffff--Opening the Maw", C_QuestLog.IsQuestFlaggedCompleted(63660));
 						tooltip:AddLine("|cffffffff--Link to the Maw", C_QuestLog.IsQuestFlaggedCompleted(63661));
 						tooltip:AddLine("|cffffffff--Mysteries of the Maw", C_QuestLog.IsQuestFlaggedCompleted(63662));
@@ -1377,11 +1378,11 @@ function addon:OnInitialize()
 						tooltip:AddLine("|cffffffff--Surveying Secrets", C_QuestLog.IsQuestFlaggedCompleted(64555));
 						tooltip:AddLine("|cffffffff--In Need of Assistance", C_QuestLog.IsQuestFlaggedCompleted(64556));
 						else
-						tooltip:AddLine("|cffffffffMaw Walkers (CH2)","|cff00ff00True|r|n|n");
+						tooltip:AddLine("Maw Walkers (CH2)","|cff00ff00True|r|n|n");
 						end
 						-- Focusing the Eye
 						if quest63902 == false then
-						tooltip:AddLine("|cffffffffFocusing the Eye (CH3)", "|cffff0000False|r|n|n");
+						tooltip:AddLine("Focusing the Eye (CH3)", "|cffff0000False|r|n|n");
 						tooltip:AddLine("|cffffffff--A Show of Gratitude", C_QuestLog.IsQuestFlaggedCompleted(63848));
 						tooltip:AddLine("|cffffffff--Ease of Passage", C_QuestLog.IsQuestFlaggedCompleted(63855));
 						tooltip:AddLine("|cffffffff--Grab Bag", C_QuestLog.IsQuestFlaggedCompleted(63895));
@@ -1399,7 +1400,7 @@ function addon:OnInitialize()
 						tooltip:AddLine("|cffffffff--Focusing the Eye", C_QuestLog.IsQuestFlaggedCompleted(63901));
 						tooltip:AddLine("|cffffffff--Good News, Everyone!", C_QuestLog.IsQuestFlaggedCompleted(63902));
 						else
-						tooltip:AddLine("|cffffffffFocusing the Eye (CH3)","|cff00ff00True|r|n|n");
+						tooltip:AddLine("Focusing the Eye (CH3)","|cff00ff00True|r|n|n");
 						end			
 						tooltip:AddLine(" ");
 						level = C_CovenantSanctumUI.GetRenownLevel();
@@ -1664,7 +1665,7 @@ function MyDO:BuildToolTip(self)
 	tooltip:SetFont(ssRegFont);		
 	tooltip:SmartAnchorTo(self);
 	tooltip:SetAutoHideDelay(0.25, self)										
-	tooltip:AddHeader("|cffe5cc80MyPathfinder - Flying Progression Tracker|r|n");		
+	tooltip:AddHeader("|cffe5cc80MyPathfinder v" .. GetAddOnMetadata("MyPathfinder", "Version") .. "|r|n");		
 	MyPathfinder.ProcessTooltip(MyPathfinder.Status);						
 	tooltip:AddLine("|n|cff00ff00Left Click|r to toggle between Shadowlands, BFA, WOD, and Legion ");					
 	tooltip:UpdateScrolling();
