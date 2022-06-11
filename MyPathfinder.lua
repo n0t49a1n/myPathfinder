@@ -1528,7 +1528,7 @@ function addon:OnInitialize()
 						end
 						
 					elseif MyPathfinder.Config.Legion then	
-						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cff13ff29Legion|r|n|n");
+						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cff13ff29Legion|r (Legacy)|n|n");
 						tooltip:AddLine("|cff00A2E8Patch 7.0.3");
 						if MyPathfinder.GetAchievementInfo(11190) == true and MyPathfinder.Config.ShowCompleted == false then 
 						tooltip:AddLine("|cffffffffRequirements","|cff00ff00Complete|r");
@@ -1543,7 +1543,7 @@ function addon:OnInitialize()
 						MyPathfinder.Tooltip(item[11446]);
 						end
 					elseif MyPathfinder.Config.Draenor then	
-						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cffe53101Warlords of Draenor|r|n|n");						
+						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cffe53101Warlords of Draenor|r (Legacy)|n|n");						
 						tooltip:AddLine("|cff00A2E8Patch 6.2");
 						if MyPathfinder.GetAchievementInfo(10018) == true and MyPathfinder.Config.ShowCompleted == false then  
 						tooltip:AddLine("|cffffffffRequirements","|cff00ff00Complete|r");
