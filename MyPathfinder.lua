@@ -412,7 +412,7 @@ function addon:OnInitialize()
 						else
 						tooltip:AddLine("|cff888888Focusing the Eye","|cff888888Locked|r");
 						end						
-						if check1 == true then
+						if quest63902 == true then
 						tooltip:AddLine("|cfff8b700World Quests");
 						if quest63949 == true then
 						tooltip:AddLine("|cffffffffShaping Fate", "|cff00ff00Complete|r");
