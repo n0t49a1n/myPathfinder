@@ -350,7 +350,7 @@ function addon:OnInitialize()
 						end
 						tooltip:AddLine("|cfff8b700Chains of Domination Quest Line");						
 						-- Battle of Ardenweald
-						if check1 == true and check2 == true then -- preq check
+						if check2 == true then -- preq check
 						if quest63639 == true then -- complete check
 						tooltip:AddLine("|cff00A2E8Battle of Ardenweald","|cff00ff00Complete|r");
 						else
@@ -368,7 +368,7 @@ function addon:OnInitialize()
 						end
 						
 						-- Maw Walkers
-						if quest63639 == true and check1 == true and check2 then -- preq check
+						if quest63639 == true and check2 then -- preq check
 						if quest64556 == true then -- complete check
 						tooltip:AddLine("|cff00A2E8Maw Walkers","|cff00ff00Complete|r");
 						else
@@ -387,7 +387,7 @@ function addon:OnInitialize()
 						tooltip:AddLine("|cff888888Maw Walkers","|cff888888Locked|r");
 						end
 						-- Focusing the Eye
-						if quest64556 == true and quest63639 == true and check1 == true and check2 then -- preq check
+						if quest64556 == true and quest63639 == true and check2 then -- preq check
 						if quest63902 == true then -- complete check
 						tooltip:AddLine("|cff00A2E8Focusing the Eye","|cff00ff00Complete|r");
 						else
