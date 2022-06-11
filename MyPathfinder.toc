@@ -1,8 +1,8 @@
-## Interface: 90002
-## Title: MyPathfinder-3.0.0.1
-## Notes: A simple LDB add-on for displaying the status of MyPathfinder (Flying) Unlocks
-## Author: Updated to work with SL
-## Version: 3.0.0.1
+## Interface: 90200
+## Title: MyPathfinder (9.2.x)
+## Notes: A simple LDB add-on for displaying the status of MyPathfinder (Flying) Unlocks, Updated to work with SL
+## Author: n0t49a1n
+## Version: 3.2.0.2
 ## SavedVariables: MyPathfinder
 ## X-Category: LDB
 ## X-Website: 

@@ -37,72 +37,11 @@ local MyDO = LibStub("LibDataBroker-1.1"):NewDataObject("MyPathfinder", {
 	end,
 }); --added ;
 
-function addon:SlashHandler(msg)
-	if msg == "help" then
-		
-		print("|cffe5cc80MyPathfinder Help Menu|n|rUse |cff00ff00/pf|r or |cff00ff00/MyPathfinder|r followed by a command, for example|n|cff00ff00toggle|r - toggles between Shadowlands, BFA, Legion, and WoD|n|cff00ff00minimap|r - toggles the minimap icon on and off");
-		
-	elseif msg == "toggle" or msg == "Toggle" then
-		
-		if MyPathfinder.Config.Shadow == true then
-			MyPathfinder.Config.Shadow = false;
-			MyPathfinder.Config.Battle = true;
-			MyPathfinder.Config.Legion = false;
-			MyPathfinder.Config.Draenor = false;
-			print("|n|cfff8b700World Of Warcraft: |cff13ff29BFA |cfff8b700Enabled|r|n|n");
-		elseif MyPathfinder.Config.Shadow == true then
-			MyPathfinder.Config.Shadow = false;
-			MyPathfinder.Config.Battle = false;
-			MyPathfinder.Config.Legion = true;
-			MyPathfinder.Config.Draenor = false;
-			print("|n|cfff8b700World Of Warcraft: |cff13ff29Legion |cfff8b700Enabled|r|n|n");
-		elseif  MyPathfinder.Config.Legion == true then
-			MyPathfinder.Config.Shadow = false;
-			MyPathfinder.Config.Battle = false;
-			MyPathfinder.Config.Legion = false;
-			MyPathfinder.Config.Draenor = true;
-			print("|n|cfff8b700World Of Warcraft: |cff13ff29WoD |cfff8b700Enabled|r|n|n");
-		else
-			MyPathfinder.Config.Shadow = true;
-			MyPathfinder.Config.Battle = false;
-			MyPathfinder.Config.Legion = false;
-			MyPathfinder.Config.Draenor = false;
-			print("|n|cfff8b700World Of Warcraft: |cff13ff29Shadowlands |cfff8b700Enabled|r|n|n");
-		end
-		
-		MyPathfinder.Update();	
-				
-	elseif msg == "minimap"  or msg == "Minimap" then
-		self.db.profile.minimap.hide = not self.db.profile.minimap.hide
-		if self.db.profile.minimap.hide then
-			print("|cffe5cc80MyPathfinder minimap icon is now disabled|r");
-			icon:Hide("MyPathfinder")
-		else						
-			print("|cffe5cc80MyPathfinder minimap icon is now enabled|r");
-			icon:Show("MyPathfinder")
-		end
-	else
-		print("|n");
-		print("|T" .. MyDO.icon .. ":0|t |cffe5cc80MyPathfinder - Flying Progression Tracker|n|rUse |cff00ff00/pf help|r to view all available options");
-		if MyPathfinder.Status and initialized then
-			MyPathfinder.ProcessPrint(MyPathfinder.Status);
-			print("|n" .. RED_FONT_COLOR_CODE .. "Achievements once completed on any character count for account wide progress. Blizzards earned by is not always accurate!");
-		else 
-			print("Error - Nothing to Output?");
-		end
-		print("|n");
-	end
-end
-
 function addon:OnInitialize()
 	
 	self.db = LibStub("AceDB-3.0"):New("MyPathfinder", dbDefaults, true)
 
 	icon:Register("MyPathfinder", MyDO, self.db.profile.minimap)
-
-	self:RegisterChatCommand("pf", "SlashHandler")
-	self:RegisterChatCommand("pathfinder", "SlashHandler")
-	self:RegisterChatCommand("mypathfinder", "SlashHandler")
 
 	if not MyPathfinder.Config then
 		MyPathfinder.Config = {}
@@ -127,7 +66,7 @@ function addon:OnInitialize()
 	end
 			
 	MyPathfinder.tStatus = {
-	  [14315] = {
+	  [14790] = {
 		Sum = 0,
 		Count = 0,
 		Percent = 0
@@ -160,57 +99,76 @@ function addon:OnInitialize()
 	}
 	
 	MyPathfinder.Status = {	
-		[14315] = { -- Shadowlands Diplomat
+		[15514] = { -- Unlocking the Secrets
 			Completed = false,
-			Tab = 2,
+			Tab = 0,
+			Color = "|cffffffff",
+			sFormat = true,
+			Display = "None",
+			skipAdd = true,
+				[15224] = {-- 
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[15513] = {-- 
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[15515] = {-- 
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},	
+				[15509] = {-- 
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[15512] = {-- 
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},
+				[15518] = {-- 
+					Completed = false,
+					Tab = 3,
+					Color = "|cfff8b700",
+					sFormat = false,
+					Display = "Percent",
+					skipAdd = true,
+				},					
+		},
+		[14961] = { -- Chains of Domination
+			Completed = false,
+			Tab = 0,
 			Color = "|cffffffff",
 			sFormat = true,
 			Display = "Status",
-			[2413] = { --COURT OF HARVESTERS
-				Faction = true, 
-				Completed = false,
-				Tab = 3,
-				Color = "|cfff8b700",
-				sFormat = false,
-				Display = "Percent",
-				skipAdd = true,
-			},
-			[2410] = { --UNDYING ARMY
-				Faction = true, 
-				Completed = false,
-				Tab = 3,
-				Color = "|cfff8b700",
-				sFormat = false,
-				Display = "Percent",
-				skipAdd = true,
-			},
-			[2465] = { --WILD HUNT
-				Faction = true, 
-				Completed = false,
-				Tab = 3,
-				Color = "|cfff8b700",
-				sFormat = false,
-				Display = "Percent",
-				skipAdd = true,
-			},
-			[2432] = { --VE'NARI
-				Faction = true, 
-				Completed = false,
-				Tab = 3,
-				Color = "|cfff8b700",
-				sFormat = false,
-				Display = "Percent",
-				skipAdd = true,
-			},
-			[2407] = { --THE ASCENDED
-				Faction = true, 
-				Completed = false,
-				Tab = 3,
-				Color = "|cfff8b700",
-				sFormat = false,
-				Display = "Percent",
-				skipAdd = true,
-			},			
+			skipAdd = true,					
+		},
+		[14790] = { -- Covenant Campaign
+			Completed = false,
+			Tab = 0,
+			Color = "|cffffffff",
+			sFormat = true,
+			Display = "Status",			
 		},
 	[12989] = {-- Battle for Azeroth MyPathfinder, Part One
 			Completed = false,
@@ -1287,7 +1245,7 @@ function addon:OnInitialize()
 	end
 	
 	MyPathfinder.Sort = function(table)
-		SortOrder = { [1] = 14315, [2] = 12989, [3] = 13250, [4] = 11190, [5] = 11446, [6] = 10018};
+		SortOrder = { [0] = 15514, [1] = 14790, [2] = 12989, [3] = 13250, [4] = 11190, [5] = 11446, [6] = 10018};
 
 		for k1,v1 in ipairs(SortOrder) do
 			for k2,v2 in pairs(table) do
@@ -1318,7 +1276,7 @@ function addon:OnInitialize()
 	end
 	
 	MyPathfinder.Reset = function ()
-		SortOrder = { [1] = 14315, [2] = 12989, [3] = 13250, [4] = 11190, [5] = 11446, [6] = 10018};
+		SortOrder = { [0] = 15514, [1] = 14790, [2] = 12989, [3] = 13250, [4] = 11190, [5] = 11446, [6] = 10018};
 		for soK,soV in ipairs(SortOrder) do
 			MyPathfinder.tStatus[soV].Sum = 0;
 			MyPathfinder.tStatus[soV].Count = 0;
@@ -1327,7 +1285,7 @@ function addon:OnInitialize()
 	
 	MyPathfinder.ProcessTitlePercent = function (item)						
 		MyPathfinder.Reset();
-		SortOrder = { [1] = 14315, [2] = 12989, [3] = 13250, [4] = 11190, [5] = 11446, [6] = 10018};
+		SortOrder = { [0] = 15514, [1] = 14790, [2] = 12989, [3] = 13250, [4] = 11190, [5] = 11446, [6] = 10018};
 		for soK,soV in ipairs(SortOrder) do
 			for iK,iV in pairs(item) do
 				if soV == iK then
@@ -1379,14 +1337,37 @@ function addon:OnInitialize()
 	
 	MyPathfinder.ProcessTooltip = function (item)
 		
-		SortOrder = { [1] = 14315, [2] = 12989, [3] = 13250, [4] = 11190, [5] = 11446, [6] = 10018};
+		SortOrder = { [1] = 14790, [2] = 12989, [3] = 13250, [4] = 11190, [5] = 11446, [6] = 10018};
 		for k1,v1 in ipairs(SortOrder) do
 			for k2,v2 in pairs(item) do
 				if v1 == k2 then
-					if MyPathfinder.Config.Shadow and v1 == 14315 then	
-						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cff6600CCShadowlands|r|n|n");	
-						tooltip:AddLine("|cffe53101More coming soon|n")					
-						MyPathfinder.Tooltip(item[k2]);
+					if MyPathfinder.Config.Shadow and v1 == 14790 then	
+						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cff6600CCShadowlands|r 9.2 Zereth Mortis|n|n");	
+						tooltip:AddLine("Achievements");
+						MyPathfinder.Tooltip(item[15514]);
+						tooltip:AddLine(" ");
+						tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cff6600CCShadowlands|r 9.1|n|n");	
+						tooltip:AddLine("Quests");
+						questprimus=QuestUtils_GetQuestName(63727);
+						if questprimus == "" then
+						tooltip:AddLine("|cffffffffThe Primus Returns|r|n|n","0%")				
+						else
+						tooltip:AddLine("|cffffffff" .. questprimus,GetQuestProgressBarPercent(63727) .. "%|r|n|n");
+						end
+						tooltip:AddLine("Achievements");
+						MyPathfinder.Tooltip(item[14790]);
+						MyPathfinder.Tooltip(item[14961]);
+						tooltip:AddLine("Renown");
+						level = C_CovenantSanctumUI.GetRenownLevel();
+						if level > 43 then
+						tooltip:AddLine("|cff13ff29Complete|r");
+						elseif level > 30 and level < 44 then
+						tooltip:AddLine("|cffffffffLevel|r","|cfff8b700" .. level .. "/44");
+						elseif level > 20 and level < 30 then
+						tooltip:AddLine("|cffffffffLevel|r","|cfff8b700" .. level .. "/44");
+						elseif level > 0 and level < 20 then
+						tooltip:AddLine("|cffffffffLevel|r","|cffff0000" .. level .. "/44");
+						end
 					elseif MyPathfinder.Config.Battle and (v1 == 12989 or v1 == 13250) then	
 						if v1 == 12989 then tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cFFE77324Battle for Azeroth|r|n|n"); end
 						MyPathfinder.Tooltip(item[k2]);
@@ -1451,9 +1432,7 @@ function addon:OnInitialize()
 						spacing = spacing .. "   ";
 					end
 					
-					if sformat == true then
-						tooltip:AddLine(" ");
-					end
+
 					
 					if display == "None" then
 						tooltip:AddLine(spacing .. color .. item.Name);
@@ -1496,129 +1475,14 @@ function addon:OnInitialize()
 		end
 	end
 		
-	MyPathfinder.ProcessPrint = function (item)
-		SortOrder = { [1] = 14315, [2] = 12989, [3] = 13250, [4] = 11190, [5] = 11446, [6] = 10018};
-		for k1,v1 in ipairs(SortOrder) do
-			for k2,v2 in pairs(item) do
-				if v1 == k2 then
-					if MyPathfinder.Config.Shadow and v1 == 14315 then	
-						print("|n|cfff8b700World Of Warcraft: |cff6600CCShadowlands|r|n|n");
-						print("More coming soon|n")
-						MyPathfinder.Print(item[k2]);
-					elseif MyPathfinder.Config.Battle and (v1 == 12989 or v1 == 13250) then	
-						if v1 == 12989 then print("|n|cfff8b700World Of Warcraft: |cFFE77324Battle for Azeroth|r|n|n"); end
-						MyPathfinder.Print(item[k2]);
-					elseif MyPathfinder.Config.Legion and (v1 == 11446 or v1 == 11190) then	
-						if v1 == 11190 then print("|n|cfff8b700World Of Warcraft: |cff13ff29Legion|r|n|n"); end
-						MyPathfinder.Print(item[k2]);
-					elseif MyPathfinder.Config.Draenor and v1 == 10018 then	
-						print("|n|cfff8b700World Of Warcraft: |cffe53101Warlords of Draenor|r|n|n");
-						MyPathfinder.Print(item[k2]);
-					end
-				end
-			end
-		end
-	end
 
-	MyPathfinder.Print = function (item)
-		if type(item) == "table" then
-			
-			if item.Name then
-				
-					local color = "|cffffffff";
-					if item.Color then
-						color = item.Color;
-					end
-					
-					local sformat = false;
-					if item.sFormat then
-						sformat = item.sFormat;
-					end
-					
-					local display = "None";
-					if item.Display then
-						display = item.Display;
-					end
-
-					local status = false;
-					if item.Completed then
-						status = true;
-					end
-					
-					local ebo = false;
-					if item.earnedBy then
-						if item.earnedBy ~= "" then
-							ebo = true;
-						end
-					end
-					
-					local ebm = false;
-					if item.wasEarnedByMe then
-						if item.wasEarnedByMe ~= "" then
-							ebm = true;
-						end
-					end
-					
-					local tab = 3;
-					local spacing = "";
-					if item.Tab then
-						tab = item.Tab;
-					end
-					for i = 1, tab, 1 do
-						spacing = spacing .. "   ";
-					end
-					
-					if sformat == true then
-						print(" ");
-					end
-					
-					if display == "None" then
-						print(spacing .. color .. item.Name);
-					elseif display == "Status" then
-						if status == true then
-							if item.HideEB then
-								print(spacing .. color .. item.Name, GREEN_FONT_COLOR_CODE .. "Complete");
-							else
-								if ebo == true then
-									print(spacing .. color .. item.Name, "|cff888888Earned By " .. item.earnedBy .. "|r " .. GREEN_FONT_COLOR_CODE .. "Complete");
-								elseif ebm == true then
-									myname, myrealm = UnitName("player");
-									print(spacing .. color .. item.Name, "|cff888888Earned By " .. myname .. "|r " .. GREEN_FONT_COLOR_CODE .. "Complete");
-								else
-									print(spacing .. color .. item.Name, GREEN_FONT_COLOR_CODE .. "Complete");
-								end
-							end
-						else
-							print(spacing .. color .. item.Name, RED_FONT_COLOR_CODE .. "Incomplete");
-						end		
-					else
-						if item.HideEB then
-							print(spacing .. color .. item.Name, MyPathfinder.GetPercent(item));
-						else
-							if ebo == true then
-								print(spacing .. color .. item.Name, "|cff888888Earned By " .. item.earnedBy .. "|r " .. GREEN_FONT_COLOR_CODE .. MyPathfinder.GetPercent(item));
-							elseif ebm == true then
-								myname, myrealm = UnitName("player");
-								print(spacing .. color .. item.Name, "|cff888888Earned By " .. myname .. "|r " .. GREEN_FONT_COLOR_CODE .. MyPathfinder.GetPercent(item));
-							else
-								print(spacing .. color .. item.Name, MyPathfinder.GetPercent(item));
-							end
-						end		
-					end							
-			end
-			
-			for k, v in pairs(item) do				
-				MyPathfinder.Print(v);				
-			end
-		end
-	end
 
 	MyPathfinder.Update = function()					
 		local output = "";		
 		MyPathfinder.Status = MyPathfinder.Traverse(MyPathfinder.Status);
 		MyPathfinder.ProcessTitlePercent(MyPathfinder.Status);			
 		if MyPathfinder.Config.Shadow then	
-			local p = MyPathfinder.tStatus[14315].Sum / MyPathfinder.tStatus[14315].Count; 
+			local p = MyPathfinder.tStatus[14790].Sum / MyPathfinder.tStatus[14790].Count; 
 			output = " |cFFE77324B|r: " .. string.format("%#3.2f%%", p);
 		end
 		if MyPathfinder.Config.Battle then	
@@ -1650,19 +1514,6 @@ end
 
 function MyPathfinder_OnClick(self, button, ...)			
 		if button == "LeftButton" then
-			if IsControlKeyDown() then
-				if (MyPathfinder.Config.Transparent == false) then
-					MyPathfinder.Config.Transparent = true;
-				else
-					MyPathfinder.Config.Transparent = false;
-				end
-				tooltip:Release();
-    		tooltip = nil;
-    		MyDO:BuildToolTip(self);
-			else
-				ToggleAchievementFrame();
-			end			
-		elseif button == "RightButton" then
 			tooltip:Release();
     	tooltip = nil;			
 			if MyPathfinder.Config.Shadow == true then
@@ -1771,8 +1622,7 @@ function MyDO:BuildToolTip(self)
 	tooltip:SetAutoHideDelay(0.25, self)										
 	tooltip:AddHeader("|cffe5cc80MyPathfinder - Flying Progression Tracker|r|n");		
 	MyPathfinder.ProcessTooltip(MyPathfinder.Status);						
-	tooltip:AddLine("|n|cff00ff00Left Click|r to toggle Achievement tooltip");
-	tooltip:AddLine("|cff00ff00Right Click|r to toggle between Shadowlands, BFA, WOD, and Legion ");
+	tooltip:AddLine("|n|cff00ff00Left Click|r to toggle between Shadowlands, BFA, WOD, and Legion ");
 	tooltip:AddLine("|n" .. RED_FONT_COLOR_CODE .. "Achievements once completed on any character count for account");
 	tooltip:AddLine(RED_FONT_COLOR_CODE .. "wide progress. Blizzards earned by is not always accurate!");					
 	tooltip:UpdateScrolling();
