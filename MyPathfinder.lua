@@ -84,6 +84,10 @@ function addon:OnInitialize()
     if MyPathfinder.Config.Shadow == nil then
         MyPathfinder.Config.Shadow = true
     end
+	-- Dragonflight Beta
+	if MyPathfinder.Config.Dragon == nil then
+        MyPathfinder.Config.Dragon = false
+    end
 
     MyPathfinder.tStatus = {
         [15514] = {
@@ -1707,7 +1711,12 @@ function addon:OnInitialize()
             else
                 MyPathfinder.Tooltip(item[10018])
             end
-        end
+        -- Dragonflight beta 
+		elseif MyPathfinder.Config.Dragon then
+            tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cff33937FDragonflight|r (SOON)|n|n")
+            tooltip:AddLine("|cff00A2E8Patch 10.0.0.43342")
+			tooltip:AddLine("|cffffffffComing Soon|r")
+		end
     end
 
     --[4] = 11446, [5] = 11190, [6] = 10018};
@@ -1850,23 +1859,28 @@ function MyPathfinder_OnClick(self, button, ...)
             MyPathfinder.Config.Battle = true
             MyPathfinder.Config.Legion = false
             MyPathfinder.Config.Draenor = false
+			MyPathfinder.Config.Dragon = false
         elseif MyPathfinder.Config.Battle == true then
             MyPathfinder.Config.Shadow = false
             MyPathfinder.Config.Battle = false
             MyPathfinder.Config.Legion = true
             MyPathfinder.Config.Draenor = false
+			MyPathfinder.Config.Dragon = false
         elseif MyPathfinder.Config.Legion == true then
             MyPathfinder.Config.Shadow = false
             MyPathfinder.Config.Battle = false
             MyPathfinder.Config.Legion = false
             MyPathfinder.Config.Draenor = true
+			MyPathfinder.Config.Dragon = false
         else
             MyPathfinder.Config.Shadow = true
             MyPathfinder.Config.Battle = false
             MyPathfinder.Config.Legion = false
             MyPathfinder.Config.Draenor = false
+			MyPathfinder.Config.Dragon = false
         end
-
+		-- Dragonflight beta 
+		-- MyPathfinder.Config.Dragon = false
         MyDO:BuildToolTip(self)
     end
 
