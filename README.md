@@ -5,9 +5,7 @@ Description:
 Features:
     Display and track progress towards unlocking flying Legion, Draenor, BFA and Shadowlands 9.1 and 9.2
 
-Version: 
-    3.6.11
-    
+   
 Known Issues:
     Please report any issue with this addon
     https://www.curseforge.com/wow/addons/mypathfinder
