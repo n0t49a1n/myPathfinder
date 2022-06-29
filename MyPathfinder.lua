@@ -1486,26 +1486,26 @@ function addon:OnInitialize()
                 tooltip:AddLine("|cfff8b700Prerequisites")
 
                 if level > 43 then
-                    tooltip:AddLine("|cff00A2E8Renown", "|cff13ff29Complete|r")
+                    tooltip:AddLine("|cffffffffRenown", "|cff13ff29Complete|r")
                     check2 = true
                 elseif level > 30 and level < 44 then
-                    tooltip:AddLine("|cff00A2E8Renown", "|cfff8b700" .. level .. "/44")
+                    tooltip:AddLine("|cffffffffRenown", "|cfff8b700" .. level .. "/44")
                 elseif level > 20 and level < 30 then
-                    tooltip:AddLine("|cff00A2E8Renown", "|cfff8b700" .. level .. "/44")
+                    tooltip:AddLine("|cffffffffRenown", "|cfff8b700" .. level .. "/44")
                 elseif level > 0 and level < 20 then
-                    tooltip:AddLine("|cff00A2E8Renown", "|cffff0000" .. level .. "/44")
+                    tooltip:AddLine("|cffffffffRenown", "|cffff0000" .. level .. "/44")
                 end
 
                 if check1 == true then
                     MyPathfinder.Tooltip(item[14790])
                 else
-                    tooltip:AddLine("|cff00A2E8Covenant Campaign", "|cff888888Incomplete")
+                    tooltip:AddLine("|cffffffffCovenant Campaign", "|cff888888Incomplete")
                 end
 
                 tooltip:AddLine("|cfff8b700Chains of Domination Quest Line")
 
                 -- Battle of Ardenweald
-                if check2 == true then -- preq check
+                if check1 == true and check2 == true then -- preq check
                     if quest63639 == true and MyPathfinder.Config.ShowCompleted == false then -- complete check
                         tooltip:AddLine("|cff00A2E8Battle of Ardenweald", "|cff00ff00Complete|r")
                     else
@@ -1519,7 +1519,7 @@ function addon:OnInitialize()
                         tooltip:AddLine("|cffffffff--Report to Oribos", quest63639)
                     end
                 else
-                    tooltip:AddLine("|cff888888Battle of Ardenweald", "|cff888888Locked|r")
+                    tooltip:AddLine("|cff888888Battle of Ardenweald", "|cff888888Prerequisite Incomplete|r")
                 end
 
                 -- Maw Walkers
@@ -1539,7 +1539,7 @@ function addon:OnInitialize()
                         tooltip:AddLine("|cffffffff--In Need of Assistance", quest64556)
                     end
                 else
-                    tooltip:AddLine("|cff888888Maw Walkers", "|cff888888Locked|r")
+                    tooltip:AddLine("|cff888888Maw Walkers", "|cff888888Prerequisite Incomplete|r")
                 end
 
                 -- Focusing the Eye
@@ -1566,7 +1566,7 @@ function addon:OnInitialize()
                         tooltip:AddLine("|cffffffff--Good News, Everyone!", quest63902)
                     end
                 else
-                    tooltip:AddLine("|cff888888Focusing the Eye", "|cff888888Locked|r")
+                    tooltip:AddLine("|cff888888Focusing the Eye", "|cff888888Prerequisite Incomplete|r")
                 end
 
                 if quest63902 == true then
@@ -1607,21 +1607,26 @@ function addon:OnInitialize()
                         end
                         check4 = true
                     end
-                end
+                else
+				tooltip:AddLine("|cfff8b700World Quests");
+				tooltip:AddLine("|cff888888Shaping Fate", "|cff888888Prerequisite Incomplete");
+				tooltip:AddLine("|cff888888Replenish the Reservoir", "|cff888888Prerequisite Incomplete")
+				end
 
                 tooltip:AddLine("|cfff8b700Chains of Domination Quest Line (Continued)")
 
                 -- The Last Sigil
-                if
-                    quest63902 == true and check3 == true and check4 == true and quest64556 == true and
+                if quest63902 == true and check3 == true and check4 == true and quest64556 == true and
                         quest63639 == true and
-                        check1 == true and
-                        check2 or
-                        MyPathfinder.Config.ShowCompleted == true
+                        check1 and
+                        check2 and
+						check3 and
+						check4 
                  then -- preq check
-                    if quest63727 == true and MyPathfinder.Config.ShowCompleted == false then -- complete check
-                        tooltip:AddLine("|cff00A2E8The Last Sigil", "|cff00ff00Complete|r")
-                    else
+                    if quest63727 == true and
+                        MyPathfinder.Config.ShowCompleted == false then -- complete check
+                        tooltip:AddLine("|cff00A2E8The Last Sigil", "|cff00ff00Complete|r")					
+                    else 
                         tooltip:AddLine("|cff00A2E8The Last Sigil")
                         tooltip:AddLine("|cffffffff--Vault of Secrets", C_QuestLog.IsQuestFlaggedCompleted(63703))
                         tooltip:AddLine("|cffffffff--Vengeance for Korthia", C_QuestLog.IsQuestFlaggedCompleted(63704))
@@ -1645,7 +1650,7 @@ function addon:OnInitialize()
                         end
                     end
                 else
-                    tooltip:AddLine("|cff888888The Last Sigil", "|cff888888Locked|r")
+                    tooltip:AddLine("|cff888888The Last Sigil", "|cff888888Prerequisite Incomplete|r")
                 end
             else
                 tooltip:AddLine("|cffffffffRequirements", "|cff00ff00Complete|r")
@@ -1658,7 +1663,7 @@ function addon:OnInitialize()
                 tooltip:AddLine("|cffffffffRequirements", "|cff00ff00Complete|r")
             else
                 tooltip:AddLine("|cfff8b700Prerequisites")
-                if quest63727 == true then -- preq check
+                if quest63727 == true or MyPathfinder.Config.ShowCompleted == true then -- preq check
                     tooltip:AddLine("|cffffffffPatch 9.0.1", "|cff00ff00Complete|r")
                     tooltip:AddLine("|cfff8b700Achievments")
                     MyPathfinder.Tooltip(item[15514])
