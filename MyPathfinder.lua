@@ -1616,15 +1616,8 @@ function addon:OnInitialize()
                 tooltip:AddLine("|cfff8b700Chains of Domination Quest Line (Continued)")
 
                 -- The Last Sigil
-                if quest63902 == true and check3 == true and check4 == true and quest64556 == true and
-                        quest63639 == true and
-                        check1 and
-                        check2 and
-						check3 and
-						check4 
-                 then -- preq check
-                    if quest63727 == true and
-                        MyPathfinder.Config.ShowCompleted == false then -- complete check
+                if quest63902 == true and quest64556 == true and quest63639 == true and check1 and check2 or MyPathfinder.Config.ShowCompleted == true then -- preq check
+                    if quest63727 == true and MyPathfinder.Config.ShowCompleted == false then -- complete check
                         tooltip:AddLine("|cff00A2E8The Last Sigil", "|cff00ff00Complete|r")					
                     else 
                         tooltip:AddLine("|cff00A2E8The Last Sigil")
@@ -1646,7 +1639,7 @@ function addon:OnInitialize()
 
                         if quest63727 == true then
                             tooltip:AddLine("|cfff8b700Item")
-                            tooltip:AddLine("|cff00A2E8Memories of Sunless Skies", "|cff888888Unused|r")
+                            tooltip:AddLine("|cffffffffMemories of Sunless Skies", "|cff888888Unused|r")
                         end
                     end
                 else
