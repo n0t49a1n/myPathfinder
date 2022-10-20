@@ -1,8 +1,8 @@
-## Interface: 100000
+## Interface: 100002
 ## Title: MyPathfinder
 ## Notes: A simple add-on for displaying the status of MyPathfinder (Flying) Unlocks, Updated to work with Dragonflight, Shadowlands, BFA, WOD, and Legion
 ## Author: n0t49a1n
-## Version: 3.8.1
+## Version: 3.8.2
 ## SavedVariables: MyPathfinder
 ## X-Category: 
 ## X-Website: 

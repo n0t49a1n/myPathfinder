@@ -5,7 +5,7 @@
     Support for Legion, Warlords of Draenor, Battle for Azeroth, Shadowlands and Dragonflight
 
     Version:
-        3.8.1
+        3.8.2
 
     License:
         This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -84,7 +84,6 @@ function addon:OnInitialize()
     if MyPathfinder.Config.Shadow == nil then
         MyPathfinder.Config.Shadow = false
     end
-	-- Dragonflight Beta
 	if MyPathfinder.Config.Dragon == nil then
         MyPathfinder.Config.Dragon = true
     end
@@ -1649,7 +1648,7 @@ function addon:OnInitialize()
                 if check1 == true then
                     MyPathfinder.Tooltip(item[14790])
                 else
-                    tooltip:AddLine("|cffffffffCovenant Campaign", "|cff888888Incomplete")
+                    tooltip:AddLine("|cffffffffCovenant Campaign", "|cffff0000Incomplete")
                 end
 
                 tooltip:AddLine("|cfff8b700Chains of Domination Quest Line")
@@ -1725,35 +1724,35 @@ function addon:OnInitialize()
                         tooltip:AddLine("|cffffffffShaping Fate", "|cff00ff00Complete|r")
                         check3 = true
                     else
-                        tooltip:AddLine("|cffffffffShaping Fate", "|cff888888Incomplete")
+                        tooltip:AddLine("|cffffffffShaping Fate", "|cffff0000Incomplete")
                     end
 
                     if covenantID == 1 then --kyrian
                         if C_QuestLog.IsQuestFlaggedCompleted(61982) == true then
                             tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff00ff00Complete|r")
                         else
-                            tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff888888Incomplete")
+                            tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cffff0000Incomplete")
                         end
                         check4 = true
                     elseif covenantID == 2 then --venthyr
                         if C_QuestLog.IsQuestFlaggedCompleted(61981) == true then
                             tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff00ff00Complete|r")
                         else
-                            tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff888888Incomplete")
+                            tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cffff0000Incomplete")
                         end
                         check4 = true
                     elseif covenantID == 3 then --nightfae
                         if C_QuestLog.IsQuestFlaggedCompleted(61984) == true then
                             tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff00ff00Complete|r")
                         else
-                            tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff888888Incomplete")
+                            tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cffff0000Incomplete")
                         end
                         check4 = true
                     elseif covenantID == 4 then --necrolord
                         if C_QuestLog.IsQuestFlaggedCompleted(61983) == true then
                             tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff00ff00Complete|r")
                         else
-                            tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff888888Incomplete")
+                            tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cffff0000Incomplete")
                         end
                         check4 = true
                     end
@@ -1811,7 +1810,7 @@ function addon:OnInitialize()
                     tooltip:AddLine("|cfff8b700Achievments")
                     MyPathfinder.Tooltip(item[15514])
                 else
-                    tooltip:AddLine("|cff888888Patch 9.0.1", "|cff888888Incomplete")
+                    tooltip:AddLine("|cff888888Patch 9.0.1", "|cffff0000Incomplete")
                 end
             end
         elseif MyPathfinder.Config.Battle then
