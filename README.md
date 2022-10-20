@@ -1,12 +1,12 @@
 Description:
-    MyPathfinder is a simple addon designed to track progress in unlocking the Legion, Draenor, BFA and Shadowlands 9.1 and 9.2 patch flying.
+    MyPathfinder is a simple addon designed to track progress in unlocking the Legion, Draenor, BFA, Shadowlands and Dragonflight flying.
     MyPathfinder is fully functional as a standalone plugin and includes a minimap icon.
 
 Features:
-    Display and track progress towards unlocking flying Legion, Draenor, BFA and Shadowlands 9.1 and 9.2
+    Display and track progress towards unlocking flying Legion, Draenor, BFA, Shadowlands and Dragonflight
 
 Version: 
-    3.6.11
+    3.8.1
     
 Known Issues:
     Please report any issue with this addon
