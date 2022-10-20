@@ -5,7 +5,7 @@
     Support for Legion, Warlords of Draenor, Battle for Azeroth, Shadowlands and Dragonflight
 
     Version:
-        3.8.3
+        3.8.4
 
     License:
         This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
