@@ -5,7 +5,7 @@
     Support for Legion, Warlords of Draenor, Battle for Azeroth, Shadowlands and Dragonflight
 
     Version:
-        3.8.2
+        3.8.3
 
     License:
         This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -1461,6 +1461,10 @@ function addon:OnInitialize()
 
     MyPathfinder.ProcessTooltip = function(item)
         if MyPathfinder.Config.Dragon then
+		tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cFF33937FDragonflight|r|n|n")
+		tooltip:AddLine("|cff00A2E8Dragonriding")
+			version = select(4, GetBuildInfo())
+			if version >100000 then
 		-- The Dragonscale Expedition (storyline 1289)
 		if UnitFactionGroup("player") == "Horde" then
 		--H
@@ -1526,10 +1530,7 @@ function addon:OnInitialize()
 		s1300q02 = C_QuestLog.IsQuestFlaggedCompleted(66115) --The Mandate of the Red
 		s1300q03 = C_QuestLog.IsQuestFlaggedCompleted(68795) --Dragonriding
 		end
-
-			tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cFF33937FDragonflight|r|n|n")
 			--start of requirements / guide / info section
-            tooltip:AddLine("|cff00A2E8Dragonriding (BETA)")
 			if MyPathfinder.GetAchievementInfo(15794) == false or MyPathfinder.Config.ShowCompleted == true then
                 tooltip:AddLine("|cfff8b700The Dragonscale Expedition Storyline")
 				if s1289q16 == true then
@@ -1595,6 +1596,9 @@ function addon:OnInitialize()
 				tooltip:AddLine("")
 				tooltip:AddLine("|cfff8b700Dragonriding")
 				MyPathfinder.Tooltip(item[15794])
+			end
+			else
+				tooltip:AddLine("|cffffffffDragonflight Client (10.0.0+)", "|cffff0000Incomplete")
 			end
 		elseif MyPathfinder.Config.Shadow then
             --logic
@@ -1668,7 +1672,7 @@ function addon:OnInitialize()
                         tooltip:AddLine("|cffffffff--Report to Oribos", quest63639)
                     end
                 else
-                    tooltip:AddLine("|cff888888Battle of Ardenweald", "|cff888888Prerequisite Incomplete|r")
+                    tooltip:AddLine("|cff888888Battle of Ardenweald", "|cffff0000Prerequisite Incomplete|r")
                 end
 
                 -- Maw Walkers
@@ -1688,7 +1692,7 @@ function addon:OnInitialize()
                         tooltip:AddLine("|cffffffff--In Need of Assistance", quest64556)
                     end
                 else
-                    tooltip:AddLine("|cff888888Maw Walkers", "|cff888888Prerequisite Incomplete|r")
+                    tooltip:AddLine("|cff888888Maw Walkers", "|cffff0000Prerequisite Incomplete|r")
                 end
 
                 -- Focusing the Eye
@@ -1715,7 +1719,7 @@ function addon:OnInitialize()
                         tooltip:AddLine("|cffffffff--Good News, Everyone!", quest63902)
                     end
                 else
-                    tooltip:AddLine("|cff888888Focusing the Eye", "|cff888888Prerequisite Incomplete|r")
+                    tooltip:AddLine("|cff888888Focusing the Eye", "|cffff0000Prerequisite Incomplete|r")
                 end
 
                 if quest63902 == true then
@@ -1758,8 +1762,8 @@ function addon:OnInitialize()
                     end
                 else
 				tooltip:AddLine("|cfff8b700World Quests");
-				tooltip:AddLine("|cff888888Shaping Fate", "|cff888888Prerequisite Incomplete");
-				tooltip:AddLine("|cff888888Replenish the Reservoir", "|cff888888Prerequisite Incomplete")
+				tooltip:AddLine("|cff888888Shaping Fate", "|cffff0000Prerequisite Incomplete");
+				tooltip:AddLine("|cff888888Replenish the Reservoir", "|cffff0000Prerequisite Incomplete")
 				end
 
                 tooltip:AddLine("|cfff8b700Chains of Domination Quest Line (Continued)")
@@ -1792,7 +1796,7 @@ function addon:OnInitialize()
                         end
                     end
                 else
-                    tooltip:AddLine("|cff888888The Last Sigil", "|cff888888Prerequisite Incomplete|r")
+                    tooltip:AddLine("|cff888888The Last Sigil", "|cffff0000Prerequisite Incomplete|r")
                 end
             else
                 tooltip:AddLine("|cffffffffRequirements", "|cff00ff00Complete|r")
@@ -2000,8 +2004,6 @@ function MyPathfinder_OnClick(self, button, ...)
     if button == "LeftButton" then
         tooltip:Release()
         tooltip = nil
-
-        -- Dragonflight beta 
 		if MyPathfinder.Config.Dragon == true then
 			MyPathfinder.Config.Dragon = false
 		    MyPathfinder.Config.Shadow = true
@@ -2136,9 +2138,9 @@ function MyDO:BuildToolTip(self)
     tooltip:AddLine("|n|cffffffffLeft Click|r to toggle between Dragonflight, Shadowlands, BFA, WOD, and Legion ")
 
     if MyPathfinder.Config.ShowCompleted == false then
-        tooltip:AddLine("|n|cffffffffRight Click|r to |cff00ff00Show|r Completed Requirements (BETA)")
+        tooltip:AddLine("|n|cffffffffRight Click|r to |cff00ff00Show|r Completed Requirements")
     else
-        tooltip:AddLine("|n|cffffffffRight Click|r to |cffff0000Hide|r Completed Requirements (BETA)")
+        tooltip:AddLine("|n|cffffffffRight Click|r to |cffff0000Hide|r Completed Requirements")
     end
 
     tooltip:UpdateScrolling()
