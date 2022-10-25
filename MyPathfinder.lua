@@ -1,23 +1,22 @@
 --[[
-    MyPathfinder, a World of Warcraft Addon
-    
-    Tracks your "Pathfinder" progress. 
-    Support for Legion, Warlords of Draenor, Battle for Azeroth, Shadowlands and Dragonflight
+MyPathfinder, a World of Warcraft Addon
 
-    Version:
-        3.8.4
+Tracks your "Pathfinder" progress.
+Support for Legion, Warlords of Draenor, Battle for Azeroth, Shadowlands and Dragonflight
 
-    License:
-        This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
-        as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+Version:
+3.8.5
 
-        This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-        without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-        See the GNU General Public License for more details.
+License:
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-        You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
 ]]
-
 local initialized = false
 local MINIMAP_ICON = "Interface\\Icons\\ability_hunter_pathfinding"
 local dbDefaults = {
@@ -84,7 +83,7 @@ function addon:OnInitialize()
     if MyPathfinder.Config.Shadow == nil then
         MyPathfinder.Config.Shadow = false
     end
-	if MyPathfinder.Config.Dragon == nil then
+    if MyPathfinder.Config.Dragon == nil then
         MyPathfinder.Config.Dragon = true
     end
 
@@ -1374,7 +1373,16 @@ function addon:OnInitialize()
     end
 
     MyPathfinder.Sort = function(table)
-        SortOrder = {[0] = 15794, [1] = 15514, [2] = 14790, [3] = 13250, [4] = 12989, [5] = 11446, [6] = 11190, [7] = 10018}
+        SortOrder = {
+            [0] = 15794,
+            [1] = 15514,
+            [2] = 14790,
+            [3] = 13250,
+            [4] = 12989,
+            [5] = 11446,
+            [6] = 11190,
+            [7] = 10018
+        }
 
         for _, v1 in ipairs(SortOrder) do
             for k2, _ in pairs(table) do
@@ -1406,7 +1414,16 @@ function addon:OnInitialize()
     end
 
     MyPathfinder.Reset = function()
-        SortOrder = {[0] = 15794, [1] = 15514, [2] = 14790, [3] = 13250, [4] = 12989, [5] = 11446, [6] = 11190, [7] = 10018}
+        SortOrder = {
+            [0] = 15794,
+            [1] = 15514,
+            [2] = 14790,
+            [3] = 13250,
+            [4] = 12989,
+            [5] = 11446,
+            [6] = 11190,
+            [7] = 10018
+        }
 
         for _, v in ipairs(SortOrder) do
             MyPathfinder.tStatus[v].Sum = 0
@@ -1416,7 +1433,16 @@ function addon:OnInitialize()
 
     MyPathfinder.ProcessTitlePercent = function(item)
         MyPathfinder.Reset()
-        SortOrder = {[0] = 15794, [1] = 15514, [2] = 14790, [3] = 13250, [4] = 12989, [5] = 11446, [6] = 11190, [7] = 10018}
+        SortOrder = {
+            [0] = 15794,
+            [1] = 15514,
+            [2] = 14790,
+            [3] = 13250,
+            [4] = 12989,
+            [5] = 11446,
+            [6] = 11190,
+            [7] = 10018
+        }
 
         for soK, soV in ipairs(SortOrder) do
             for iK, iV in pairs(item) do
@@ -1461,146 +1487,141 @@ function addon:OnInitialize()
 
     MyPathfinder.ProcessTooltip = function(item)
         if MyPathfinder.Config.Dragon then
-		tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cFF33937FDragonflight|r|n|n")
-		tooltip:AddLine("|cff00A2E8Dragonriding")
-			version = select(4, GetBuildInfo())
-			if version >100000 then
-		-- The Dragonscale Expedition (storyline 1289)
-		if UnitFactionGroup("player") == "Horde" then
-		--H
-		s1289q01 = C_QuestLog.IsQuestFlaggedCompleted(65435) --The Dragon Isles Await
-		s1289q02 = C_QuestLog.IsQuestFlaggedCompleted(65437) --Aspectral Invitation
-		s1289q03 = C_QuestLog.IsQuestFlaggedCompleted(65443) --Expeditionary Coordination
-		s1289q04 = C_QuestLog.IsQuestFlaggedCompleted(72256) --Dark Talons
-		s1289q05 = C_QuestLog.IsQuestFlaggedCompleted(65439) --Whispers on the Winds
-		s1289q06 = C_QuestLog.IsQuestFlaggedCompleted(69944) --Chasing Storms
-		s1289q07 = C_QuestLog.IsQuestFlaggedCompleted(65444) --To the Dragon Isles
-		s1289q08 = C_QuestLog.IsQuestFlaggedCompleted(65452) --Explorers in Peril
-		s1289q09 = C_QuestLog.IsQuestFlaggedCompleted(65453) --Primal Pests
-		s1289q10 = C_QuestLog.IsQuestFlaggedCompleted(65451) --Practice Materials
-		s1289q11 = C_QuestLog.IsQuestFlaggedCompleted(69910) --Where is Wrathion?
-		--A + H
-		s1289q12 = C_QuestLog.IsQuestFlaggedCompleted(69911) --Excuse the Mess
-		s1289q13 = C_QuestLog.IsQuestFlaggedCompleted(69912) --My First Real Emergency!
-		s1289q14 = C_QuestLog.IsQuestFlaggedCompleted(66101) --From Such Great Heights
-		s1289q15 = C_QuestLog.IsQuestFlaggedCompleted(69914) --The Djaradin Have Awoken
-		--H
-		s1289q16 = C_QuestLog.IsQuestFlaggedCompleted(70198) --The Call of the Isles
-		else
-		--A
-		s1289q01 = C_QuestLog.IsQuestFlaggedCompleted(65436) --The Dragon Isles Await
-		s1289q02 = C_QuestLog.IsQuestFlaggedCompleted(66577) --Aspectral Invitation
-		s1289q03 = C_QuestLog.IsQuestFlaggedCompleted(66589) --Expeditionary Coordination
-		s1289q04 = C_QuestLog.IsQuestFlaggedCompleted(72240) --The Obsidian Warders
-		s1289q05 = C_QuestLog.IsQuestFlaggedCompleted(66596) --Whispers on the Winds
-		s1289q06 = C_QuestLog.IsQuestFlaggedCompleted(70050) --Chasing Storms
-		s1289q07 = C_QuestLog.IsQuestFlaggedCompleted(67700) --To the Dragon Isles
-		s1289q08 = C_QuestLog.IsQuestFlaggedCompleted(70122) --Explorers in Peril
-		s1289q09 = C_QuestLog.IsQuestFlaggedCompleted(70123) --Primal Pests
-		s1289q10 = C_QuestLog.IsQuestFlaggedCompleted(70124) --Practice Materials
-		s1289q11 = C_QuestLog.IsQuestFlaggedCompleted(70125) --Where is Wrathion?
-		--A + H
-		s1289q12 = C_QuestLog.IsQuestFlaggedCompleted(69911) --Excuse the Mess
-		s1289q13 = C_QuestLog.IsQuestFlaggedCompleted(69912) --My First Real Emergency!
-		s1289q14 = C_QuestLog.IsQuestFlaggedCompleted(66101) --From Such Great Heights
-		s1289q15 = C_QuestLog.IsQuestFlaggedCompleted(69914) --The Djaradin Have Awoken
-		--A
-		s1289q16 = C_QuestLog.IsQuestFlaggedCompleted(70197) --The Call of the Isles
-		end
+            tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cFF33937FDragonflight|r|n|n")
+            tooltip:AddLine("|cff00A2E8Dragonriding")
+            -- The Dragonscale Expedition (storyline 1289)
+            if UnitFactionGroup("player") == "Horde" then
+                --H
+                s1289q01 = C_QuestLog.IsQuestFlaggedCompleted(65435) --The Dragon Isles Await
+                s1289q02 = C_QuestLog.IsQuestFlaggedCompleted(65437) --Aspectral Invitation
+                s1289q03 = C_QuestLog.IsQuestFlaggedCompleted(65443) --Expeditionary Coordination
+                s1289q04 = C_QuestLog.IsQuestFlaggedCompleted(72256) --Dark Talons
+                s1289q05 = C_QuestLog.IsQuestFlaggedCompleted(65439) --Whispers on the Winds
+                s1289q06 = C_QuestLog.IsQuestFlaggedCompleted(69944) --Chasing Storms
+                s1289q07 = C_QuestLog.IsQuestFlaggedCompleted(65444) --To the Dragon Isles
+                s1289q08 = C_QuestLog.IsQuestFlaggedCompleted(65452) --Explorers in Peril
+                s1289q09 = C_QuestLog.IsQuestFlaggedCompleted(65453) --Primal Pests
+                s1289q10 = C_QuestLog.IsQuestFlaggedCompleted(65451) --Practice Materials
+                s1289q11 = C_QuestLog.IsQuestFlaggedCompleted(69910) --Where is Wrathion?
+                --A + H
+                s1289q12 = C_QuestLog.IsQuestFlaggedCompleted(69911) --Excuse the Mess
+                s1289q13 = C_QuestLog.IsQuestFlaggedCompleted(69912) --My First Real Emergency!
+                s1289q14 = C_QuestLog.IsQuestFlaggedCompleted(66101) --From Such Great Heights
+                s1289q15 = C_QuestLog.IsQuestFlaggedCompleted(69914) --The Djaradin Have Awoken
+                --H
+                s1289q16 = C_QuestLog.IsQuestFlaggedCompleted(70198) --The Call of the Isles
+            else
+                --A
+                s1289q01 = C_QuestLog.IsQuestFlaggedCompleted(65436) --The Dragon Isles Await
+                s1289q02 = C_QuestLog.IsQuestFlaggedCompleted(66577) --Aspectral Invitation
+                s1289q03 = C_QuestLog.IsQuestFlaggedCompleted(66589) --Expeditionary Coordination
+                s1289q04 = C_QuestLog.IsQuestFlaggedCompleted(72240) --The Obsidian Warders
+                s1289q05 = C_QuestLog.IsQuestFlaggedCompleted(66596) --Whispers on the Winds
+                s1289q06 = C_QuestLog.IsQuestFlaggedCompleted(70050) --Chasing Storms
+                s1289q07 = C_QuestLog.IsQuestFlaggedCompleted(67700) --To the Dragon Isles
+                s1289q08 = C_QuestLog.IsQuestFlaggedCompleted(70122) --Explorers in Peril
+                s1289q09 = C_QuestLog.IsQuestFlaggedCompleted(70123) --Primal Pests
+                s1289q10 = C_QuestLog.IsQuestFlaggedCompleted(70124) --Practice Materials
+                s1289q11 = C_QuestLog.IsQuestFlaggedCompleted(70125) --Where is Wrathion?
+                --A + H
+                s1289q12 = C_QuestLog.IsQuestFlaggedCompleted(69911) --Excuse the Mess
+                s1289q13 = C_QuestLog.IsQuestFlaggedCompleted(69912) --My First Real Emergency!
+                s1289q14 = C_QuestLog.IsQuestFlaggedCompleted(66101) --From Such Great Heights
+                s1289q15 = C_QuestLog.IsQuestFlaggedCompleted(69914) --The Djaradin Have Awoken
+                --A
+                s1289q16 = C_QuestLog.IsQuestFlaggedCompleted(70197) --The Call of the Isles
+            end
 
-		if C_QuestLog.IsQuestFlaggedCompleted(70197) or C_QuestLog.IsQuestFlaggedCompleted(70198) == true then
-		-- Dragons in Distress (storyline 1299)
-		s1299q01 = C_QuestLog.IsQuestFlaggedCompleted(65760) --Reporting for Duty
-		s1299q02 = C_QuestLog.IsQuestFlaggedCompleted(65989) --Invader Djaradin
-		s1299q03 = C_QuestLog.IsQuestFlaggedCompleted(65990) --Deliver Whelps From Evil
-		s1299q04 = C_QuestLog.IsQuestFlaggedCompleted(65991) --Time for a Reckoning
-		s1299q05 = C_QuestLog.IsQuestFlaggedCompleted(65993) --Killjoy
-		s1299q06 = C_QuestLog.IsQuestFlaggedCompleted(65992) --Blacktalon Intel
-		s1299q07 = C_QuestLog.IsQuestFlaggedCompleted(65995) --The Obsidian Citadel
-		s1299q08 = C_QuestLog.IsQuestFlaggedCompleted(65996) --Veteran Reinforcements
-		s1299q09 = C_QuestLog.IsQuestFlaggedCompleted(65997) --Chasing Sendrax
-		s1299q10 = C_QuestLog.IsQuestFlaggedCompleted(65998) --Future of the Flights
-		s1299q11 = C_QuestLog.IsQuestFlaggedCompleted(65999) --Red in Tooth and Claw
-		s1299q12 = C_QuestLog.IsQuestFlaggedCompleted(66000) --Library of Alexstrasza
-		s1299q13 = C_QuestLog.IsQuestFlaggedCompleted(66001) --A Last Hope
-		end
-		if C_QuestLog.IsQuestFlaggedCompleted(66001) == true then
-		-- In Defense of Life (storyline 1300)
-		s1300q01 = C_QuestLog.IsQuestFlaggedCompleted(66114) --For the Benefit of the Queen
-		s1300q02 = C_QuestLog.IsQuestFlaggedCompleted(66115) --The Mandate of the Red
-		s1300q03 = C_QuestLog.IsQuestFlaggedCompleted(68795) --Dragonriding
-		end
-			--start of requirements / guide / info section
-			if MyPathfinder.GetAchievementInfo(15794) == false or MyPathfinder.Config.ShowCompleted == true then
+            if C_QuestLog.IsQuestFlaggedCompleted(70197) or C_QuestLog.IsQuestFlaggedCompleted(70198) == true then
+                -- Dragons in Distress (storyline 1299)
+                s1299q01 = C_QuestLog.IsQuestFlaggedCompleted(65760) --Reporting for Duty
+                s1299q02 = C_QuestLog.IsQuestFlaggedCompleted(65989) --Invader Djaradin
+                s1299q03 = C_QuestLog.IsQuestFlaggedCompleted(65990) --Deliver Whelps From Evil
+                s1299q04 = C_QuestLog.IsQuestFlaggedCompleted(65991) --Time for a Reckoning
+                s1299q05 = C_QuestLog.IsQuestFlaggedCompleted(65993) --Killjoy
+                s1299q06 = C_QuestLog.IsQuestFlaggedCompleted(65992) --Blacktalon Intel
+                s1299q07 = C_QuestLog.IsQuestFlaggedCompleted(65995) --The Obsidian Citadel
+                s1299q08 = C_QuestLog.IsQuestFlaggedCompleted(65996) --Veteran Reinforcements
+                s1299q09 = C_QuestLog.IsQuestFlaggedCompleted(65997) --Chasing Sendrax
+                s1299q10 = C_QuestLog.IsQuestFlaggedCompleted(65998) --Future of the Flights
+                s1299q11 = C_QuestLog.IsQuestFlaggedCompleted(65999) --Red in Tooth and Claw
+                s1299q12 = C_QuestLog.IsQuestFlaggedCompleted(66000) --Library of Alexstrasza
+                s1299q13 = C_QuestLog.IsQuestFlaggedCompleted(66001) --A Last Hope
+            end
+            if C_QuestLog.IsQuestFlaggedCompleted(66001) == true then
+                -- In Defense of Life (storyline 1300)
+                s1300q01 = C_QuestLog.IsQuestFlaggedCompleted(66114) --For the Benefit of the Queen
+                s1300q02 = C_QuestLog.IsQuestFlaggedCompleted(66115) --The Mandate of the Red
+                s1300q03 = C_QuestLog.IsQuestFlaggedCompleted(68795) --Dragonriding
+            end
+            --start of requirements / guide / info section
+            if MyPathfinder.GetAchievementInfo(15794) == false or MyPathfinder.Config.ShowCompleted == true then
                 tooltip:AddLine("|cfff8b700The Dragonscale Expedition Storyline")
-				if s1289q16 == true then
-					tooltip:AddLine("|cffffffffThe Dragonscale Expedition Storyline", "|cff00ff00Complete|r")
-				else
-					tooltip:AddLine("|cffffffff--The Dragon Isles Await", s1289q01)
-					tooltip:AddLine("|cffffffff--Aspectral Invitation", s1289q02)
-					tooltip:AddLine("|cffffffff--Expeditionary Coordination", s1289q03)
-					if UnitFactionGroup("player") == "Horde" then
-					tooltip:AddLine("|cffffffff--Dark Talons", s1289q04)
-					else
-					tooltip:AddLine("|cffffffff--The Obsidian Warders", s1289q04)
-					end
-					tooltip:AddLine("|cffffffff--Whispers on the Winds", s1289q05)
-					tooltip:AddLine("|cffffffff--Chasing Storms", s1289q06)
-					tooltip:AddLine("|cffffffff--To the Dragon Isles", s1289q07)
-					tooltip:AddLine("|cffffffff--Primal Pests", s1289q08)
-					tooltip:AddLine("|cffffffff--Explorers in Peril", s1289q09)	
-					tooltip:AddLine("|cffffffff--Practice Materials", s1289q10)
-					tooltip:AddLine("|cffffffff--Where is Wrathion?", s1289q11)
-					tooltip:AddLine("|cffffffff--Excuse the Mess", s1289q12)
-					tooltip:AddLine("|cffffffff--My First Real Emergency!", s1289q13)
-					tooltip:AddLine("|cffffffff--From Such Great Heights", s1289q14)
-					tooltip:AddLine("|cffffffff--The Djaradin Have Awoken", s1289q15)
-					tooltip:AddLine("|cffffffff--The Call of the Isles", s1289q16)
-				end
-				tooltip:AddLine("")
-				tooltip:AddLine("|cfff8b700Dragons in Distress Storyline")
-				if s1289q16 == true then
-					if s1299q13 == true then
-						tooltip:AddLine("|cffffffffDragons in Distress Storyline", "|cff00ff00Complete|r")
-					else
-						tooltip:AddLine("|cffffffff--Reporting for Duty", s1299q01)
-						tooltip:AddLine("|cffffffff--Invader Djaradin", s1299q02)
-						tooltip:AddLine("|cffffffff--Deliver Whelps From Evil", s1299q03)
-						tooltip:AddLine("|cffffffff--Time for a Reckoning", s1299q04)
-						tooltip:AddLine("|cffffffff--Killjoy", s1299q05)
-						tooltip:AddLine("|cffffffff--Blacktalon Intel", s1299q06)
-						tooltip:AddLine("|cffffffff--The Obsidian Citadel", s1299q07)
-						tooltip:AddLine("|cffffffff--Veteran Reinforcements", s1299q08)
-						tooltip:AddLine("|cffffffff--Chasing Sendrax", s1299q09)
-						tooltip:AddLine("|cffffffff--Future of the Flights", s1299q10)	
-						tooltip:AddLine("|cffffffff--Red in Tooth and Claw", s1299q11)
-						tooltip:AddLine("|cffffffff--Library of Alexstrasza", s1299q12)
-						tooltip:AddLine("|cffffffff--A Last Hope", s1299q13)
-					end
-				else
+                if s1289q16 == true then
+                    tooltip:AddLine("|cffffffffThe Dragonscale Expedition Storyline", "|cff00ff00Complete|r")
+                else
+                    tooltip:AddLine("|cffffffff--The Dragon Isles Await", s1289q01)
+                    tooltip:AddLine("|cffffffff--Aspectral Invitation", s1289q02)
+                    tooltip:AddLine("|cffffffff--Expeditionary Coordination", s1289q03)
+                    if UnitFactionGroup("player") == "Horde" then
+                        tooltip:AddLine("|cffffffff--Dark Talons", s1289q04)
+                    else
+                        tooltip:AddLine("|cffffffff--The Obsidian Warders", s1289q04)
+                    end
+                    tooltip:AddLine("|cffffffff--Whispers on the Winds", s1289q05)
+                    tooltip:AddLine("|cffffffff--Chasing Storms", s1289q06)
+                    tooltip:AddLine("|cffffffff--To the Dragon Isles", s1289q07)
+                    tooltip:AddLine("|cffffffff--Primal Pests", s1289q08)
+                    tooltip:AddLine("|cffffffff--Explorers in Peril", s1289q09)
+                    tooltip:AddLine("|cffffffff--Practice Materials", s1289q10)
+                    tooltip:AddLine("|cffffffff--Where is Wrathion?", s1289q11)
+                    tooltip:AddLine("|cffffffff--Excuse the Mess", s1289q12)
+                    tooltip:AddLine("|cffffffff--My First Real Emergency!", s1289q13)
+                    tooltip:AddLine("|cffffffff--From Such Great Heights", s1289q14)
+                    tooltip:AddLine("|cffffffff--The Djaradin Have Awoken", s1289q15)
+                    tooltip:AddLine("|cffffffff--The Call of the Isles", s1289q16)
+                end
+                tooltip:AddLine("")
+                tooltip:AddLine("|cfff8b700Dragons in Distress Storyline")
+                if s1289q16 == true then
+                    if s1299q13 == true then
+                        tooltip:AddLine("|cffffffffDragons in Distress Storyline", "|cff00ff00Complete|r")
+                    else
+                        tooltip:AddLine("|cffffffff--Reporting for Duty", s1299q01)
+                        tooltip:AddLine("|cffffffff--Invader Djaradin", s1299q02)
+                        tooltip:AddLine("|cffffffff--Deliver Whelps From Evil", s1299q03)
+                        tooltip:AddLine("|cffffffff--Time for a Reckoning", s1299q04)
+                        tooltip:AddLine("|cffffffff--Killjoy", s1299q05)
+                        tooltip:AddLine("|cffffffff--Blacktalon Intel", s1299q06)
+                        tooltip:AddLine("|cffffffff--The Obsidian Citadel", s1299q07)
+                        tooltip:AddLine("|cffffffff--Veteran Reinforcements", s1299q08)
+                        tooltip:AddLine("|cffffffff--Chasing Sendrax", s1299q09)
+                        tooltip:AddLine("|cffffffff--Future of the Flights", s1299q10)
+                        tooltip:AddLine("|cffffffff--Red in Tooth and Claw", s1299q11)
+                        tooltip:AddLine("|cffffffff--Library of Alexstrasza", s1299q12)
+                        tooltip:AddLine("|cffffffff--A Last Hope", s1299q13)
+                    end
+                else
                     tooltip:AddLine("|cffffffffThe Dragonscale Expedition Storyline", "|cffff0000Incomplete")
                 end
-					tooltip:AddLine("")
-					tooltip:AddLine("|cfff8b700In Defense of Life Storyline")
-				if s1299q13 == true then
-						if s1300q3 == true then
-							tooltip:AddLine("|cffffffffStoryline", "|cff00ff00Complete|r")
-						else
-							tooltip:AddLine("|cffffffff--For the Benefit of the Queen", s1300q01)
-							tooltip:AddLine("|cffffffff--The Mandate of the Red", s1300q02)
-							tooltip:AddLine("|cffffffff--Dragonriding", s1300q03)
-						end
-				else
+                tooltip:AddLine("")
+                tooltip:AddLine("|cfff8b700In Defense of Life Storyline")
+                if s1299q13 == true then
+                    if s1300q3 == true then
+                        tooltip:AddLine("|cffffffffStoryline", "|cff00ff00Complete|r")
+                    else
+                        tooltip:AddLine("|cffffffff--For the Benefit of the Queen", s1300q01)
+                        tooltip:AddLine("|cffffffff--The Mandate of the Red", s1300q02)
+                        tooltip:AddLine("|cffffffff--Dragonriding", s1300q03)
+                    end
+                else
                     tooltip:AddLine("|cffffffffDragons in Distress Storyline", "|cffff0000Incomplete")
                 end
-				tooltip:AddLine("")
-				tooltip:AddLine("|cfff8b700Dragonriding")
-				MyPathfinder.Tooltip(item[15794])
-			end
-			else
-				tooltip:AddLine("|cffffffffDragonflight Client (10.0.0+)", "|cffff0000Incomplete")
-			end
-		elseif MyPathfinder.Config.Shadow then
+                tooltip:AddLine("")
+                tooltip:AddLine("|cfff8b700Dragonriding")
+                MyPathfinder.Tooltip(item[15794])
+            end
+        elseif MyPathfinder.Config.Shadow then
             --logic
             quest63639 = C_QuestLog.IsQuestFlaggedCompleted(63639)
             quest64556 = C_QuestLog.IsQuestFlaggedCompleted(64556)
@@ -1664,11 +1685,20 @@ function addon:OnInitialize()
                     else
                         tooltip:AddLine("|cff00A2E8Battle of Ardenweald")
                         tooltip:AddLine("|cffffffff--The First Move", C_QuestLog.IsQuestFlaggedCompleted(63576))
-                        tooltip:AddLine("|cffffffff--A Gathering of Covenants", C_QuestLog.IsQuestFlaggedCompleted(63856))
+                        tooltip:AddLine(
+                            "|cffffffff--A Gathering of Covenants",
+                            C_QuestLog.IsQuestFlaggedCompleted(63856)
+                        )
                         tooltip:AddLine("|cffffffff--Voices of the Eternal", C_QuestLog.IsQuestFlaggedCompleted(63857))
-                        tooltip:AddLine("|cffffffff--The Battle of Ardenweald", C_QuestLog.IsQuestFlaggedCompleted(63578))
+                        tooltip:AddLine(
+                            "|cffffffff--The Battle of Ardenweald",
+                            C_QuestLog.IsQuestFlaggedCompleted(63578)
+                        )
                         tooltip:AddLine("|cffffffff--Can't Turn Our Backs", C_QuestLog.IsQuestFlaggedCompleted(63638))
-                        tooltip:AddLine("|cffffffff--The Heart of Ardenweald", C_QuestLog.IsQuestFlaggedCompleted(63904))
+                        tooltip:AddLine(
+                            "|cffffffff--The Heart of Ardenweald",
+                            C_QuestLog.IsQuestFlaggedCompleted(63904)
+                        )
                         tooltip:AddLine("|cffffffff--Report to Oribos", quest63639)
                     end
                 else
@@ -1684,10 +1714,16 @@ function addon:OnInitialize()
                         tooltip:AddLine("|cffffffff--Opening the Maw", C_QuestLog.IsQuestFlaggedCompleted(63660))
                         tooltip:AddLine("|cffffffff--Link to the Maw", C_QuestLog.IsQuestFlaggedCompleted(63661))
                         tooltip:AddLine("|cffffffff--Mysteries of the Maw", C_QuestLog.IsQuestFlaggedCompleted(63662))
-                        tooltip:AddLine("|cffffffff--Korthia, the City of Secrets", C_QuestLog.IsQuestFlaggedCompleted(63663))
+                        tooltip:AddLine(
+                            "|cffffffff--Korthia, the City of Secrets",
+                            C_QuestLog.IsQuestFlaggedCompleted(63663)
+                        )
                         tooltip:AddLine("|cffffffff--Who is the Maw Walker?", C_QuestLog.IsQuestFlaggedCompleted(63994))
                         tooltip:AddLine("|cffffffff--Opening to Oribos", C_QuestLog.IsQuestFlaggedCompleted(63665))
-                        tooltip:AddLine("|cffffffff--Charge of the Covenants", C_QuestLog.IsQuestFlaggedCompleted(64007))
+                        tooltip:AddLine(
+                            "|cffffffff--Charge of the Covenants",
+                            C_QuestLog.IsQuestFlaggedCompleted(64007)
+                        )
                         tooltip:AddLine("|cffffffff--Surveying Secrets", C_QuestLog.IsQuestFlaggedCompleted(64555))
                         tooltip:AddLine("|cffffffff--In Need of Assistance", quest64556)
                     end
@@ -1708,7 +1744,10 @@ function addon:OnInitialize()
                         tooltip:AddLine("|cffffffff--Birds of a Feather", C_QuestLog.IsQuestFlaggedCompleted(63810))
                         tooltip:AddLine("|cffffffff--The Caged Bird", C_QuestLog.IsQuestFlaggedCompleted(63754))
                         tooltip:AddLine("|cffffffff--Claim the Sky", C_QuestLog.IsQuestFlaggedCompleted(63764))
-                        tooltip:AddLine("|cffffffff--A Hate-Hate Relationship", C_QuestLog.IsQuestFlaggedCompleted(63811))
+                        tooltip:AddLine(
+                            "|cffffffff--A Hate-Hate Relationship",
+                            C_QuestLog.IsQuestFlaggedCompleted(63811)
+                        )
                         tooltip:AddLine("|cffffffff--Fury Given Voice", C_QuestLog.IsQuestFlaggedCompleted(63831))
                         tooltip:AddLine("|cffffffff--The Chosen Few", C_QuestLog.IsQuestFlaggedCompleted(63844))
                         tooltip:AddLine("|cffffffff--Wrath of Odyn", C_QuestLog.IsQuestFlaggedCompleted(63845))
@@ -1761,18 +1800,21 @@ function addon:OnInitialize()
                         check4 = true
                     end
                 else
-				tooltip:AddLine("|cfff8b700World Quests");
-				tooltip:AddLine("|cff888888Shaping Fate", "|cffff0000Prerequisite Incomplete");
-				tooltip:AddLine("|cff888888Replenish the Reservoir", "|cffff0000Prerequisite Incomplete")
-				end
+                    tooltip:AddLine("|cfff8b700World Quests")
+                    tooltip:AddLine("|cff888888Shaping Fate", "|cffff0000Prerequisite Incomplete")
+                    tooltip:AddLine("|cff888888Replenish the Reservoir", "|cffff0000Prerequisite Incomplete")
+                end
 
                 tooltip:AddLine("|cfff8b700Chains of Domination Quest Line (Continued)")
 
                 -- The Last Sigil
-                if quest63902 == true and quest64556 == true and quest63639 == true and check1 and check2 or MyPathfinder.Config.ShowCompleted == true then -- preq check
+                if
+                    quest63902 == true and quest64556 == true and quest63639 == true and check1 and check2 or
+                        MyPathfinder.Config.ShowCompleted == true
+                 then -- preq check
                     if quest63727 == true and MyPathfinder.Config.ShowCompleted == false then -- complete check
-                        tooltip:AddLine("|cff00A2E8The Last Sigil", "|cff00ff00Complete|r")					
-                    else 
+                        tooltip:AddLine("|cff00A2E8The Last Sigil", "|cff00ff00Complete|r")
+                    else
                         tooltip:AddLine("|cff00A2E8The Last Sigil")
                         tooltip:AddLine("|cffffffff--Vault of Secrets", C_QuestLog.IsQuestFlaggedCompleted(63703))
                         tooltip:AddLine("|cffffffff--Vengeance for Korthia", C_QuestLog.IsQuestFlaggedCompleted(63704))
@@ -1862,7 +1904,7 @@ function addon:OnInitialize()
             else
                 MyPathfinder.Tooltip(item[10018])
             end
-		end
+        end
     end
 
     --[4] = 11446, [5] = 11190, [6] = 10018};
@@ -1921,10 +1963,17 @@ function addon:OnInitialize()
                             tooltip:AddLine(spacing .. color .. item.Name, GREEN_FONT_COLOR_CODE .. "Complete")
                         else
                             if ebo == true then
-                                tooltip:AddLine(spacing .. color .. item.Name, "|cff888888Earned By " .. item.earnedBy .. "|r " .. GREEN_FONT_COLOR_CODE .. "Complete")
+                                tooltip:AddLine(
+                                    spacing .. color .. item.Name,
+                                    "|cff888888Earned By " ..
+                                        item.earnedBy .. "|r " .. GREEN_FONT_COLOR_CODE .. "Complete"
+                                )
                             elseif ebm == true then
                                 myname, myrealm = UnitName("player")
-                                tooltip:AddLine(spacing .. color .. item.Name, "|cff888888Earned By " .. myname .. "|r " .. GREEN_FONT_COLOR_CODE .. "Complete")
+                                tooltip:AddLine(
+                                    spacing .. color .. item.Name,
+                                    "|cff888888Earned By " .. myname .. "|r " .. GREEN_FONT_COLOR_CODE .. "Complete"
+                                )
                             else
                                 tooltip:AddLine(spacing .. color .. item.Name, GREEN_FONT_COLOR_CODE .. "Complete")
                             end
@@ -1937,10 +1986,18 @@ function addon:OnInitialize()
                         tooltip:AddLine(spacing .. color .. item.Name, MyPathfinder.GetPercent(item))
                     else
                         if ebo == true then
-                            tooltip:AddLine(spacing .. color .. item.Name, "|cff888888Earned By " .. item.earnedBy .. "|r " .. GREEN_FONT_COLOR_CODE .. MyPathfinder.GetPercent(item))
+                            tooltip:AddLine(
+                                spacing .. color .. item.Name,
+                                "|cff888888Earned By " ..
+                                    item.earnedBy .. "|r " .. GREEN_FONT_COLOR_CODE .. MyPathfinder.GetPercent(item)
+                            )
                         elseif ebm == true then
                             myname, myrealm = UnitName("player")
-                            tooltip:AddLine(spacing .. color .. item.Name, "|cff888888Earned By " .. myname .. "|r " .. GREEN_FONT_COLOR_CODE .. MyPathfinder.GetPercent(item))
+                            tooltip:AddLine(
+                                spacing .. color .. item.Name,
+                                "|cff888888Earned By " ..
+                                    myname .. "|r " .. GREEN_FONT_COLOR_CODE .. MyPathfinder.GetPercent(item)
+                            )
                         else
                             tooltip:AddLine(spacing .. color .. item.Name, MyPathfinder.GetPercent(item))
                         end
@@ -1963,19 +2020,25 @@ function addon:OnInitialize()
             local p = MyPathfinder.tStatus[15794].Sum
             output = " |cffe333333|r: " .. string.format("%#3.2f%%", p)
         end
-		
-		if MyPathfinder.Config.Shadow then
-            local p = (MyPathfinder.tStatus[15514].Sum + MyPathfinder.tStatus[14790].Sum) / (MyPathfinder.tStatus[15514].Count + MyPathfinder.tStatus[14790].Count)
+
+        if MyPathfinder.Config.Shadow then
+            local p =
+                (MyPathfinder.tStatus[15514].Sum + MyPathfinder.tStatus[14790].Sum) /
+                (MyPathfinder.tStatus[15514].Count + MyPathfinder.tStatus[14790].Count)
             output = " |cFFE77324B|r: " .. string.format("%#3.2f%%", p)
         end
 
         if MyPathfinder.Config.Battle then
-            local p = (MyPathfinder.tStatus[13250].Sum + MyPathfinder.tStatus[12989].Sum) / (MyPathfinder.tStatus[13250].Count + MyPathfinder.tStatus[12989].Count)
+            local p =
+                (MyPathfinder.tStatus[13250].Sum + MyPathfinder.tStatus[12989].Sum) /
+                (MyPathfinder.tStatus[13250].Count + MyPathfinder.tStatus[12989].Count)
             output = " |cFFE77324B|r: " .. string.format("%#3.2f%%", p)
         end
 
         if MyPathfinder.Config.Legion then
-            local p = (MyPathfinder.tStatus[11446].Sum + MyPathfinder.tStatus[11190].Sum) / (MyPathfinder.tStatus[11446].Count + MyPathfinder.tStatus[11190].Count)
+            local p =
+                (MyPathfinder.tStatus[11446].Sum + MyPathfinder.tStatus[11190].Sum) /
+                (MyPathfinder.tStatus[11446].Count + MyPathfinder.tStatus[11190].Count)
             output = " |cff13ff29L|r: " .. string.format("%#3.2f%%", p)
         end
 
@@ -2004,38 +2067,38 @@ function MyPathfinder_OnClick(self, button, ...)
     if button == "LeftButton" then
         tooltip:Release()
         tooltip = nil
-		if MyPathfinder.Config.Dragon == true then
-			MyPathfinder.Config.Dragon = false
-		    MyPathfinder.Config.Shadow = true
+        if MyPathfinder.Config.Dragon == true then
+            MyPathfinder.Config.Dragon = false
+            MyPathfinder.Config.Shadow = true
             MyPathfinder.Config.Battle = false
             MyPathfinder.Config.Legion = false
             MyPathfinder.Config.Draenor = false
-		elseif MyPathfinder.Config.Shadow == true then
-			MyPathfinder.Config.Dragon = false
+        elseif MyPathfinder.Config.Shadow == true then
+            MyPathfinder.Config.Dragon = false
             MyPathfinder.Config.Shadow = false
             MyPathfinder.Config.Battle = true
             MyPathfinder.Config.Legion = false
             MyPathfinder.Config.Draenor = false
         elseif MyPathfinder.Config.Battle == true then
-			MyPathfinder.Config.Dragon = false
+            MyPathfinder.Config.Dragon = false
             MyPathfinder.Config.Shadow = false
             MyPathfinder.Config.Battle = false
             MyPathfinder.Config.Legion = true
             MyPathfinder.Config.Draenor = false
         elseif MyPathfinder.Config.Legion == true then
-			MyPathfinder.Config.Dragon = false
+            MyPathfinder.Config.Dragon = false
             MyPathfinder.Config.Shadow = false
             MyPathfinder.Config.Battle = false
             MyPathfinder.Config.Legion = false
             MyPathfinder.Config.Draenor = true
         else
-			MyPathfinder.Config.Dragon = true
+            MyPathfinder.Config.Dragon = true
             MyPathfinder.Config.Shadow = false
             MyPathfinder.Config.Battle = false
             MyPathfinder.Config.Legion = false
             MyPathfinder.Config.Draenor = false
         end
-		
+
         MyDO:BuildToolTip(self)
     end
 
