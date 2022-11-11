@@ -5,7 +5,7 @@ Tracks your "Pathfinder" progress.
 Support for Legion, Warlords of Draenor, Battle for Azeroth, Shadowlands and Dragonflight
 
 Version:
-3.8.5
+3.8.7
 
 License:
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -1620,6 +1620,8 @@ function addon:OnInitialize()
                 tooltip:AddLine("")
                 tooltip:AddLine("|cfff8b700Dragonriding")
                 MyPathfinder.Tooltip(item[15794])
+            else
+                tooltip:AddLine("|cff00ff00Completed|r")
             end
         elseif MyPathfinder.Config.Shadow then
             --logic
@@ -1841,14 +1843,14 @@ function addon:OnInitialize()
                     tooltip:AddLine("|cff888888The Last Sigil", "|cffff0000Prerequisite Incomplete|r")
                 end
             else
-                tooltip:AddLine("|cffffffffRequirements", "|cff00ff00Complete|r")
+                tooltip:AddLine("|cff00ff00Completed|r")
             end
 
             tooltip:AddLine(" ")
             tooltip:AddLine("|cff00A2E8Patch 9.2 (Zereth Mortis)")
 
             if isZereth == true and MyPathfinder.Config.ShowCompleted == false then
-                tooltip:AddLine("|cffffffffRequirements", "|cff00ff00Complete|r")
+                tooltip:AddLine("|cff00ff00Completed|r")
             else
                 tooltip:AddLine("|cfff8b700Prerequisites")
                 if quest63727 == true or MyPathfinder.Config.ShowCompleted == true then -- preq check
@@ -1864,7 +1866,7 @@ function addon:OnInitialize()
             tooltip:AddLine("|cff00A2E8Patch 8.0.1")
 
             if MyPathfinder.GetAchievementInfo(12989) == true and MyPathfinder.Config.ShowCompleted == false then
-                tooltip:AddLine("|cffffffffRequirements", "|cff00ff00Complete|r")
+                tooltip:AddLine("|cff00ff00Completed|r")
             else
                 MyPathfinder.Tooltip(item[12989])
             end
@@ -1873,7 +1875,7 @@ function addon:OnInitialize()
             tooltip:AddLine("|cff00A2E8Patch 8.2")
 
             if MyPathfinder.GetAchievementInfo(13250) == true and MyPathfinder.Config.ShowCompleted == false then
-                tooltip:AddLine("|cffffffffRequirements", "|cff00ff00Complete|r")
+                tooltip:AddLine("|cff00ff00Completed|r")
             else
                 MyPathfinder.Tooltip(item[13250])
             end
@@ -1882,7 +1884,7 @@ function addon:OnInitialize()
             tooltip:AddLine("|cff00A2E8Patch 7.0.3")
 
             if MyPathfinder.GetAchievementInfo(11190) == true and MyPathfinder.Config.ShowCompleted == false then
-                tooltip:AddLine("|cffffffffRequirements", "|cff00ff00Complete|r")
+                tooltip:AddLine("|cff00ff00Completed|r")
             else
                 MyPathfinder.Tooltip(item[11190])
             end
@@ -1891,7 +1893,7 @@ function addon:OnInitialize()
             tooltip:AddLine("|cff00A2E8Patch 7.2")
 
             if MyPathfinder.GetAchievementInfo(11446) == true and MyPathfinder.Config.ShowCompleted == false then
-                tooltip:AddLine("|cffffffffRequirements", "|cff00ff00Complete|r")
+                tooltip:AddLine("|cff00ff00Completed|r")
             else
                 MyPathfinder.Tooltip(item[11446])
             end
@@ -1900,7 +1902,7 @@ function addon:OnInitialize()
             tooltip:AddLine("|cff00A2E8Patch 6.2")
 
             if MyPathfinder.GetAchievementInfo(10018) == true and MyPathfinder.Config.ShowCompleted == false then
-                tooltip:AddLine("|cffffffffRequirements", "|cff00ff00Complete|r")
+                tooltip:AddLine("|cff00ff00Completed|r")
             else
                 MyPathfinder.Tooltip(item[10018])
             end
