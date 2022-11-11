@@ -2117,10 +2117,6 @@ function MyPathfinder_OnClick(self, button, ...)
 end
 
 function GameTooltip_SetBackdropStyle(self, style)
-    self:SetBackdrop(style)
-    self:SetBackdropBorderColor((style.backdropBorderColor or TOOLTIP_DEFAULT_COLOR):GetRGB())
-    self:SetBackdropColor((style.backdropColor or TOOLTIP_DEFAULT_BACKGROUND_COLOR):GetRGB())
-
     if self.TopOverlay then
         if style.overlayAtlasTop then
             self.TopOverlay:SetAtlas(style.overlayAtlasTop, true)
