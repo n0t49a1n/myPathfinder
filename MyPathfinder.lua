@@ -5,7 +5,7 @@ Tracks your "Pathfinder" progress.
 Support for Legion, Warlords of Draenor, Battle for Azeroth, Shadowlands and Dragonflight
 
 Version:
-3.8.7
+3.8.8
 
 License:
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -86,7 +86,7 @@ function addon:OnInitialize()
     if MyPathfinder.Config.Dragon == nil then
         MyPathfinder.Config.Dragon = true
     end
-
+    local race = UnitRace("player");
     MyPathfinder.tStatus = {
         [15794] = {
             Sum = 0,
@@ -1558,9 +1558,13 @@ function addon:OnInitialize()
             if MyPathfinder.GetAchievementInfo(15794) == false or MyPathfinder.Config.ShowCompleted == true then
                 tooltip:AddLine("|cfff8b700The Dragonscale Expedition Storyline")
                 if s1289q16 == true then
-                    tooltip:AddLine("|cffffffffThe Dragonscale Expedition Storyline", "|cff00ff00Complete|r")
+                    tooltip:AddLine("|cffffffffThe Dragonscale Expedition Storyline", GREEN_FONT_COLOR_CODE .. "Complete|r")
                 else
+                    if race == "Dracthyr" then
+                    --skip
+                    else
                     tooltip:AddLine("|cffffffff--The Dragon Isles Await", s1289q01)
+                    end
                     tooltip:AddLine("|cffffffff--Aspectral Invitation", s1289q02)
                     tooltip:AddLine("|cffffffff--Expeditionary Coordination", s1289q03)
                     if UnitFactionGroup("player") == "Horde" then
@@ -1585,7 +1589,7 @@ function addon:OnInitialize()
                 tooltip:AddLine("|cfff8b700Dragons in Distress Storyline")
                 if s1289q16 == true then
                     if s1299q13 == true then
-                        tooltip:AddLine("|cffffffffDragons in Distress Storyline", "|cff00ff00Complete|r")
+                        tooltip:AddLine("|cffffffffDragons in Distress Storyline", GREEN_FONT_COLOR_CODE .. "Complete|r")
                     else
                         tooltip:AddLine("|cffffffff--Reporting for Duty", s1299q01)
                         tooltip:AddLine("|cffffffff--Invader Djaradin", s1299q02)
@@ -1602,26 +1606,26 @@ function addon:OnInitialize()
                         tooltip:AddLine("|cffffffff--A Last Hope", s1299q13)
                     end
                 else
-                    tooltip:AddLine("|cffffffffThe Dragonscale Expedition Storyline", "|cffff0000Incomplete")
+                    tooltip:AddLine("|cffffffffThe Dragonscale Expedition Storyline", RED_FONT_COLOR_CODE .. "Incomplete")
                 end
                 tooltip:AddLine("")
                 tooltip:AddLine("|cfff8b700In Defense of Life Storyline")
                 if s1299q13 == true then
                     if s1300q3 == true then
-                        tooltip:AddLine("|cffffffffStoryline", "|cff00ff00Complete|r")
+                        tooltip:AddLine("|cffffffffStoryline", GREEN_FONT_COLOR_CODE .. "Complete|r")
                     else
                         tooltip:AddLine("|cffffffff--For the Benefit of the Queen", s1300q01)
                         tooltip:AddLine("|cffffffff--The Mandate of the Red", s1300q02)
                         tooltip:AddLine("|cffffffff--Dragonriding", s1300q03)
                     end
                 else
-                    tooltip:AddLine("|cffffffffDragons in Distress Storyline", "|cffff0000Incomplete")
+                    tooltip:AddLine("|cffffffffDragons in Distress Storyline", RED_FONT_COLOR_CODE .. "Incomplete")
                 end
                 tooltip:AddLine("")
                 tooltip:AddLine("|cfff8b700Dragonriding")
                 MyPathfinder.Tooltip(item[15794])
             else
-                tooltip:AddLine("|cff00ff00Completed|r")
+                tooltip:AddLine(GREEN_FONT_COLOR_CODE .. "Completed|r")
             end
         elseif MyPathfinder.Config.Shadow then
             --logic
@@ -1675,7 +1679,7 @@ function addon:OnInitialize()
                 if check1 == true then
                     MyPathfinder.Tooltip(item[14790])
                 else
-                    tooltip:AddLine("|cffffffffCovenant Campaign", "|cffff0000Incomplete")
+                    tooltip:AddLine("|cffffffffCovenant Campaign", RED_FONT_COLOR_CODE .. "Incomplete")
                 end
 
                 tooltip:AddLine("|cfff8b700Chains of Domination Quest Line")
@@ -1683,7 +1687,7 @@ function addon:OnInitialize()
                 -- Battle of Ardenweald
                 if check1 == true and check2 == true then -- preq check
                     if quest63639 == true and MyPathfinder.Config.ShowCompleted == false then -- complete check
-                        tooltip:AddLine("|cff00A2E8Battle of Ardenweald", "|cff00ff00Complete|r")
+                        tooltip:AddLine("|cff00A2E8Battle of Ardenweald", GREEN_FONT_COLOR_CODE .. "Complete|r")
                     else
                         tooltip:AddLine("|cff00A2E8Battle of Ardenweald")
                         tooltip:AddLine("|cffffffff--The First Move", C_QuestLog.IsQuestFlaggedCompleted(63576))
@@ -1704,13 +1708,13 @@ function addon:OnInitialize()
                         tooltip:AddLine("|cffffffff--Report to Oribos", quest63639)
                     end
                 else
-                    tooltip:AddLine("|cff888888Battle of Ardenweald", "|cffff0000Prerequisite Incomplete|r")
+                    tooltip:AddLine("|cff888888Battle of Ardenweald", RED_FONT_COLOR_CODE .. "Prerequisite Incomplete|r")
                 end
 
                 -- Maw Walkers
                 if quest63639 == true and check2 then -- preq check
                     if quest64556 == true and MyPathfinder.Config.ShowCompleted == false then -- complete check
-                        tooltip:AddLine("|cff00A2E8Maw Walkers", "|cff00ff00Complete|r")
+                        tooltip:AddLine("|cff00A2E8Maw Walkers", GREEN_FONT_COLOR_CODE .. "Complete|r")
                     else
                         tooltip:AddLine("|cff00A2E8Maw Walkers")
                         tooltip:AddLine("|cffffffff--Opening the Maw", C_QuestLog.IsQuestFlaggedCompleted(63660))
@@ -1730,13 +1734,13 @@ function addon:OnInitialize()
                         tooltip:AddLine("|cffffffff--In Need of Assistance", quest64556)
                     end
                 else
-                    tooltip:AddLine("|cff888888Maw Walkers", "|cffff0000Prerequisite Incomplete|r")
+                    tooltip:AddLine("|cff888888Maw Walkers", RED_FONT_COLOR_CODE .. "Prerequisite Incomplete|r")
                 end
 
                 -- Focusing the Eye
                 if quest64556 == true and quest63639 == true and check2 then -- preq check
                     if quest63902 == true and MyPathfinder.Config.ShowCompleted == false then -- complete check
-                        tooltip:AddLine("|cff00A2E8Focusing the Eye", "|cff00ff00Complete|r")
+                        tooltip:AddLine("|cff00A2E8Focusing the Eye", GREEN_FONT_COLOR_CODE .. "Complete|r")
                     else
                         tooltip:AddLine("|cff00A2E8Focusing the Eye")
                         tooltip:AddLine("|cffffffff--A Show of Gratitude", C_QuestLog.IsQuestFlaggedCompleted(63848))
@@ -1760,51 +1764,51 @@ function addon:OnInitialize()
                         tooltip:AddLine("|cffffffff--Good News, Everyone!", quest63902)
                     end
                 else
-                    tooltip:AddLine("|cff888888Focusing the Eye", "|cffff0000Prerequisite Incomplete|r")
+                    tooltip:AddLine("|cff888888Focusing the Eye", RED_FONT_COLOR_CODE .. "Prerequisite Incomplete|r")
                 end
 
                 if quest63902 == true then
                     tooltip:AddLine("|cfff8b700World Quests")
                     if quest63949 == true then
-                        tooltip:AddLine("|cffffffffShaping Fate", "|cff00ff00Complete|r")
+                        tooltip:AddLine("|cffffffffShaping Fate", GREEN_FONT_COLOR_CODE .. "Complete|r")
                         check3 = true
                     else
-                        tooltip:AddLine("|cffffffffShaping Fate", "|cffff0000Incomplete")
+                        tooltip:AddLine("|cffffffffShaping Fate", RED_FONT_COLOR_CODE .. "Incomplete")
                     end
 
                     if covenantID == 1 then --kyrian
                         if C_QuestLog.IsQuestFlaggedCompleted(61982) == true then
-                            tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff00ff00Complete|r")
+                            tooltip:AddLine("|cffffffffReplenish the Reservoir", GREEN_FONT_COLOR_CODE .. "Complete|r")
                         else
-                            tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cffff0000Incomplete")
+                            tooltip:AddLine("|cffffffffReplenish the Reservoir", RED_FONT_COLOR_CODE .. "Incomplete")
                         end
                         check4 = true
                     elseif covenantID == 2 then --venthyr
                         if C_QuestLog.IsQuestFlaggedCompleted(61981) == true then
-                            tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff00ff00Complete|r")
+                            tooltip:AddLine("|cffffffffReplenish the Reservoir", GREEN_FONT_COLOR_CODE .. "Complete|r")
                         else
-                            tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cffff0000Incomplete")
+                            tooltip:AddLine("|cffffffffReplenish the Reservoir", RED_FONT_COLOR_CODE .. "Incomplete")
                         end
                         check4 = true
                     elseif covenantID == 3 then --nightfae
                         if C_QuestLog.IsQuestFlaggedCompleted(61984) == true then
-                            tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff00ff00Complete|r")
+                            tooltip:AddLine("|cffffffffReplenish the Reservoir", GREEN_FONT_COLOR_CODE .. "Complete|r")
                         else
-                            tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cffff0000Incomplete")
+                            tooltip:AddLine("|cffffffffReplenish the Reservoir", RED_FONT_COLOR_CODE .. "Incomplete")
                         end
                         check4 = true
                     elseif covenantID == 4 then --necrolord
                         if C_QuestLog.IsQuestFlaggedCompleted(61983) == true then
-                            tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cff00ff00Complete|r")
+                            tooltip:AddLine("|cffffffffReplenish the Reservoir", GREEN_FONT_COLOR_CODE .. "Complete|r")
                         else
-                            tooltip:AddLine("|cffffffffReplenish the Reservoir", "|cffff0000Incomplete")
+                            tooltip:AddLine("|cffffffffReplenish the Reservoir", RED_FONT_COLOR_CODE .. "Incomplete")
                         end
                         check4 = true
                     end
                 else
                     tooltip:AddLine("|cfff8b700World Quests")
-                    tooltip:AddLine("|cff888888Shaping Fate", "|cffff0000Prerequisite Incomplete")
-                    tooltip:AddLine("|cff888888Replenish the Reservoir", "|cffff0000Prerequisite Incomplete")
+                    tooltip:AddLine("|cff888888Shaping Fate", RED_FONT_COLOR_CODE .. "Prerequisite Incomplete")
+                    tooltip:AddLine("|cff888888Replenish the Reservoir", RED_FONT_COLOR_CODE .. "Prerequisite Incomplete")
                 end
 
                 tooltip:AddLine("|cfff8b700Chains of Domination Quest Line (Continued)")
@@ -1815,7 +1819,7 @@ function addon:OnInitialize()
                         MyPathfinder.Config.ShowCompleted == true
                  then -- preq check
                     if quest63727 == true and MyPathfinder.Config.ShowCompleted == false then -- complete check
-                        tooltip:AddLine("|cff00A2E8The Last Sigil", "|cff00ff00Complete|r")
+                        tooltip:AddLine("|cff00A2E8The Last Sigil", GREEN_FONT_COLOR_CODE .. "Complete|r")
                     else
                         tooltip:AddLine("|cff00A2E8The Last Sigil")
                         tooltip:AddLine("|cffffffff--Vault of Secrets", C_QuestLog.IsQuestFlaggedCompleted(63703))
@@ -1840,25 +1844,25 @@ function addon:OnInitialize()
                         end
                     end
                 else
-                    tooltip:AddLine("|cff888888The Last Sigil", "|cffff0000Prerequisite Incomplete|r")
+                    tooltip:AddLine("|cff888888The Last Sigil", RED_FONT_COLOR_CODE .. "Prerequisite Incomplete|r")
                 end
             else
-                tooltip:AddLine("|cff00ff00Completed|r")
+                tooltip:AddLine(GREEN_FONT_COLOR_CODE .. "Completed|r")
             end
 
             tooltip:AddLine(" ")
             tooltip:AddLine("|cff00A2E8Patch 9.2 (Zereth Mortis)")
 
             if isZereth == true and MyPathfinder.Config.ShowCompleted == false then
-                tooltip:AddLine("|cff00ff00Completed|r")
+                tooltip:AddLine(GREEN_FONT_COLOR_CODE .. "Completed|r")
             else
                 tooltip:AddLine("|cfff8b700Prerequisites")
                 if quest63727 == true or MyPathfinder.Config.ShowCompleted == true then -- preq check
-                    tooltip:AddLine("|cffffffffPatch 9.0.1", "|cff00ff00Complete|r")
+                    tooltip:AddLine("|cffffffffPatch 9.0.1", GREEN_FONT_COLOR_CODE .. "Complete|r")
                     tooltip:AddLine("|cfff8b700Achievments")
                     MyPathfinder.Tooltip(item[15514])
                 else
-                    tooltip:AddLine("|cff888888Patch 9.0.1", "|cffff0000Incomplete")
+                    tooltip:AddLine("|cff888888Patch 9.0.1", RED_FONT_COLOR_CODE .. "Incomplete")
                 end
             end
         elseif MyPathfinder.Config.Battle then
@@ -1866,7 +1870,7 @@ function addon:OnInitialize()
             tooltip:AddLine("|cff00A2E8Patch 8.0.1")
 
             if MyPathfinder.GetAchievementInfo(12989) == true and MyPathfinder.Config.ShowCompleted == false then
-                tooltip:AddLine("|cff00ff00Completed|r")
+                tooltip:AddLine(GREEN_FONT_COLOR_CODE .. "Completed|r")
             else
                 MyPathfinder.Tooltip(item[12989])
             end
@@ -1875,7 +1879,7 @@ function addon:OnInitialize()
             tooltip:AddLine("|cff00A2E8Patch 8.2")
 
             if MyPathfinder.GetAchievementInfo(13250) == true and MyPathfinder.Config.ShowCompleted == false then
-                tooltip:AddLine("|cff00ff00Completed|r")
+                tooltip:AddLine(GREEN_FONT_COLOR_CODE .. "Completed|r")
             else
                 MyPathfinder.Tooltip(item[13250])
             end
@@ -1884,7 +1888,7 @@ function addon:OnInitialize()
             tooltip:AddLine("|cff00A2E8Patch 7.0.3")
 
             if MyPathfinder.GetAchievementInfo(11190) == true and MyPathfinder.Config.ShowCompleted == false then
-                tooltip:AddLine("|cff00ff00Completed|r")
+                tooltip:AddLine(GREEN_FONT_COLOR_CODE .. "Completed|r")
             else
                 MyPathfinder.Tooltip(item[11190])
             end
@@ -1893,7 +1897,7 @@ function addon:OnInitialize()
             tooltip:AddLine("|cff00A2E8Patch 7.2")
 
             if MyPathfinder.GetAchievementInfo(11446) == true and MyPathfinder.Config.ShowCompleted == false then
-                tooltip:AddLine("|cff00ff00Completed|r")
+                tooltip:AddLine(GREEN_FONT_COLOR_CODE .. "Completed|r")
             else
                 MyPathfinder.Tooltip(item[11446])
             end
@@ -1902,7 +1906,7 @@ function addon:OnInitialize()
             tooltip:AddLine("|cff00A2E8Patch 6.2")
 
             if MyPathfinder.GetAchievementInfo(10018) == true and MyPathfinder.Config.ShowCompleted == false then
-                tooltip:AddLine("|cff00ff00Completed|r")
+                tooltip:AddLine(GREEN_FONT_COLOR_CODE .. "Completed|r")
             else
                 MyPathfinder.Tooltip(item[10018])
             end
@@ -2201,7 +2205,7 @@ function MyDO:BuildToolTip(self)
     if MyPathfinder.Config.ShowCompleted == false then
         tooltip:AddLine("|n|cffffffffRight Click|r to |cff00ff00Show|r Completed Requirements")
     else
-        tooltip:AddLine("|n|cffffffffRight Click|r to |cffff0000Hide|r Completed Requirements")
+        tooltip:AddLine("|n|cffffffffRight Click|r to " .. RED_FONT_COLOR_CODE .. "Hide|r Completed Requirements")
     end
 
     tooltip:UpdateScrolling()

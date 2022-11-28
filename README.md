@@ -6,7 +6,7 @@ Features:
     Display and track progress towards unlocking flying Legion, Draenor, BFA, Shadowlands and Dragonflight
 
 Version: 
-    3.8.5
+    3.8.8
     
 Known Issues:
     Please report any issue with this addon

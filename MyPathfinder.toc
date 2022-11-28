@@ -2,7 +2,7 @@
 ## Title: MyPathfinder
 ## Notes: A simple add-on for displaying the status of MyPathfinder (Flying) Unlocks, Updated to work with Dragonflight, Shadowlands, BFA, WOD, and Legion
 ## Author: n0t49a1n
-## Version: 3.8.7
+## Version: 3.8.8
 ## SavedVariables: MyPathfinder
 Libs\Libs.xml
 MyPathfinder.lua
