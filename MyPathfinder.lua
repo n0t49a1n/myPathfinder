@@ -5,7 +5,7 @@ Tracks your "Pathfinder" progress.
 Support for Legion, Warlords of Draenor, Battle for Azeroth, Shadowlands and Dragonflight
 
 Version:
-3.8.8
+3.8.9
 
 License:
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -1508,8 +1508,9 @@ function addon:OnInitialize()
                 s1289q13 = C_QuestLog.IsQuestFlaggedCompleted(69912) --My First Real Emergency!
                 s1289q14 = C_QuestLog.IsQuestFlaggedCompleted(66101) --From Such Great Heights
                 s1289q15 = C_QuestLog.IsQuestFlaggedCompleted(69914) --The Djaradin Have Awoken
-                --H
-                s1289q16 = C_QuestLog.IsQuestFlaggedCompleted(70198) --The Call of the Isles
+                s1300q01 = C_QuestLog.IsQuestFlaggedCompleted(66114) --For the Benefit of the Queen
+                s1300q02 = C_QuestLog.IsQuestFlaggedCompleted(66115) --The Mandate of the Red
+                s1300q03 = C_QuestLog.IsQuestFlaggedCompleted(68795) --Dragonriding
             else
                 --A
                 s1289q01 = C_QuestLog.IsQuestFlaggedCompleted(65436) --The Dragon Isles Await
@@ -1528,37 +1529,15 @@ function addon:OnInitialize()
                 s1289q13 = C_QuestLog.IsQuestFlaggedCompleted(69912) --My First Real Emergency!
                 s1289q14 = C_QuestLog.IsQuestFlaggedCompleted(66101) --From Such Great Heights
                 s1289q15 = C_QuestLog.IsQuestFlaggedCompleted(69914) --The Djaradin Have Awoken
-                --A
-                s1289q16 = C_QuestLog.IsQuestFlaggedCompleted(70197) --The Call of the Isles
-            end
-
-            if C_QuestLog.IsQuestFlaggedCompleted(70197) or C_QuestLog.IsQuestFlaggedCompleted(70198) == true then
-                -- Dragons in Distress (storyline 1299)
-                s1299q01 = C_QuestLog.IsQuestFlaggedCompleted(65760) --Reporting for Duty
-                s1299q02 = C_QuestLog.IsQuestFlaggedCompleted(65989) --Invader Djaradin
-                s1299q03 = C_QuestLog.IsQuestFlaggedCompleted(65990) --Deliver Whelps From Evil
-                s1299q04 = C_QuestLog.IsQuestFlaggedCompleted(65991) --Time for a Reckoning
-                s1299q05 = C_QuestLog.IsQuestFlaggedCompleted(65993) --Killjoy
-                s1299q06 = C_QuestLog.IsQuestFlaggedCompleted(65992) --Blacktalon Intel
-                s1299q07 = C_QuestLog.IsQuestFlaggedCompleted(65995) --The Obsidian Citadel
-                s1299q08 = C_QuestLog.IsQuestFlaggedCompleted(65996) --Veteran Reinforcements
-                s1299q09 = C_QuestLog.IsQuestFlaggedCompleted(65997) --Chasing Sendrax
-                s1299q10 = C_QuestLog.IsQuestFlaggedCompleted(65998) --Future of the Flights
-                s1299q11 = C_QuestLog.IsQuestFlaggedCompleted(65999) --Red in Tooth and Claw
-                s1299q12 = C_QuestLog.IsQuestFlaggedCompleted(66000) --Library of Alexstrasza
-                s1299q13 = C_QuestLog.IsQuestFlaggedCompleted(66001) --A Last Hope
-            end
-            if C_QuestLog.IsQuestFlaggedCompleted(66001) == true then
-                -- In Defense of Life (storyline 1300)
                 s1300q01 = C_QuestLog.IsQuestFlaggedCompleted(66114) --For the Benefit of the Queen
                 s1300q02 = C_QuestLog.IsQuestFlaggedCompleted(66115) --The Mandate of the Red
                 s1300q03 = C_QuestLog.IsQuestFlaggedCompleted(68795) --Dragonriding
             end
             --start of requirements / guide / info section
             if MyPathfinder.GetAchievementInfo(15794) == false or MyPathfinder.Config.ShowCompleted == true then
-                tooltip:AddLine("|cfff8b700The Dragonscale Expedition Storyline")
+                tooltip:AddLine("|cfff8b700Dragonflight Storyline")
                 if s1289q16 == true then
-                    tooltip:AddLine("|cffffffffThe Dragonscale Expedition Storyline", GREEN_FONT_COLOR_CODE .. "Complete|r")
+                    tooltip:AddLine("|cffffffffDragonflight Storyline Prerequisite", GREEN_FONT_COLOR_CODE .. "Complete|r")
                 else
                     if race == "Dracthyr" then
                     --skip
@@ -1583,43 +1562,9 @@ function addon:OnInitialize()
                     tooltip:AddLine("|cffffffff--My First Real Emergency!", s1289q13)
                     tooltip:AddLine("|cffffffff--From Such Great Heights", s1289q14)
                     tooltip:AddLine("|cffffffff--The Djaradin Have Awoken", s1289q15)
-                    tooltip:AddLine("|cffffffff--The Call of the Isles", s1289q16)
-                end
-                tooltip:AddLine("")
-                tooltip:AddLine("|cfff8b700Dragons in Distress Storyline")
-                if s1289q16 == true then
-                    if s1299q13 == true then
-                        tooltip:AddLine("|cffffffffDragons in Distress Storyline", GREEN_FONT_COLOR_CODE .. "Complete|r")
-                    else
-                        tooltip:AddLine("|cffffffff--Reporting for Duty", s1299q01)
-                        tooltip:AddLine("|cffffffff--Invader Djaradin", s1299q02)
-                        tooltip:AddLine("|cffffffff--Deliver Whelps From Evil", s1299q03)
-                        tooltip:AddLine("|cffffffff--Time for a Reckoning", s1299q04)
-                        tooltip:AddLine("|cffffffff--Killjoy", s1299q05)
-                        tooltip:AddLine("|cffffffff--Blacktalon Intel", s1299q06)
-                        tooltip:AddLine("|cffffffff--The Obsidian Citadel", s1299q07)
-                        tooltip:AddLine("|cffffffff--Veteran Reinforcements", s1299q08)
-                        tooltip:AddLine("|cffffffff--Chasing Sendrax", s1299q09)
-                        tooltip:AddLine("|cffffffff--Future of the Flights", s1299q10)
-                        tooltip:AddLine("|cffffffff--Red in Tooth and Claw", s1299q11)
-                        tooltip:AddLine("|cffffffff--Library of Alexstrasza", s1299q12)
-                        tooltip:AddLine("|cffffffff--A Last Hope", s1299q13)
-                    end
-                else
-                    tooltip:AddLine("|cffffffffThe Dragonscale Expedition Storyline", RED_FONT_COLOR_CODE .. "Incomplete")
-                end
-                tooltip:AddLine("")
-                tooltip:AddLine("|cfff8b700In Defense of Life Storyline")
-                if s1299q13 == true then
-                    if s1300q3 == true then
-                        tooltip:AddLine("|cffffffffStoryline", GREEN_FONT_COLOR_CODE .. "Complete|r")
-                    else
-                        tooltip:AddLine("|cffffffff--For the Benefit of the Queen", s1300q01)
-                        tooltip:AddLine("|cffffffff--The Mandate of the Red", s1300q02)
-                        tooltip:AddLine("|cffffffff--Dragonriding", s1300q03)
-                    end
-                else
-                    tooltip:AddLine("|cffffffffDragons in Distress Storyline", RED_FONT_COLOR_CODE .. "Incomplete")
+                    tooltip:AddLine("|cffffffff--For the Benefit of the Queen", s1300q01)
+                    tooltip:AddLine("|cffffffff--The Mandate of the Red", s1300q02)
+                    tooltip:AddLine("|cffffffff--Dragonriding", s1300q03)
                 end
                 tooltip:AddLine("")
                 tooltip:AddLine("|cfff8b700Dragonriding")
