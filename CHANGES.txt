@@ -1,0 +1,10 @@
+n0t49a1n | 2023/10/12 | 3.8.11
+	TOC Bump to 100200
+	ACEDB update for ptr changes
+	fix icon in addon menu
+	Code cleanup coming in 3.9.0
+
+n0t49a1n | 2023/10/12 | 3.8.10
+	TOC Bump to 100005
+	Tiny cleanup
+
