@@ -1,8 +1,8 @@
-## Interface: 100200
+## Interface: 110000, 110002
 ## Title: MyPathfinder
-## Notes: A simple add-on for displaying the status of MyPathfinder (Flying) Unlocks, Updated to work with Dragonflight, Shadowlands, BFA, WOD, and Legion
+## Notes: A simple add-on for displaying the status of MyPathfinder (Flying) Unlocks, Updated to work with War Within, Dragonflight, Shadowlands, BFA, WOD, and Legion
 ## Author: n0t49a1n
-## Version: 3.8.11
+## Version: 3.9.0
 ## SavedVariables: MyPathfinder
 ## IconTexture: Interface\Icons\ability_hunter_pathfinding
 Libs\Libs.xml
