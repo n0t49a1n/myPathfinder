@@ -1,8 +1,6 @@
 n0t49a1n | 2024/08/14 | 3.9.0
 	TOC Bump to 110002
 	expansion update new pathfinder added
-	simplify/rebuild of addon
-	update of ACE & Qtip Lib
 
 n0t49a1n | 2023/10/12 | 3.8.11
 	TOC Bump to 100200

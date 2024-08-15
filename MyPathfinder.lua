@@ -83,6 +83,9 @@ function addon:OnInitialize()
     if MyPathfinder.Config.Shadow == nil then
         MyPathfinder.Config.Shadow = false
     end
+    if MyPathfinder.Config.Zereth == nil then
+        MyPathfinder.Config.Zereth = false
+    end
     if MyPathfinder.Config.Dragon == nil then
         MyPathfinder.Config.Dragon = false
     end
@@ -128,7 +131,74 @@ function addon:OnInitialize()
             isStatistic = GetAchievementInfo(achievementID)
         return name
     end
-    local function GetColorForPercent(percent)
+MyPathfinder.GetStorylineInfo = function(storylineID)
+		local questLineName,
+			questName,
+			questLineID,
+			questID,
+			x,
+			y,
+			isHidden,
+			isLegendary,
+			isLocalStory,
+			isDaily,
+			isCampaign,
+			isImportant,
+			isAccountCompleted,
+			isCombatAllyQuest,
+			isMeta,
+			inProgress,
+			isQuestStart,
+			floorLocation = C_QuestLine.GetQuestLineInfo(storylineID)
+        return questLineName
+    end				
+				
+    function IsCovenantQuestCompleted()
+        local covenantID = C_Covenants.GetActiveCovenantID()
+        local questID
+
+        if covenantID == 1 then -- Kyrian
+            questID = 62557
+        elseif covenantID == 2 then -- Venthyr
+            questID = 58407
+        elseif covenantID == 3 then -- Night Fae
+            questID = 60108
+        elseif covenantID == 4 then -- Necrolord
+            questID = 62406
+        else
+            return false -- No valid covenant found
+        end
+
+        return C_QuestLog.IsQuestFlaggedCompleted(questID) == true
+    end
+
+    function GetFactionRepDetails(factionIndex)
+        local factionData = C_Reputation.GetFactionDataByID(factionIndex)
+        -- Check if factionData is nil
+        if not factionData then
+            return "Neutral", "|cFF808080" -- Return a default value if data is nil
+        end
+        local reaction = factionData.reaction
+        local text, color
+
+        if reaction >= 7 then
+            text = "Completed"
+            color = "|cFF00FF00" -- Green
+        elseif reaction == 6 then
+            text = "Honored"
+            color = "|cFFFFFF00" -- Yellow
+        elseif reaction == 5 then
+            text = "Friendly"
+            color = "|cFFFF4500" -- Orange Red
+        elseif reaction == 4 then
+            text = "Neutral"
+            color = "|cFF808080" -- Grey
+        end
+
+        return text, color
+    end
+
+    function GetColorForPercent(percent)
         if percent >= 100 then
             return "|cFF00FF00" -- Green
         elseif percent >= 90 then
@@ -144,9 +214,41 @@ function addon:OnInitialize()
         elseif percent >= 30 then
             return "|cFFFF4500" -- Orange Red
         else
-            return "|cFF808080" -- Red
+            return "|cFF808080" -- Grey
         end
     end
+    GetQuestName = function(questID)
+        local name = C_QuestLog.GetTitleForQuestID(questID)
+        if name then
+            return name
+        else
+            return questID
+        end
+    end
+
+    -- Function to get the quest completion status for a given quest ID
+    GetQuestCompleted = function(questID)
+        local complete = C_QuestLog.IsQuestFlaggedCompleted(questID)
+        local status
+
+        if complete then
+            status = "|cFF00FF00Completed|r"
+        else
+            status = "|cFF808080Incomplete|r"
+        end
+
+        return status
+    end
+
+    function addQuestLines(quests)
+        for i, questID in ipairs(quests) do
+            tooltip:AddLine(
+                string.format("-- |cffffffff%s", GetQuestName(questID)),
+                string.format("%s|r", GetQuestCompleted(questID))
+            )
+        end
+    end
+    local faction = UnitFactionGroup("player")
 
     MyPathfinder.GetAchievementstatus = function(achievementID)
         local criteriaList = {} -- Table to hold all criteria info
@@ -165,7 +267,6 @@ function addon:OnInitialize()
                 percent = 100
             end
 
-            -- No direct support for nested sub-criteria in the standard API, so we only handle top-level criteria
             table.insert(
                 criteriaList,
                 {
@@ -180,135 +281,63 @@ function addon:OnInitialize()
     end
 
     MyPathfinder.ProcessTooltip = function(item)
-        if MyPathfinder.Config.War then
+        --
+		-- WAR WITHIN
+		--
+		if MyPathfinder.Config.War then
             tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cffDC143CWar Within|r|n|n")
-            tooltip:AddLine(string.format("|cff00A2E8%s (Steady Flight)|r", MyPathfinder.GetAchievementName(40231)))
-            local achievementIDs = {40790, 20118, 20598, 19560, 19559}
-
-            for _, id in ipairs(achievementIDs) do
-                tooltip:AddLine(string.format("|cfff8b700%s|r", MyPathfinder.GetAchievementName(id)))
-                local criteriaList = MyPathfinder.GetAchievementstatus(id)
-                for _, criteria in ipairs(criteriaList) do
-                    local displayText
-                    if criteria.percent == 100 then
-                        displayText = "|cff00ff00Completed|r" -- Green color for "Completed"
-                    else
-                        local color = GetColorForPercent(criteria.percent)
-                        displayText = string.format("%s%.0f%%|r", color, criteria.percent)
-                    end
-                    tooltip:AddLine(
-                        string.format("-- |cffffffff%s ", criteria.criteriaString or "Unknown"),
-                        displayText
-                    )
-                end
-            end
-        elseif MyPathfinder.Config.Dragon then
-            tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cFF33937FDragonflight|r|n|n")
-            tooltip:AddLine("|cff00A2E8Dragonriding")
-            -- The Dragonscale Expedition (storyline 1289)
-            if UnitFactionGroup("player") == "Horde" then
-                --H
-                s1289q01 = C_QuestLog.IsQuestFlaggedCompleted(65435) --The Dragon Isles Await
-                s1289q02 = C_QuestLog.IsQuestFlaggedCompleted(65437) --Aspectral Invitation
-                s1289q03 = C_QuestLog.IsQuestFlaggedCompleted(65443) --Expeditionary Coordination
-                s1289q04 = C_QuestLog.IsQuestFlaggedCompleted(72256) --Dark Talons
-                s1289q05 = C_QuestLog.IsQuestFlaggedCompleted(65439) --Whispers on the Winds
-                s1289q06 = C_QuestLog.IsQuestFlaggedCompleted(69944) --Chasing Storms
-                s1289q07 = C_QuestLog.IsQuestFlaggedCompleted(65444) --To the Dragon Isles
-                s1289q08 = C_QuestLog.IsQuestFlaggedCompleted(65452) --Explorers in Peril
-                s1289q09 = C_QuestLog.IsQuestFlaggedCompleted(65453) --Primal Pests
-                s1289q10 = C_QuestLog.IsQuestFlaggedCompleted(65451) --Practice Materials
-                s1289q11 = C_QuestLog.IsQuestFlaggedCompleted(69910) --Where is Wrathion?
-                --A + H
-                s1289q12 = C_QuestLog.IsQuestFlaggedCompleted(69911) --Excuse the Mess
-                s1289q13 = C_QuestLog.IsQuestFlaggedCompleted(69912) --My First Real Emergency!
-                s1289q14 = C_QuestLog.IsQuestFlaggedCompleted(66101) --From Such Great Heights
-                s1289q15 = C_QuestLog.IsQuestFlaggedCompleted(69914) --The Djaradin Have Awoken
-                s1300q01 = C_QuestLog.IsQuestFlaggedCompleted(66114) --For the Benefit of the Queen
-                s1300q02 = C_QuestLog.IsQuestFlaggedCompleted(66115) --The Mandate of the Red
-                s1300q03 = C_QuestLog.IsQuestFlaggedCompleted(68795) --Dragonriding
-            else
-                --A
-                s1289q01 = C_QuestLog.IsQuestFlaggedCompleted(65436) --The Dragon Isles Await
-                s1289q02 = C_QuestLog.IsQuestFlaggedCompleted(66577) --Aspectral Invitation
-                s1289q03 = C_QuestLog.IsQuestFlaggedCompleted(66589) --Expeditionary Coordination
-                s1289q04 = C_QuestLog.IsQuestFlaggedCompleted(72240) --The Obsidian Warders
-                s1289q05 = C_QuestLog.IsQuestFlaggedCompleted(66596) --Whispers on the Winds
-                s1289q06 = C_QuestLog.IsQuestFlaggedCompleted(70050) --Chasing Storms
-                s1289q07 = C_QuestLog.IsQuestFlaggedCompleted(67700) --To the Dragon Isles
-                s1289q08 = C_QuestLog.IsQuestFlaggedCompleted(70122) --Explorers in Peril
-                s1289q09 = C_QuestLog.IsQuestFlaggedCompleted(70123) --Primal Pests
-                s1289q10 = C_QuestLog.IsQuestFlaggedCompleted(70124) --Practice Materials
-                s1289q11 = C_QuestLog.IsQuestFlaggedCompleted(70125) --Where is Wrathion?
-                --A + H
-                s1289q12 = C_QuestLog.IsQuestFlaggedCompleted(69911) --Excuse the Mess
-                s1289q13 = C_QuestLog.IsQuestFlaggedCompleted(69912) --My First Real Emergency!
-                s1289q14 = C_QuestLog.IsQuestFlaggedCompleted(66101) --From Such Great Heights
-                s1289q15 = C_QuestLog.IsQuestFlaggedCompleted(69914) --The Djaradin Have Awoken
-                s1300q01 = C_QuestLog.IsQuestFlaggedCompleted(66114) --For the Benefit of the Queen
-                s1300q02 = C_QuestLog.IsQuestFlaggedCompleted(66115) --The Mandate of the Red
-                s1300q03 = C_QuestLog.IsQuestFlaggedCompleted(68795) --Dragonriding
-            end
-            --start of requirements / guide / info section
-            if MyPathfinder.GetAchievementInfo(15794) == false or MyPathfinder.Config.ShowCompleted == true then
-                tooltip:AddLine("|cfff8b700Dragonflight Storyline")
-                if s1289q16 == true then
-                    tooltip:AddLine(
-                        "|cffffffffDragonflight Storyline Prerequisite",
-                        GREEN_FONT_COLOR_CODE .. "Completed|r"
-                    )
-                else
-                    if race == "Dracthyr" then
-                        --skip
-                    else
-                        tooltip:AddLine("-- |cffffffffThe Dragon Isles Await", s1289q01)
-                    end
-                    tooltip:AddLine("-- |cffffffffAspectral Invitation", s1289q02)
-                    tooltip:AddLine("-- |cffffffffExpeditionary Coordination", s1289q03)
-                    if UnitFactionGroup("player") == "Horde" then
-                        tooltip:AddLine("-- |cffffffffDark Talons", s1289q04)
-                    else
-                        tooltip:AddLine("-- |cffffffffThe Obsidian Warders", s1289q04)
-                    end
-                    tooltip:AddLine("-- |cffffffffWhispers on the Winds", s1289q05)
-                    tooltip:AddLine("-- |cffffffffChasing Storms", s1289q06)
-                    tooltip:AddLine("-- |cffffffffTo the Dragon Isles", s1289q07)
-                    tooltip:AddLine("-- |cffffffffPrimal Pests", s1289q08)
-                    tooltip:AddLine("-- |cffffffffExplorers in Peril", s1289q09)
-                    tooltip:AddLine("-- |cffffffffPractice Materials", s1289q10)
-                    tooltip:AddLine("-- |cffffffffWhere is Wrathion?", s1289q11)
-                    tooltip:AddLine("-- |cffffffffExcuse the Mess", s1289q12)
-                    tooltip:AddLine("-- |cffffffffMy First Real Emergency!", s1289q13)
-                    tooltip:AddLine("-- |cffffffffFrom Such Great Heights", s1289q14)
-                    tooltip:AddLine("-- |cffffffffThe Djaradin Have Awoken", s1289q15)
-                    tooltip:AddLine("-- |cffffffffFor the Benefit of the Queen", s1300q01)
-                    tooltip:AddLine("-- |cffffffffThe Mandate of the Red", s1300q02)
-                    tooltip:AddLine("-- |cffffffffDragonriding", s1300q03)
-                end
-                tooltip:AddLine("|n")
-                local achievementIDs = {15794}
-
-                for _, id in ipairs(achievementIDs) do
+            local tid = 40231
+            local id = {40790, 20118, 20598, 19560, 19559}
+            tooltip:AddLine(string.format("|cff00A2E8%s|r", MyPathfinder.GetAchievementName(tid)))
+            if MyPathfinder.GetAchievementInfo(tid) == false or MyPathfinder.Config.ShowCompleted == true then
+                for _, id in ipairs(id) do
                     tooltip:AddLine(string.format("|cfff8b700%s|r", MyPathfinder.GetAchievementName(id)))
                     local criteriaList = MyPathfinder.GetAchievementstatus(id)
                     for _, criteria in ipairs(criteriaList) do
-                        local displayText
+                        local text
                         if criteria.percent == 100 then
-                            displayText = "|cff00ff00Completed|r" -- Green color for "Completed"
+                            text = "|cff00ff00Completed|r" -- Green color for "Completed"
                         else
                             local color = GetColorForPercent(criteria.percent)
-                            displayText = string.format("%s%.0f%%|r", color, criteria.percent)
+                            text = string.format("%s%.0f%%|r", color, criteria.percent)
                         end
-                        tooltip:AddLine(
-                            string.format("-- |cffffffff%s ", criteria.criteriaString or "Unknown"),
-                            displayText
-                        )
+                        tooltip:AddLine(string.format("-- |cffffffff%s ", criteria.criteriaString or "Unknown"), text)
                     end
                 end
             else
                 tooltip:AddLine(GREEN_FONT_COLOR_CODE .. "Completed|r")
             end
-        elseif MyPathfinder.Config.Shadow then
+        --
+		-- DRAGONFLIGHT
+		--
+		elseif MyPathfinder.Config.Dragon then
+            tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cFF33937FDragonflight|r|n|n")
+			local qid = 68795
+			local tid = 19307
+            local id = {16334, 15394, 16336, 16363, 17739, 16761, 17766, 19309}
+            tooltip:AddLine(string.format("|cff00A2E8%s|r", MyPathfinder.GetAchievementName(tid)))
+            if C_QuestLog.IsQuestFlaggedCompleted(qid) == false or MyPathfinder.Config.ShowCompleted == true then
+                for _, id in ipairs(id) do
+                    tooltip:AddLine(string.format("|cfff8b700%s|r", MyPathfinder.GetAchievementName(id)))
+                    local criteriaList = MyPathfinder.GetAchievementstatus(id)
+                    for _, criteria in ipairs(criteriaList) do
+                        local text
+                        if criteria.percent == 100 then
+                            text = "|cff00ff00Completed|r" -- Green color for "Completed"
+                        else
+                            local color = GetColorForPercent(criteria.percent)
+                            text = string.format("%s%.0f%%|r", color, criteria.percent)
+                        end
+                        tooltip:AddLine(string.format("-- |cffffffff%s ", criteria.criteriaString or "Unknown"), text)
+                    end
+                end
+            else
+                tooltip:AddLine(GREEN_FONT_COLOR_CODE .. "Completed|r")
+            end
+        --
+		-- SHADOWLANDS
+		--
+		elseif MyPathfinder.Config.Shadow then
             --logic
             quest63639 = C_QuestLog.IsQuestFlaggedCompleted(63639)
             quest64556 = C_QuestLog.IsQuestFlaggedCompleted(64556)
@@ -345,7 +374,8 @@ function addon:OnInitialize()
             --start of requirements / guide / info section
             if MyPathfinder.GetAchievementInfo(15514) == false or MyPathfinder.Config.ShowCompleted == true then
                 tooltip:AddLine("|cfff8b700Prerequisites")
-
+				local chapterIsComplete = MyPathfinder.GetStorylineInfo(1219)
+				tooltip:AddLine(tostring(chapterIsComplete))
                 if level > 43 then
                     tooltip:AddLine("-- |cffffffffRenown", "|cff13ff29Completed|r")
                     check2 = true
@@ -554,158 +584,191 @@ function addon:OnInitialize()
             else
                 tooltip:AddLine(GREEN_FONT_COLOR_CODE .. "Completed|r")
             end
+        --
+		-- SHADOWLANDS ZERATH MORTIS
+		--
+		elseif MyPathfinder.Config.Zereth then
+            tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cFFE77324Zereth Mortis|r|n|n")
+            tooltip:AddLine(string.format("|cff00A2E8%s|r", MyPathfinder.GetAchievementName(19307)))
+            local achievementIDs = {15224, 15509, 15513, 15512, 15515, 15518}
 
-            tooltip:AddLine(" ")
-            tooltip:AddLine("|cff00A2E8Patch 9.2 (Zereth Mortis)")
-
-            if isZereth == true and MyPathfinder.Config.ShowCompleted == false then
-                tooltip:AddLine(GREEN_FONT_COLOR_CODE .. "Completed|r")
-            else
-                tooltip:AddLine("|cfff8b700Prerequisites")
-                if quest63727 == true or MyPathfinder.Config.ShowCompleted == true then -- preq check
-                    tooltip:AddLine("|cffffffffPatch 9.0.1", GREEN_FONT_COLOR_CODE .. "Completed|r")
-                    local achievementIDs = {15514}
-
-                    for _, id in ipairs(achievementIDs) do
-                        tooltip:AddLine(string.format("|cfff8b700%s|r", MyPathfinder.GetAchievementName(id)))
-                        local criteriaList = MyPathfinder.GetAchievementstatus(id)
-                        for _, criteria in ipairs(criteriaList) do
-                            local displayText
-                            if criteria.percent == 100 then
-                                displayText = "|cff00ff00Completed|r" -- Green color for "Completed"
-                            else
-                                local color = GetColorForPercent(criteria.percent)
-                                displayText = string.format("%s%.0f%%|r", color, criteria.percent)
-                            end
-                            tooltip:AddLine(
-                                string.format("-- |cffffffff%s ", criteria.criteriaString or "Unknown"),
-                                displayText
-                            )
-                        end
+            for _, id in ipairs(achievementIDs) do
+                tooltip:AddLine(string.format("|cfff8b700%s|r", MyPathfinder.GetAchievementName(id)))
+                local criteriaList = MyPathfinder.GetAchievementstatus(id)
+                for _, criteria in ipairs(criteriaList) do
+                    local text
+                    if criteria.percent == 100 then
+                        text = "|cff00ff00Completed|r" -- Green color for "Completed"
+                    else
+                        local color = GetColorForPercent(criteria.percent)
+                        text = string.format("%s%.0f%%|r", color, criteria.percent)
                     end
-                else
-                    tooltip:AddLine("|cffffffffPatch 9.0.1", RED_FONT_COLOR_CODE .. "Incomplete")
+                    tooltip:AddLine(string.format("-- |cffffffff%s ", criteria.criteriaString or "Unknown"), text)
                 end
             end
-        elseif MyPathfinder.Config.Battle then
+        --
+		-- BATTLE FOR AZEROTH
+		--
+		elseif MyPathfinder.Config.Battle then
             tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cFFE77324Battle for Azeroth|r|n|n")
-            tooltip:AddLine("|cff00A2E8Patch 8.0.1")
-
-            local achievementIDs = {12989}
-
-            for _, id in ipairs(achievementIDs) do
-                tooltip:AddLine(string.format("|cfff8b700%s|r", MyPathfinder.GetAchievementName(id)))
-                local criteriaList = MyPathfinder.GetAchievementstatus(id)
-                for _, criteria in ipairs(criteriaList) do
-                    local displayText
-                    if criteria.percent == 100 then
-                        displayText = "|cff00ff00Completed|r" -- Green color for "Completed"
-                    else
-                        local color = GetColorForPercent(criteria.percent)
-                        displayText = string.format("%s%.0f%%|r", color, criteria.percent)
-                    end
-                    tooltip:AddLine(
-                        string.format("-- |cffffffff%s ", criteria.criteriaString or "Unknown"),
-                        displayText
-                    )
+            local tid = 12989
+            local aid = {12988, 13144, 12510, 12593, 12947} --Alliance
+            local hid = {12988, 13144, 12509, 12479, 12947} --Horde
+            tooltip:AddLine(string.format("|cff00A2E8%s|r", MyPathfinder.GetAchievementName(tid)))
+            if MyPathfinder.GetAchievementInfo(13250) == false or MyPathfinder.Config.ShowCompleted == true then
+                if faction == "Alliance" then
+                    xid = aid
+                else
+                    xid = hid
                 end
-            end
 
-            tooltip:AddLine(" ")
-            tooltip:AddLine("|cff00A2E8Patch 8.2")
-
-            local achievementIDs = {13250}
-
-            for _, id in ipairs(achievementIDs) do
-                tooltip:AddLine(string.format("|cfff8b700%s|r", MyPathfinder.GetAchievementName(id)))
-                local criteriaList = MyPathfinder.GetAchievementstatus(id)
-                for _, criteria in ipairs(criteriaList) do
-                    local displayText
-                    if criteria.percent == 100 then
-                        displayText = "|cff00ff00Completed|r" -- Green color for "Completed"
-                    else
-                        local color = GetColorForPercent(criteria.percent)
-                        displayText = string.format("%s%.0f%%|r", color, criteria.percent)
+                for _, id in ipairs(xid) do
+                    tooltip:AddLine(string.format("|cfff8b700%s|r", MyPathfinder.GetAchievementName(id)))
+                    local criteriaList = MyPathfinder.GetAchievementstatus(id)
+                    for _, criteria in ipairs(criteriaList) do
+                        local text
+                        if criteria.percent == 100 then
+                            text = "|cff00ff00Completed|r" -- Green color for "Completed"
+                        else
+                            local color = GetColorForPercent(criteria.percent)
+                            text = string.format("%s%.0f%%|r", color, criteria.percent)
+                        end
+                        tooltip:AddLine(string.format("-- |cffffffff%s ", criteria.criteriaString or "Unknown"), text)
                     end
-                    tooltip:AddLine(
-                        string.format("-- |cffffffff%s ", criteria.criteriaString or "Unknown"),
-                        displayText
-                    )
                 end
+            else
+                tooltip:AddLine(GREEN_FONT_COLOR_CODE .. "Completed|r")
             end
-        elseif MyPathfinder.Config.Legion then
+			tooltip:AddLine(" ")
+			local tid = 13250
+            local id = {12989, 13776, 13712}
+            tooltip:AddLine(string.format("|cff00A2E8%s|r", MyPathfinder.GetAchievementName(tid)))
+            if MyPathfinder.GetAchievementInfo(13250) == false or MyPathfinder.Config.ShowCompleted == true then
+                for _, id in ipairs(id) do
+                    tooltip:AddLine(string.format("|cfff8b700%s|r", MyPathfinder.GetAchievementName(id)))
+                    local criteriaList = MyPathfinder.GetAchievementstatus(id)
+                    for _, criteria in ipairs(criteriaList) do
+                        local text
+                        if criteria.percent == 100 then
+                            text = "|cff00ff00Completed|r" -- Green color for "Completed"
+                        else
+                            local color = GetColorForPercent(criteria.percent)
+                            text = string.format("%s%.0f%%|r", color, criteria.percent)
+                        end
+                        tooltip:AddLine(string.format("-- |cffffffff%s ", criteria.criteriaString or "Unknown"), text)
+                    end
+                end
+				tooltip:AddLine("|cfff8b700Nazjatar Reputations|r")
+                local text, color = GetFactionRepDetails(2373)
+                tooltip:AddLine("-- |cffffffff Earn Revered status with the The Unshackled|r", color .. text)
+                local text, color = GetFactionRepDetails(2400)
+                tooltip:AddLine("-- |cffffffff Earn Revered status with the Waveblade Ankoan|r", color .. text)
+				
+				tooltip:AddLine("|cfff8b700Rustbolt Resistance Reputation|r")
+                local text, color = GetFactionRepDetails(2391)
+                tooltip:AddLine("-- |cffffffff Earn Revered status with the Rustbolt Resistance|r", color .. text)
+            else
+                tooltip:AddLine(GREEN_FONT_COLOR_CODE .. "Completed|r")
+            end
+        --
+		-- LEGION
+		--
+		elseif MyPathfinder.Config.Legion then
             tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cff13ff29Legion|r (Legacy)|n|n")
-            tooltip:AddLine("|cff00A2E8Patch 7.0.3")
-
-            local achievementIDs = {11190}
-
-            for _, id in ipairs(achievementIDs) do
-                tooltip:AddLine(string.format("|cfff8b700%s|r", MyPathfinder.GetAchievementName(id)))
-                local criteriaList = MyPathfinder.GetAchievementstatus(id)
-                for _, criteria in ipairs(criteriaList) do
-                    local displayText
-                    if criteria.percent == 100 then
-                        displayText = "|cff00ff00Completed|r" -- Green color for "Completed"
-                    else
-                        local color = GetColorForPercent(criteria.percent)
-                        displayText = string.format("%s%.0f%%|r", color, criteria.percent)
+            local tid = 11190
+            local id = {11188, 11189, 11157, 10672}
+            tooltip:AddLine(string.format("|cff00A2E8%s|r", MyPathfinder.GetAchievementName(tid)))
+            if MyPathfinder.GetAchievementInfo(tid) == false or MyPathfinder.Config.ShowCompleted == true then
+                for _, id in ipairs(id) do
+                    tooltip:AddLine(string.format("|cfff8b700%s|r", MyPathfinder.GetAchievementName(id)))
+                    local criteriaList = MyPathfinder.GetAchievementstatus(id)
+                    for _, criteria in ipairs(criteriaList) do
+                        local text
+                        if criteria.percent == 100 then
+                            text = "|cff00ff00Completed|r" -- Green color for "Completed"
+                        else
+                            local color = GetColorForPercent(criteria.percent)
+                            text = string.format("%s%.0f%%|r", color, criteria.percent)
+                        end
+                        tooltip:AddLine(string.format("-- |cffffffff%s ", criteria.criteriaString or "Unknown"), text)
                     end
-                    tooltip:AddLine(
-                        string.format("-- |cffffffff%s ", criteria.criteriaString or "Unknown"),
-                        displayText
-                    )
                 end
-            end
 
+                local id = 10994
+                tooltip:AddLine(string.format("|cfff8b700%s|r", MyPathfinder.GetAchievementName(id)))
+                local criteria = MyPathfinder.GetAchievementstatus(10746)
+                local text
+                if criteria and criteria.percent == 100 then
+                    text = "|cff00ff00Completed|r"
+                else
+                    local color = GetColorForPercent(criteria.percent or 0)
+                    text = string.format("%s%.0f%%|r", color, criteria.percent or 0)
+                end
+                tooltip:AddLine("-- |cffffffff Complete your class Order Campaign", text)
+            else
+                tooltip:AddLine(GREEN_FONT_COLOR_CODE .. "Completed|r")
+            end
             tooltip:AddLine(" ")
-            tooltip:AddLine("|cff00A2E8Patch 7.2")
-
-            local achievementIDs = {11446}
-
-            for _, id in ipairs(achievementIDs) do
-                tooltip:AddLine(string.format("|cfff8b700%s|r", MyPathfinder.GetAchievementName(id)))
-                local criteriaList = MyPathfinder.GetAchievementstatus(id)
-                for _, criteria in ipairs(criteriaList) do
-                    local displayText
-                    if criteria.percent == 100 then
-                        displayText = "|cff00ff00Completed|r" -- Green color for "Completed"
-                    else
-                        local color = GetColorForPercent(criteria.percent)
-                        displayText = string.format("%s%.0f%%|r", color, criteria.percent)
+            local tid = 11446
+            local id = {11190, 11543}
+            tooltip:AddLine(string.format("|cff00A2E8%s|r", MyPathfinder.GetAchievementName(tid)))
+            if MyPathfinder.GetAchievementInfo(tid) == false or MyPathfinder.Config.ShowCompleted == true then
+                for _, id in ipairs(id) do
+                    tooltip:AddLine(string.format("|cfff8b700%s|r", MyPathfinder.GetAchievementName(id)))
+                    local criteriaList = MyPathfinder.GetAchievementstatus(id)
+                    for _, criteria in ipairs(criteriaList) do
+                        local text
+                        if criteria.percent == 100 then
+                            text = "|cff00ff00Completed|r" -- Green color for "Completed"
+                        else
+                            local color = GetColorForPercent(criteria.percent)
+                            text = string.format("%s%.0f%%|r", color, criteria.percent)
+                        end
+                        tooltip:AddLine(string.format("-- |cffffffff%s ", criteria.criteriaString or "Unknown"), text)
                     end
-                    tooltip:AddLine(
-                        string.format("-- |cffffffff%s ", criteria.criteriaString or "Unknown"),
-                        displayText
-                    )
                 end
+                tooltip:AddLine(string.format("|cfff8b700%s|r", MyPathfinder.GetAchievementName(11545)))
+                local text, color = GetFactionRepDetails(2045)
+                tooltip:AddLine("-- |cffffffff Earn Revered status with the Armies of Legionfall|r", color .. text)
+            else
+                tooltip:AddLine(GREEN_FONT_COLOR_CODE .. "Completed|r")
             end
-        elseif MyPathfinder.Config.Draenor then
+        --
+		-- DRAENOR
+		--
+		elseif MyPathfinder.Config.Draenor then
             tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cffe53101Warlords of Draenor|r (Legacy)|n|n")
-            tooltip:AddLine("|cff00A2E8Patch 6.2")
-
-            local achievementIDs = {10018}
-
-            for _, id in ipairs(achievementIDs) do
-                tooltip:AddLine(string.format("|cfff8b700%s|r", MyPathfinder.GetAchievementName(id)))
-                local criteriaList = MyPathfinder.GetAchievementstatus(id)
-                for _, criteria in ipairs(criteriaList) do
-                    local displayText
-                    if criteria.percent == 100 then
-                        displayText = "|cff00ff00Completed|r" -- Green color for "Completed"
-                    else
-                        local color = GetColorForPercent(criteria.percent)
-                        displayText = string.format("%s%.0f%%|r", color, criteria.percent)
-                    end
-                    tooltip:AddLine(
-                        string.format("-- |cffffffff%s ", criteria.criteriaString or "Unknown"),
-                        displayText
-                    )
+            local tid = 10018
+            local aid = {8935, 10348, 9564, 10350, 9833} --Alliance
+            local hid = {8935, 10348, 9562, 10349, 9923} --Horde
+            tooltip:AddLine(string.format("|cff00A2E8%s|r", MyPathfinder.GetAchievementName(tid)))
+            if MyPathfinder.GetAchievementInfo(tid) == false or MyPathfinder.Config.ShowCompleted == true then
+                if faction == "Alliance" then
+                    xid = aid
+                else
+                    xid = hid
                 end
+
+                for _, id in ipairs(xid) do
+                    tooltip:AddLine(string.format("|cfff8b700%s|r", MyPathfinder.GetAchievementName(id)))
+                    local criteriaList = MyPathfinder.GetAchievementstatus(id)
+                    for _, criteria in ipairs(criteriaList) do
+                        local text
+                        if criteria.percent == 100 then
+                            text = "|cff00ff00Completed|r" -- Green color for "Completed"
+                        else
+                            local color = GetColorForPercent(criteria.percent)
+                            text = string.format("%s%.0f%%|r", color, criteria.percent)
+                        end
+                        tooltip:AddLine(string.format("-- |cffffffff%s ", criteria.criteriaString or "Unknown"), text)
+                    end
+                end
+            else
+                tooltip:AddLine(GREEN_FONT_COLOR_CODE .. "Completed|r")
             end
         end
     end
 
-    --[4] = 11446, [5] = 11190, [6] = 10018};
     MyPathfinder.Tooltip = function(item)
         if type(item) == "table" then
             if item.Name then
@@ -751,7 +814,7 @@ function addon:OnInitialize()
 
                 for i = 1, tab, 1 do
                     spacing = spacing .. "   "
-                end               
+                end
             end
 
             for k, v in pairs(item) do
@@ -770,6 +833,13 @@ function addon:OnInitialize()
         if MyPathfinder.Config.Dragon then
             local p = MyPathfinder.tStatus[15794].Sum
             output = " |cffe333333|r: " .. string.format("%#3.2f%%", p)
+        end
+
+        if MyPathfinder.Config.Zereth then
+            local p =
+                (MyPathfinder.tStatus[15514].Sum + MyPathfinder.tStatus[14790].Sum) /
+                (MyPathfinder.tStatus[15514].Count + MyPathfinder.tStatus[14790].Count)
+            output = " |cFFE77324B|r: " .. string.format("%#3.2f%%", p)
         end
 
         if MyPathfinder.Config.Shadow then
@@ -818,62 +888,35 @@ function MyPathfinder_OnClick(self, button, ...)
     if button == "LeftButton" then
         tooltip:Release()
         tooltip = nil
-        if MyPathfinder.Config.War == true then
-            MyPathfinder.Config.War = false
-            MyPathfinder.Config.Dragon = true
-            MyPathfinder.Config.Shadow = false
-            MyPathfinder.Config.Battle = false
-            MyPathfinder.Config.Legion = false
-            MyPathfinder.Config.Draenor = false
-        elseif MyPathfinder.Config.Dragon == true then
-            MyPathfinder.Config.War = false
-            MyPathfinder.Config.Dragon = false
-            MyPathfinder.Config.Shadow = true
-            MyPathfinder.Config.Battle = false
-            MyPathfinder.Config.Legion = false
-            MyPathfinder.Config.Draenor = false
-        elseif MyPathfinder.Config.Shadow == true then
-            MyPathfinder.Config.War = false
-            MyPathfinder.Config.Dragon = false
-            MyPathfinder.Config.Shadow = false
-            MyPathfinder.Config.Battle = true
-            MyPathfinder.Config.Legion = false
-            MyPathfinder.Config.Draenor = false
-        elseif MyPathfinder.Config.Battle == true then
-            MyPathfinder.Config.War = false
-            MyPathfinder.Config.Dragon = false
-            MyPathfinder.Config.Shadow = false
-            MyPathfinder.Config.Battle = false
-            MyPathfinder.Config.Legion = true
-            MyPathfinder.Config.Draenor = false
-        elseif MyPathfinder.Config.Legion == true then
-            MyPathfinder.Config.War = false
-            MyPathfinder.Config.Dragon = false
-            MyPathfinder.Config.Shadow = false
-            MyPathfinder.Config.Battle = false
-            MyPathfinder.Config.Legion = false
-            MyPathfinder.Config.Draenor = true
-        else
-            MyPathfinder.Config.War = true
-            MyPathfinder.Config.Dragon = false
-            MyPathfinder.Config.Shadow = false
-            MyPathfinder.Config.Battle = false
-            MyPathfinder.Config.Legion = false
-            MyPathfinder.Config.Draenor = false
+
+        -- List of configuration states
+        local configStates = {"War", "Dragon", "Shadow", "Zereth", "Battle", "Legion", "Draenor"}
+
+        -- Find the current active state
+        local currentIndex
+        for i, state in ipairs(configStates) do
+            if MyPathfinder.Config[state] == true then
+                currentIndex = i
+                break
+            end
         end
 
-        MyDO:BuildToolTip(self)
-    end
+        -- Set all states to false
+        for _, state in ipairs(configStates) do
+            MyPathfinder.Config[state] = false
+        end
 
-    if button == "RightButton" then
+        -- Activate the next state
+        local nextIndex = (currentIndex % #configStates) + 1
+        MyPathfinder.Config[configStates[nextIndex]] = true
+
+        MyDO:BuildToolTip(self)
+    elseif button == "RightButton" then
         tooltip:Release()
         tooltip = nil
 
-        if MyPathfinder.Config.ShowCompleted == true then
-            MyPathfinder.Config.ShowCompleted = false
-        else
-            MyPathfinder.Config.ShowCompleted = true
-        end
+        -- Toggle the ShowCompleted flag
+        MyPathfinder.Config.ShowCompleted = not MyPathfinder.Config.ShowCompleted
 
         MyDO:BuildToolTip(self)
     end
