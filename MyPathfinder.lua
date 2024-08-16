@@ -131,27 +131,6 @@ function addon:OnInitialize()
             isStatistic = GetAchievementInfo(achievementID)
         return name
     end
-MyPathfinder.GetStorylineInfo = function(storylineID)
-		local questLineName,
-			questName,
-			questLineID,
-			questID,
-			x,
-			y,
-			isHidden,
-			isLegendary,
-			isLocalStory,
-			isDaily,
-			isCampaign,
-			isImportant,
-			isAccountCompleted,
-			isCombatAllyQuest,
-			isMeta,
-			inProgress,
-			isQuestStart,
-			floorLocation = C_QuestLine.GetQuestLineInfo(storylineID)
-        return questLineName
-    end				
 				
     function IsCovenantQuestCompleted()
         local covenantID = C_Covenants.GetActiveCovenantID()
@@ -225,6 +204,10 @@ MyPathfinder.GetStorylineInfo = function(storylineID)
             return questID
         end
     end
+function GetRenownLevel()
+    local level = C_CovenantSanctumUI.GetRenownLevel()
+    return level
+end
 
     -- Function to get the quest completion status for a given quest ID
     GetQuestCompleted = function(questID)
@@ -296,7 +279,7 @@ MyPathfinder.GetStorylineInfo = function(storylineID)
                     for _, criteria in ipairs(criteriaList) do
                         local text
                         if criteria.percent == 100 then
-                            text = "|cff00ff00Completed|r" -- Green color for "Completed"
+                            text = "|cff00ff00Completed|r"
                         else
                             local color = GetColorForPercent(criteria.percent)
                             text = string.format("%s%.0f%%|r", color, criteria.percent)
@@ -323,7 +306,7 @@ MyPathfinder.GetStorylineInfo = function(storylineID)
                     for _, criteria in ipairs(criteriaList) do
                         local text
                         if criteria.percent == 100 then
-                            text = "|cff00ff00Completed|r" -- Green color for "Completed"
+                            text = "|cff00ff00Completed|r"
                         else
                             local color = GetColorForPercent(criteria.percent)
                             text = string.format("%s%.0f%%|r", color, criteria.percent)
@@ -338,273 +321,70 @@ MyPathfinder.GetStorylineInfo = function(storylineID)
 		-- SHADOWLANDS
 		--
 		elseif MyPathfinder.Config.Shadow then
-            --logic
-            quest63639 = C_QuestLog.IsQuestFlaggedCompleted(63639)
-            quest64556 = C_QuestLog.IsQuestFlaggedCompleted(64556)
-            quest63902 = C_QuestLog.IsQuestFlaggedCompleted(63902)
-            quest63949 = C_QuestLog.IsQuestFlaggedCompleted(63949)
-            quest63727 = C_QuestLog.IsQuestFlaggedCompleted(63727)
-            level = C_CovenantSanctumUI.GetRenownLevel()
-            isKnown = IsSpellKnown(352177)
-            isZereth = MyPathfinder.GetAchievementInfo(15514)
-            covenantID = C_Covenants.GetActiveCovenantID()
 
-            if covenantID == 1 then --kyrian
-                if C_QuestLog.IsQuestFlaggedCompleted(62557) == true then
-                    check1 = true
-                end
-            elseif covenantID == 2 then --venthyr
-                if C_QuestLog.IsQuestFlaggedCompleted(58407) == true then
-                    check1 = true
-                end
-            elseif covenantID == 3 then --nightfae
-                if C_QuestLog.IsQuestFlaggedCompleted(60108) == true then
-                    check1 = true
-                end
-            elseif covenantID == 4 then --necrolord
-                if C_QuestLog.IsQuestFlaggedCompleted(62406) == true then
-                    check1 = true
-                end
-            end
 
             -- check1 = MyPathfinder.GetAchievementInfo(14790);
             tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cFFA330C9Shadowlands|r|n|n")
-            tooltip:AddLine("|cff00A2E8Patch 9.0.1 (The Shadowlands)")
+            local qid = 63727
+			local id = {14790}
+			
+			tooltip:AddLine("|cff00A2E8Shadowlands Pathfinder|r")
+			tooltip:AddLine("|cfff8b700Renown|r")
+			if GetRenownLevel() > 43 then
+                tooltip:AddLine("-- |cffffffffAt Least 44|r", "|cff00ff00Completed|r")
+            else
+                tooltip:AddLine("-- |cffffffffAt Least 44|r", string.format("|cffffffff%s|r",GetRenownLevel()))
+			end
 
-            --start of requirements / guide / info section
-            if MyPathfinder.GetAchievementInfo(15514) == false or MyPathfinder.Config.ShowCompleted == true then
-                tooltip:AddLine("|cfff8b700Prerequisites")
-				local chapterIsComplete = MyPathfinder.GetStorylineInfo(1219)
-				tooltip:AddLine(tostring(chapterIsComplete))
-                if level > 43 then
-                    tooltip:AddLine("-- |cffffffffRenown", "|cff13ff29Completed|r")
-                    check2 = true
-                elseif level > 30 and level < 44 then
-                    tooltip:AddLine("-- |cffffffffRenown", "|cfff8b700" .. level .. "/44")
-                elseif level > 20 and level < 30 then
-                    tooltip:AddLine("-- |cffffffffRenown", "|cfff8b700" .. level .. "/44")
-                elseif level > 0 and level < 20 then
-                    tooltip:AddLine("-- |cffffffffRenown", "|cffff0000" .. level .. "/44")
-                end
-
-                if check1 == true then
-                    MyPathfinder.Tooltip(item[14790])
-                else
-                    tooltip:AddLine("-- |cffffffffCovenant Campaign", RED_FONT_COLOR_CODE .. "Incomplete")
-                end
-
-                tooltip:AddLine("|cfff8b700Chains of Domination Quest Line")
-
-                -- Battle of Ardenweald
-                if check1 == true and check2 == true then -- preq check
-                    if quest63639 == true and MyPathfinder.Config.ShowCompleted == false then -- complete check
-                        tooltip:AddLine("|cff00A2E8Battle of Ardenweald", GREEN_FONT_COLOR_CODE .. "Completed|r")
-                    else
-                        tooltip:AddLine("|cff00A2E8Battle of Ardenweald")
-                        tooltip:AddLine("-- |cffffffffThe First Move", C_QuestLog.IsQuestFlaggedCompleted(63576))
-                        tooltip:AddLine(
-                            "-- |cffffffffA Gathering of Covenants",
-                            C_QuestLog.IsQuestFlaggedCompleted(63856)
-                        )
-                        tooltip:AddLine("-- |cffffffffVoices of the Eternal", C_QuestLog.IsQuestFlaggedCompleted(63857))
-                        tooltip:AddLine(
-                            "-- |cffffffffThe Battle of Ardenweald",
-                            C_QuestLog.IsQuestFlaggedCompleted(63578)
-                        )
-                        tooltip:AddLine("-- |cffffffffCan't Turn Our Backs", C_QuestLog.IsQuestFlaggedCompleted(63638))
-                        tooltip:AddLine(
-                            "-- |cffffffffThe Heart of Ardenweald",
-                            C_QuestLog.IsQuestFlaggedCompleted(63904)
-                        )
-                        tooltip:AddLine("-- |cffffffffReport to Oribos", quest63639)
-                    end
-                else
-                    tooltip:AddLine(
-                        "-- |cffffffffBattle of Ardenweald",
-                        RED_FONT_COLOR_CODE .. "Prerequisite InCompleted|r"
-                    )
-                end
-
-                -- Maw Walkers
-                if quest63639 == true and check2 then -- preq check
-                    if quest64556 == true and MyPathfinder.Config.ShowCompleted == false then -- complete check
-                        tooltip:AddLine("|cff00A2E8Maw Walkers", GREEN_FONT_COLOR_CODE .. "Completed|r")
-                    else
-                        tooltip:AddLine("|cff00A2E8Maw Walkers")
-                        tooltip:AddLine("-- |cffffffffOpening the Maw", C_QuestLog.IsQuestFlaggedCompleted(63660))
-                        tooltip:AddLine("-- |cffffffffLink to the Maw", C_QuestLog.IsQuestFlaggedCompleted(63661))
-                        tooltip:AddLine("-- |cffffffffMysteries of the Maw", C_QuestLog.IsQuestFlaggedCompleted(63662))
-                        tooltip:AddLine(
-                            "-- |cffffffffKorthia, the City of Secrets",
-                            C_QuestLog.IsQuestFlaggedCompleted(63663)
-                        )
-                        tooltip:AddLine(
-                            "-- |cffffffffWho is the Maw Walker?",
-                            C_QuestLog.IsQuestFlaggedCompleted(63994)
-                        )
-                        tooltip:AddLine("-- |cffffffffOpening to Oribos", C_QuestLog.IsQuestFlaggedCompleted(63665))
-                        tooltip:AddLine(
-                            "-- |cffffffffCharge of the Covenants",
-                            C_QuestLog.IsQuestFlaggedCompleted(64007)
-                        )
-                        tooltip:AddLine("-- |cffffffffSurveying Secrets", C_QuestLog.IsQuestFlaggedCompleted(64555))
-                        tooltip:AddLine("-- |cffffffffIn Need of Assistance", quest64556)
-                    end
-                else
-                    tooltip:AddLine("-- |cffffffffMaw Walkers", RED_FONT_COLOR_CODE .. "Prerequisite InCompleted|r")
-                end
-
-                -- Focusing the Eye
-                if quest64556 == true and quest63639 == true and check2 then -- preq check
-                    if quest63902 == true and MyPathfinder.Config.ShowCompleted == false then -- complete check
-                        tooltip:AddLine("-- |cff00A2E8Focusing the Eye", GREEN_FONT_COLOR_CODE .. "Completed|r")
-                    else
-                        tooltip:AddLine("-- |cff00A2E8Focusing the Eye")
-                        tooltip:AddLine("-- |cffffffffA Show of Gratitude", C_QuestLog.IsQuestFlaggedCompleted(63848))
-                        tooltip:AddLine("-- |cffffffffEase of Passage", C_QuestLog.IsQuestFlaggedCompleted(63855))
-                        tooltip:AddLine("-- |cffffffffGrab Bag", C_QuestLog.IsQuestFlaggedCompleted(63895))
-                        tooltip:AddLine("-- |cffffffffHearing Aid", C_QuestLog.IsQuestFlaggedCompleted(63849))
-                        tooltip:AddLine("-- |cffffffffBirds of a Feather", C_QuestLog.IsQuestFlaggedCompleted(63810))
-                        tooltip:AddLine("-- |cffffffffThe Caged Bird", C_QuestLog.IsQuestFlaggedCompleted(63754))
-                        tooltip:AddLine("-- |cffffffffClaim the Sky", C_QuestLog.IsQuestFlaggedCompleted(63764))
-                        tooltip:AddLine(
-                            "-- |cffffffffA Hate-Hate Relationship",
-                            C_QuestLog.IsQuestFlaggedCompleted(63811)
-                        )
-                        tooltip:AddLine("-- |cffffffffFury Given Voice", C_QuestLog.IsQuestFlaggedCompleted(63831))
-                        tooltip:AddLine("-- |cffffffffThe Chosen Few", C_QuestLog.IsQuestFlaggedCompleted(63844))
-                        tooltip:AddLine("-- |cffffffffWrath of Odyn", C_QuestLog.IsQuestFlaggedCompleted(63845))
-                        tooltip:AddLine("-- |cffffffffMawsplaining", C_QuestLog.IsQuestFlaggedCompleted(64014))
-                        tooltip:AddLine("-- |cffffffffTears of the Damned", C_QuestLog.IsQuestFlaggedCompleted(63896))
-                        tooltip:AddLine("-- |cffffffffAnger Management", C_QuestLog.IsQuestFlaggedCompleted(63867))
-                        tooltip:AddLine("-- |cffffffffFocusing the Eye", C_QuestLog.IsQuestFlaggedCompleted(63901))
-                        tooltip:AddLine("-- |cffffffffGood News, Everyone!", quest63902)
-                    end
-                else
-                    tooltip:AddLine(
-                        "-- |cffffffffFocusing the Eye",
-                        RED_FONT_COLOR_CODE .. "Prerequisite InCompleted|r"
-                    )
-                end
-
-                if quest63902 == true then
-                    tooltip:AddLine("|cfff8b700World Quests")
-                    if quest63949 == true then
-                        tooltip:AddLine("-- |cffffffffShaping Fate", GREEN_FONT_COLOR_CODE .. "Completed|r")
-                        check3 = true
-                    else
-                        tooltip:AddLine("-- |cffffffffShaping Fate", RED_FONT_COLOR_CODE .. "Incomplete")
-                    end
-
-                    if covenantID == 1 then --kyrian
-                        if C_QuestLog.IsQuestFlaggedCompleted(61982) == true then
-                            tooltip:AddLine(
-                                "-- |cffffffffReplenish the Reservoir",
-                                GREEN_FONT_COLOR_CODE .. "Completed|r"
-                            )
+            if C_QuestLog.IsQuestFlaggedCompleted(qid) == false or MyPathfinder.Config.ShowCompleted == true then
+                for _, id in ipairs(id) do
+                    tooltip:AddLine(string.format("|cfff8b700%s|r", MyPathfinder.GetAchievementName(id)))
+                    local criteriaList = MyPathfinder.GetAchievementstatus(id)
+                    for _, criteria in ipairs(criteriaList) do
+                        local text
+                        if criteria.percent == 100 then
+                            text = "|cff00ff00Completed|r"
                         else
-                            tooltip:AddLine("-- |cffffffffReplenish the Reservoir", RED_FONT_COLOR_CODE .. "Incomplete")
+                            local color = GetColorForPercent(criteria.percent)
+                            text = string.format("%s%.0f%%|r", color, criteria.percent)
                         end
-                        check4 = true
-                    elseif covenantID == 2 then --venthyr
-                        if C_QuestLog.IsQuestFlaggedCompleted(61981) == true then
-                            tooltip:AddLine(
-                                "-- |cffffffffReplenish the Reservoir",
-                                GREEN_FONT_COLOR_CODE .. "Completed|r"
-                            )
-                        else
-                            tooltip:AddLine("-- |cffffffffReplenish the Reservoir", RED_FONT_COLOR_CODE .. "Incomplete")
-                        end
-                        check4 = true
-                    elseif covenantID == 3 then --nightfae
-                        if C_QuestLog.IsQuestFlaggedCompleted(61984) == true then
-                            tooltip:AddLine(
-                                "-- |cffffffffReplenish the Reservoir",
-                                GREEN_FONT_COLOR_CODE .. "Completed|r"
-                            )
-                        else
-                            tooltip:AddLine("-- |cffffffffReplenish the Reservoir", RED_FONT_COLOR_CODE .. "Incomplete")
-                        end
-                        check4 = true
-                    elseif covenantID == 4 then --necrolord
-                        if C_QuestLog.IsQuestFlaggedCompleted(61983) == true then
-                            tooltip:AddLine(
-                                "-- |cffffffffReplenish the Reservoir",
-                                GREEN_FONT_COLOR_CODE .. "Completed|r"
-                            )
-                        else
-                            tooltip:AddLine("-- |cffffffffReplenish the Reservoir", RED_FONT_COLOR_CODE .. "Incomplete")
-                        end
-                        check4 = true
+                        tooltip:AddLine(string.format("-- |cffffffff%s ", criteria.criteriaString or "Unknown"), text)
                     end
-                else
-                    tooltip:AddLine("|cfff8b700World Quests")
-                    tooltip:AddLine("-- |cffffffffShaping Fate", RED_FONT_COLOR_CODE .. "Prerequisite Incomplete")
-                    tooltip:AddLine(
-                        "-- |cffffffffReplenish the Reservoir",
-                        RED_FONT_COLOR_CODE .. "Prerequisite Incomplete"
-                    )
                 end
-
-                tooltip:AddLine("|cfff8b700Chains of Domination Quest Line (Continued)")
-
-                -- The Last Sigil
-                if
-                    quest63902 == true and quest64556 == true and quest63639 == true and check1 and check2 or
-                        MyPathfinder.Config.ShowCompleted == true
-                 then -- preq check
-                    if quest63727 == true and MyPathfinder.Config.ShowCompleted == false then -- complete check
-                        tooltip:AddLine("|cff00A2E8The Last Sigil", GREEN_FONT_COLOR_CODE .. "Completed|r")
-                    else
-                        tooltip:AddLine("|cff00A2E8The Last Sigil")
-                        tooltip:AddLine("-- |cffffffffVault of Secrets", C_QuestLog.IsQuestFlaggedCompleted(63703))
-                        tooltip:AddLine("-- |cffffffffVengeance for Korthia", C_QuestLog.IsQuestFlaggedCompleted(63704))
-                        tooltip:AddLine("-- |cffffffffThe Knowledge Keepers", C_QuestLog.IsQuestFlaggedCompleted(63705))
-                        tooltip:AddLine("-- |cffffffffLet the Anima Flow", C_QuestLog.IsQuestFlaggedCompleted(63706))
-                        tooltip:AddLine("-- |cffffffffSecrets of the Vault", C_QuestLog.IsQuestFlaggedCompleted(63709))
-                        tooltip:AddLine("-- |cffffffffThe Anima Trail", C_QuestLog.IsQuestFlaggedCompleted(63710))
-                        tooltip:AddLine("-- |cffffffffBone Tools", C_QuestLog.IsQuestFlaggedCompleted(63711))
-                        tooltip:AddLine("-- |cffffffffLost Records", C_QuestLog.IsQuestFlaggedCompleted(63712))
-                        tooltip:AddLine("-- |cffffffffHooking Over", C_QuestLog.IsQuestFlaggedCompleted(63713))
-                        tooltip:AddLine("-- |cffffffffTo the Vault", C_QuestLog.IsQuestFlaggedCompleted(63714))
-                        tooltip:AddLine("-- |cffffffffDefending the Vault", C_QuestLog.IsQuestFlaggedCompleted(63717))
-                        tooltip:AddLine("-- |cffffffffKeepers of Korthia", C_QuestLog.IsQuestFlaggedCompleted(63722))
-                        tooltip:AddLine("-- |cffffffffInto the Vault", C_QuestLog.IsQuestFlaggedCompleted(63725))
-                        tooltip:AddLine("-- |cffffffffUntangling the Sigil", C_QuestLog.IsQuestFlaggedCompleted(63726))
-                        tooltip:AddLine("-- |cffffffffThe Primus Returns (Get Flying Here)", quest63727)
-
-                        if quest63727 == true then
-                            tooltip:AddLine("|cfff8b700Item")
-                            tooltip:AddLine("|cffffffffMemories of Sunless Skies", "|cffffffffUnused|r")
-                        end
-                    end
-                else
-                    tooltip:AddLine("|cffffffffThe Last Sigil", RED_FONT_COLOR_CODE .. "Prerequisite InCompleted|r")
-                end
+			tooltip:AddLine("|cfff8b700The Last Sigil Quest Line|r")
+			if C_QuestLog.IsQuestFlaggedCompleted(qid) == true then
+				tooltip:AddLine("-- |cffffffffThe Primus Returns|r", "|cff00ff00Completed|r")
+			else
+				tooltip:AddLine("-- |cffffffffThe Primus Returns|r", "|cff808080Incomplete|r")
+			end
             else
                 tooltip:AddLine(GREEN_FONT_COLOR_CODE .. "Completed|r")
             end
         --
-		-- SHADOWLANDS ZERATH MORTIS
+		-- SHADOWLANDS ZERETH MORTIS
 		--
 		elseif MyPathfinder.Config.Zereth then
             tooltip:AddLine("|n|cfff8b700World Of Warcraft: |cFFE77324Zereth Mortis|r|n|n")
-            tooltip:AddLine(string.format("|cff00A2E8%s|r", MyPathfinder.GetAchievementName(19307)))
-            local achievementIDs = {15224, 15509, 15513, 15512, 15515, 15518}
-
-            for _, id in ipairs(achievementIDs) do
-                tooltip:AddLine(string.format("|cfff8b700%s|r", MyPathfinder.GetAchievementName(id)))
-                local criteriaList = MyPathfinder.GetAchievementstatus(id)
-                for _, criteria in ipairs(criteriaList) do
-                    local text
-                    if criteria.percent == 100 then
-                        text = "|cff00ff00Completed|r" -- Green color for "Completed"
-                    else
-                        local color = GetColorForPercent(criteria.percent)
-                        text = string.format("%s%.0f%%|r", color, criteria.percent)
+            local tid = 19307
+			local id = {15224, 15509, 15513, 15512, 15515, 15518}
+            tooltip:AddLine(string.format("|cff00A2E8%s|r", MyPathfinder.GetAchievementName(tid)))
+            if MyPathfinder.GetAchievementInfo(tid) == false or MyPathfinder.Config.ShowCompleted == true then
+                for _, id in ipairs(id) do
+                    tooltip:AddLine(string.format("|cfff8b700%s|r", MyPathfinder.GetAchievementName(id)))
+                    local criteriaList = MyPathfinder.GetAchievementstatus(id)
+                    for _, criteria in ipairs(criteriaList) do
+                        local text
+                        if criteria.percent == 100 then
+                            text = "|cff00ff00Completed|r"
+                        else
+                            local color = GetColorForPercent(criteria.percent)
+                            text = string.format("%s%.0f%%|r", color, criteria.percent)
+                        end
+                        tooltip:AddLine(string.format("-- |cffffffff%s ", criteria.criteriaString or "Unknown"), text)
                     end
-                    tooltip:AddLine(string.format("-- |cffffffff%s ", criteria.criteriaString or "Unknown"), text)
                 end
+            else
+                tooltip:AddLine(GREEN_FONT_COLOR_CODE .. "Completed|r")
             end
         --
 		-- BATTLE FOR AZEROTH
@@ -628,7 +408,7 @@ MyPathfinder.GetStorylineInfo = function(storylineID)
                     for _, criteria in ipairs(criteriaList) do
                         local text
                         if criteria.percent == 100 then
-                            text = "|cff00ff00Completed|r" -- Green color for "Completed"
+                            text = "|cff00ff00Completed|r"
                         else
                             local color = GetColorForPercent(criteria.percent)
                             text = string.format("%s%.0f%%|r", color, criteria.percent)
@@ -650,7 +430,7 @@ MyPathfinder.GetStorylineInfo = function(storylineID)
                     for _, criteria in ipairs(criteriaList) do
                         local text
                         if criteria.percent == 100 then
-                            text = "|cff00ff00Completed|r" -- Green color for "Completed"
+                            text = "|cff00ff00Completed|r"
                         else
                             local color = GetColorForPercent(criteria.percent)
                             text = string.format("%s%.0f%%|r", color, criteria.percent)
@@ -685,7 +465,7 @@ MyPathfinder.GetStorylineInfo = function(storylineID)
                     for _, criteria in ipairs(criteriaList) do
                         local text
                         if criteria.percent == 100 then
-                            text = "|cff00ff00Completed|r" -- Green color for "Completed"
+                            text = "|cff00ff00Completed|r"
                         else
                             local color = GetColorForPercent(criteria.percent)
                             text = string.format("%s%.0f%%|r", color, criteria.percent)
@@ -719,7 +499,7 @@ MyPathfinder.GetStorylineInfo = function(storylineID)
                     for _, criteria in ipairs(criteriaList) do
                         local text
                         if criteria.percent == 100 then
-                            text = "|cff00ff00Completed|r" -- Green color for "Completed"
+                            text = "|cff00ff00Completed|r"
                         else
                             local color = GetColorForPercent(criteria.percent)
                             text = string.format("%s%.0f%%|r", color, criteria.percent)
@@ -755,7 +535,7 @@ MyPathfinder.GetStorylineInfo = function(storylineID)
                     for _, criteria in ipairs(criteriaList) do
                         local text
                         if criteria.percent == 100 then
-                            text = "|cff00ff00Completed|r" -- Green color for "Completed"
+                            text = "|cff00ff00Completed|r"
                         else
                             local color = GetColorForPercent(criteria.percent)
                             text = string.format("%s%.0f%%|r", color, criteria.percent)
